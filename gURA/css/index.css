@@ -1,0 +1,61 @@
+﻿body{margin:0; padding: 0; font-family: 'Open Sans', sans-serif; font-size: 14px; background: #fff;}
+select{border: 0px; padding: 4px 6px; margin-left: 4px; color: #333;}
+input{padding: 4px 6px; border-radius: 0px; border: solid 1px #777;}
+input:hover{border: solid 1px #333;}
+
+/* Topo - Início */
+#topo{width:100%; text-align: center; background: #26a; color: white;}
+#topo tr{width: 100%;}
+#topo td{width: 30%; padding: 16px 32px;}
+/* Topo - Fim */
+
+/* Bloco de Opções - Início */
+#bloco_opcoes{background: #fff; text-align: center; padding: 32px; color: #333;}
+.opcao{display: inline-block; white-space: nowrap; padding: 8px 8px; color: #333; position: relative;}
+#bloco_opcoes select{border: solid 1px #777;}
+
+#div_datas{white-space: nowrap; display: inline-block;}
+
+.drop{z-index: 1; position: absolute; display: block; background: #fff; color: #444; text-align: left; border: solid 1px #777; display: none; box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12); margin-top: 4px !important;}
+.drop div{cursor: pointer; padding: 4px 8px;}
+.drop div:hover{background: #d2d6da; color: #024; transition: all 0.2s;}
+.drop div:nth-child(1){margin-top: 0px !important;}
+.drop input{vertical-align: -1px;}
+
+.botao{background: #fff; cursor: pointer; color: #777; padding: 4px; border-radius: 0px; border: solid 1px #777; width: 135px;}
+.drop_opcoes:hover .drop{display: block !important; border: solid 1px #777;}
+.drop_opcoes .botao{background: #fff; color: #444; border: solid 1px #777;}
+.drop_opcoes:hover .botao{background: #444 !important; color: #fff !important; border-color: #444 !important; transition: all 0.2s;}
+.drop_opcoes span{font-size: 12px;}
+
+.botao_clique{background: #26a; border: solid 1px #26a; cursor: pointer; color: #fff; padding: 4px; width: 135px;}
+.botao_clique:hover{background: #048; border: solid 1px #048; color: #fff; transition: all 0.2s;}
+/* Bloco de Opções - Fim */
+
+#txt_titulo{display: none;}
+
+#div_recolhe{width: 100%; text-align: center; cursor: pointer; background: #26a; color: #fff;}
+#div_recolhe:hover{background: #048; transition: all 0.2s;}
+#div_recolhe span{font-size: 12px; vertical-align: middle;}
+
+.recolhido{background: #26a !important; color: #fff !important; box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12); padding: 8px 0px; text-align: left !important; border: 0px !important;}
+.recolhido:hover{background: #048 !important;}
+.recolhido span{font-size: 22px !important; padding-left: 16px;}
+.recolhido #txt_titulo{display: inline-block !important; font-size: 14px !important; letter-spacing: 1px; float: right; padding-right: 16px;}
+
+#divCarregaConsulta{padding: 32px; text-align: center;}
+#divCarregaConsulta table{padding: 0px; border: solid 1px #777; box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);}
+#divCarregaConsulta tr{text-align: left;}
+#divCarregaConsulta td{padding: 4px 8px; cursor: pointer;}
+#divCarregaConsulta table tr:first-child{background: #26a !important; color: #fff !important; font-weight: bold;}
+#divCarregaConsulta tr:nth-child(even){background-color:#e2e6ea}
+#divCarregaConsulta tr:hover{background: #32363a; color: #fff; transition: all 0.1s;}
+
+.titulo{display: block; color: #000}
+.tituloConteudo{display: inline-block; background: #feb; border: solid 1px #333; border-radius: 4px; padding: 16px; margin-bottom: 32px; box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);}
+.titulo b:first-child{font-size: 16px;}
+
+.divTabela{display: inline-block; padding: 0px;}
+
+.x_sair{font-size: 16px; text-align: right !important; position: absolute; right: 8px; top 20px; cursor: pointer; padding: 4px 16px; background: #fff; color: #333;}
+.x_sair:hover{background: #fff; color: red; transition: all 0.1s;}
