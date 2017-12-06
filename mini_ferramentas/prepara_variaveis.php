@@ -2,6 +2,13 @@
 //Recebe Variáveis do Formulário - Início
 $data_inicial = $_POST['data_inicial'];
 $data_final = $_POST['data_final'];
+
+$data_inicial1 = $_POST['data_inicial1'];
+$data_final1 = $_POST['data_final1'];
+
+$data_inicial2 = $_POST['data_inicial2'];
+$data_final2 = $_POST['data_final2'];
+
 $tipo_consulta = $_POST['tipo_consulta'];
 $select_dias_semana = $_POST['select_dias_semana'];
 $qtd_transf = $_POST['qtd_transf'];
@@ -132,6 +139,30 @@ $data_final_texto = date('d/m/Y',$t_final);
 $data_final_arquivo = date('d_m_Y',$t_final);
 //Conversão Data Texto - Fim
 
+
+//Conversão Data Texto - Início - 1
+$t_inicial1 = strtotime($data_inicial1);
+$data_inicial1 = date('m/d/Y',$t_inicial1);
+$data_inicial_texto1 = date('d/m/Y',$t_inicial1);
+$data_inicial_arquivo1 = date('d_m_Y',$t_inicial1);
+
+$t_final1 = strtotime($data_final1);
+$data_final1 = date('m/d/Y',$t_final1);
+$data_final_texto1 = date('d/m/Y',$t_final1);
+$data_final_arquivo1 = date('d_m_Y',$t_final1);
+//Conversão Data Texto - Fim
+
+//Conversão Data Texto - Início - 2
+$t_inicial2 = strtotime($data_inicial2);
+$data_inicial2 = date('m/d/Y',$t_inicial2);
+$data_inicial_texto2 = date('d/m/Y',$t_inicial2);
+$data_inicial_arquivo2 = date('d_m_Y',$t_inicial2);
+
+$t_final2 = strtotime($data_final2);
+$data_final2 = date('m/d/Y',$t_final2);
+$data_final_texto2 = date('d/m/Y',$t_final2);
+$data_final_arquivo2 = date('d_m_Y',$t_final2);
+//Conversão Data Texto - Fim
 
 // VETOR SUPERVISORES - INÍCIO
 $array_supervisores = array();

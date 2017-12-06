@@ -38,6 +38,19 @@ $data_final_definida = date('Y-m-d',$data_final_definida);
 
 $data_inicial_definida = strtotime($data_inicial);
 $data_inicial_definida = date('Y-m-d',$data_inicial_definida);
+//-------------------data 1---------------------------//
+$data_final_definida1 = strtotime($data_final1);
+$data_final_definida1 = date('Y-m-d',$data_final_definida1);
+
+$data_inicial_definida1 = strtotime($data_inicial1);
+$data_inicial_definida1 = date('Y-m-d',$data_inicial_definida1);
+
+//-------------------data 2---------------------------//
+$data_final_definida2 = strtotime($data_final2);
+$data_final_definida2 = date('Y-m-d',$data_final_definida2);
+
+$data_inicial_definida2 = strtotime($data_inicial2);
+$data_inicial_definida2 = date('Y-m-d',$data_inicial_definida2);
 
 $data_atual = date('Y-m-d');
 
@@ -168,7 +181,11 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
 	
 	case '23':
 		include "consulta_23.php"; // reicidencia de insatisfação
-		break;		
+		break;
+	
+	case '24':
+	    include "consulta_24.php"; // Analise de Retenção URA
+	    break;		
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>
