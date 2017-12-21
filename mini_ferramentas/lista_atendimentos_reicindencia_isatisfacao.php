@@ -30,6 +30,20 @@ $perg1 = $_GET['perg1'];
 $perg2 = $_GET['perg2'];
 $perg3 = $_GET['perg3'];
 $perg4 = $_GET['perg4'];
+    
+    $swhere = '';
+    if ($perg1> 0)    
+        $swhere .= " and tps.perg1 = '$perg1'";
+ 
+    if ($perg2 > 0)       
+        $swhere .= " and tps.perg2 = '$perg2'";
+                                   
+    if ($perg3 > 0)            
+        $swhere .= " and tps.perg3 = '$perg3'";                                           
+        
+    if ($perg4 > 0)                
+        $swhere .= " and tps.perg4 = '$perg4'";
+                   
 
 //Conversão Data Texto - Início
 $t_inicial = strtotime($data_inicial);
@@ -87,15 +101,12 @@ $sql ="	select distinct ted.*, f.desc_fila from tb_eventos_dac ted
 		and tdc.data_hora between '$data_inicial' and '$data_final 23:59:59.999'
 		$sql_tipo_dado
 		and  valor_dado = '$valor_dado'
-		and  tps.perg1 = '$perg1' 
-		and tps.perg2 = '$perg2' 
-		and tps.perg3 = '$perg3' 
-		and tps.perg4 = '$perg4' 
+		$swhere
 		and ted.id_operador is not null
 		order by ted.callid, ted.data_hora
 		";
 
-			
+//echo $sql;			
 $query = $pdo->prepare($sql);
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){

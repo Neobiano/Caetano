@@ -43,8 +43,10 @@ $acp_parcelamento = '25';//$_POST['acp_parcelamento'];
 $acp_perda_roubo = '25';//$_POST['acp_parcelamento'];
 $acp_contestacao = '25';//$_POST['acp_contestacao'];
 $acp_pontos = '25';//$_POST['acp_pontos'];
+//$acp_geral_normal = '00';//$_POST['acp_geral_normal']-ORIGINAL;
 $acp_geral_normal = '00';//$_POST['acp_geral_normal'];
-$acp_todas_premium = '05';//$_POST['acp_geral_premium'];
+//$acp_todas_premium = '05';//$_POST['acp_geral_premium']-ORIGINAL;
+$acp_todas_premium = '25';//$_POST['acp_geral_premium'];
 $acp_pj = '00';//$_POST['acp_pj'];
 $acp_100 = '00';//$_POST['acp_pj'];
 $acp_130 = '00';//$_POST['acp_pj'];
@@ -1551,8 +1553,25 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		
 		if( ($valor_ca > 0) )
 		{
-			//recebem 25% de ACP em todas os atendimentos	
-			if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo))  
+		    /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> bloco (remuneracao Filas GERA) Ladicionado apenas para compensar a desconexao embratel */
+		    /*if (in_array("$cont", $vet_geral_normal) )
+		    {
+		        $acp_aut = true;
+		        
+		        $qtde_acp = $valor_ca;
+		        $fator = 1.09;
+		    }
+		    if (in_array("$cont", $vet_pj))
+		    {
+		        $acp_aut = true;
+		        
+		        $qtde_acp = $valor_ca;
+		        $fator = 1.11;
+		    }
+			else */if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
+			    or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
+			    /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel */
+			    or in_array("$cont", $vet_todas_premium))  
 			{
 				//apenas para printar a linha com formato diferenciado	
 				$acp_aut = true;	 	
@@ -1623,8 +1642,8 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 					$qtde_acp = $row['cont']; //aqui
 					$fator = 1.25;
 				}	
-			} //recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
-			else if (in_array("$cont", $vet_todas_premium))
+			} 
+			else if (in_array("$cont", $vet_todas_premium)) //recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
 			{
 			   /*  if (($cont == 84) or ($cont == 85) or ($cont == 96) or ($cont == 97) or ($cont == 82) or ($cont == 83))
 				{
@@ -1869,6 +1888,7 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		
 		//prepara o 'vet' dos eventos faturáveis - início
 		$txt_eventos_faturaveis = "";
+		/*
 		$query = $pdo->prepare("select * from tb_eventos
 					where cod_fonte = 1");
 		$query->execute();
@@ -1883,7 +1903,8 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 					$txt_eventos_faturaveis = $txt_eventos_faturaveis . ",$cod_evento";
 			}
 		}
-		$vet_eventos_faturaveis = explode(",",$txt_eventos_faturaveis);
+		$vet_eventos_faturaveis = explode(",",$txt_eventos_faturaveis); */
+		$eventos_faturaveis = array('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140');
 		//prepara o 'vet' dos eventos faturáveis - FIM
 					
 					

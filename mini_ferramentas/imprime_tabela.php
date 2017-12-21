@@ -185,7 +185,11 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
 	
 	case '24':
 	    include "consulta_24.php"; // Analise de Retenção URA
-	    break;		
+	    break;
+	    
+	case '25':
+	    include "consulta_25.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+	    break;	
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

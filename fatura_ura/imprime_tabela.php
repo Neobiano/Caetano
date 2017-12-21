@@ -69,7 +69,7 @@ if($qual_mes=='12') $qtd_dias = 31;
 
 $dia_atual = $today = date("d");
 $mes_atual = $today = date("m");
-if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
+if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 3;
 
 // PREPARA LIKE_EVENTOS - INÍCIO
 $array_like_eventos = array();
@@ -123,44 +123,92 @@ echo "</div>";
 
 
 //$qtd_dias = 1;
-for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++){
+for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
+{
 	$total_faturados = 0;
 	$query = $pdo->prepare("select * from tb_eventos_ura (nolock)
 							where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' and ($in_like_eventos)");
 	$query->execute();
 	
-	for($i=0; $row = $query->fetch(); $i++){
+	for($i=0; $row = $query->fetch(); $i++)
+	{
 		$cod_evento = $row['cod_evento'];
 		
 		$array_cod_linha = explode(";", $cod_evento);
 		
-		$passou_pelo_014 = 0; // PARA EXCLUIR EVENTOS INDEVIDOS - 014;xx;031 (031 não é para contar aqui) **
+		//evento posterior a idpos
+		$passou_pelo_014 = 0; // PARA EXCLUIR EVENTOS INDEVIDOS - 014;xx;031 ou 014;031 (031 não é para contar aqui) **
+		$passou_pelo_022 = 0;
+		/*$arrlength=count($array_cod_linha);		
+		for($cont=0; $cont<$arrlength ;$cont++)
+		{
+		    $fatura = true;
+		    $cod_evento = $array_cod_linha[$cont];
+		    
+		    if($cod_evento == '031')
+		    {
+		        if (($array_cod_linha[$cont-1] == '014') or  (($array_cod_linha[$cont-2] == '014') && ($array_cod_linha[$cont-1] != '022')))
+		           $fatura = false;		        		              
+		    }    
+		    
+		    if ($fatura)
+		    {		        
+    		    if(in_array($cod_evento,$array_like_eventos))
+    		    {
+    		        
+    		        $array_tabela[$cod_evento][$pos_dia]++; // INCREMENTA $array_tabela
+    		        $total_faturados++;
+    		        $soma_total_faturados++;
+    		        if(isset($array_eventos_periodo[$cod_evento]))
+    		            $array_eventos_periodo[$cod_evento]++;
+    		            else
+    		                $array_eventos_periodo[$cod_evento] = 1;
+    		                
+    		    }
+		    }
+		}*/
 		
-		foreach($array_cod_linha as $cod_evento){	
-			$nao_fatura = 0; //**
-			
-			if($passou_pelo_014 == 2){ //**
-					if($cod_evento == '031') $nao_fatura = 1;
-					$passou_pelo_014 = 0;
+		foreach($array_cod_linha as $cod_evento)
+		{	
+			$nao_fatura = 0; 
+			if($cod_evento == '031')
+			{    
+    			//se passou pelo evento 014 a 'uma' ou 'duas' posições atraz..
+    			if (($passou_pelo_014 == 2) and ($passou_pelo_022 != 1))						        
+    			   $nao_fatura = 1;								 			
+    			else if ($passou_pelo_014 == 1)			
+    			   $nao_fatura = 1;
 			}
 			
-			if($passou_pelo_014 == 1) $passou_pelo_014++; //**
 			
-			if($cod_evento == '014') $passou_pelo_014 = 1; //**
+			if($passou_pelo_014 > 0) 
+			   $passou_pelo_014++; 
 			
-			if($nao_fatura == 0){
-				if(in_array($cod_evento,$array_like_eventos)){
+			if($passou_pelo_022 > 0)
+			   $passou_pelo_022++; 
+			
+			if($cod_evento == '014') 
+			    $passou_pelo_014 = 1;
+			
+			if($cod_evento == '022')
+			   $passou_pelo_022 = 1;
+			
+			if($nao_fatura == 0)
+			{
+				if(in_array($cod_evento,$array_like_eventos))
+				{
 								
-				$array_tabela[$cod_evento][$pos_dia]++; // INCREMENTA $array_tabela
-				
-				$total_faturados++;
-				$soma_total_faturados++;
-				if(isset($array_eventos_periodo[$cod_evento])) $array_eventos_periodo[$cod_evento]++;
-				else $array_eventos_periodo[$cod_evento] = 1;
+				    $array_tabela[$cod_evento][$pos_dia]++; // INCREMENTA $array_tabela				
+				    $total_faturados++;
+				    $soma_total_faturados++;
+				    if(isset($array_eventos_periodo[$cod_evento])) 
+				        $array_eventos_periodo[$cod_evento]++;
+				    else 
+				        $array_eventos_periodo[$cod_evento] = 1;
 				
 				}
 			}
-		}		
+		}
 	}
 }
 

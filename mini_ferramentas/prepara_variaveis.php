@@ -24,11 +24,23 @@ $qual_ano = $_POST['qual_ano'];
 $qual_ano = $_POST['qual_ano'];
 $qual_rechamadas = $_POST['qual_rechamadas'];
 $select_ilhas = $_POST['select_ilhas'];
-$select_origem_reicidencia = $_POST['select_origem_reicidencia']; //AQUI MEU FI
+$select_origem_reicidencia = $_POST['select_origem_reicidencia']; 
 $pesq_satisf_perg1 = $_POST['perg1'];
 $pesq_satisf_perg2 = $_POST['perg2'];
 $pesq_satisf_perg3 = $_POST['perg3'];
 $pesq_satisf_perg4 = $_POST['perg4'];
+
+
+$cd_motivo = $_POST['cd_motivo'];
+if ($cd_motivo  > 0)
+    $cd_motivo = number_format($cd_motivo, 0, ',', '.');
+
+
+    
+$cd_submotivo = $_POST['cd_submotivo'];
+if ($cd_submotivo > 0) 
+    $cd_submotivo = number_format($cd_submotivo, 0, ',', '.');
+
 
 $in_filas = $_POST['in_filas'];
 $in_filas = str_replace(" ","",$in_filas);

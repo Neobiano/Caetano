@@ -45,11 +45,94 @@ switch ($select_origem_reicidencia)
 		$sql_tipo_dado = " and t2.cod_dado = '1' ";
 		break;	
 }
+
+    if ($pesq_satisf_perg1 > 0)
+    {
+        $swhere .= " and t.perg1 = '$pesq_satisf_perg1'";
+        switch ($pesq_satisf_perg1)
+        {
+            case 1:
+                $criterios .= "  </br> <b>Perg. 1:</b> Satisfeito";
+                break;
+                
+            case 2:
+                $criterios .= "  </br> <b>Perg. 1:</b> Indiferente";
+                break;
+            case 3:
+                $criterios .= "  </br> <b>Perg. 1:</b> Insatisfeito";
+                break;
+        }
+        
+    }
+    else
+        $criterios .= " </br>  <b>Perg. 1:</b> Todas";
+        
+    if ($pesq_satisf_perg2 > 0)
+    {
+        $swhere .= " and t.perg2 = '$pesq_satisf_perg2'";
+        switch ($pesq_satisf_perg2)
+        {
+            case 1:
+                $criterios .= "  <b>Perg. 2:</b> Satisfeito";
+                break;
+                
+            case 2:
+                $criterios .= "  <b>Perg. 2:</b> Indiferente";
+                break;
+            case 3:
+                $criterios .= "  <b>Perg. 2:</b> Insatisfeito";
+                break;
+        }
+    }
+    else
+        $criterios .= "  <b>Perg. 2:</b> Todas";
+        
+        if ($pesq_satisf_perg3 > 0)
+        {
+            $swhere .= " and t.perg3 = '$pesq_satisf_perg3'";
+            
+            switch ($pesq_satisf_perg3)
+            {
+                case 1:
+                    $criterios .= "  <b>Perg. 3:</b> Satisfeito";
+                    break;
+                    
+                case 2:
+                    $criterios .= "  <b>Perg. 3:</b> Indiferente";
+                    break;
+                case 3:
+                    $criterios .= "  <b>Perg. 3:</b> Insatisfeito";
+                    break;
+            }
+        }
+        else
+            $criterios .= "  <b>Perg. 3:</b> Todas";
+            
+            if ($pesq_satisf_perg4 > 0)
+            {
+                $swhere .= " and t.perg4 = '$pesq_satisf_perg4'";
+                switch ($pesq_satisf_perg4)
+                {
+                    case 1:
+                        $criterios .= "  <b>Perg. 4:</b> Sim";
+                        break;
+                        
+                    case 2:
+                        $criterios .= "  <b>Perg. 4:</b> Parcialmente";
+                        break;
+                    case 3:
+                        $criterios .= "  <b>Perg. 4:</b> Não";
+                        break;
+                }
+            }
+            else
+                $criterios .= "  <b>Perg. 4:</b> Todas";
 	
 //IMPRIME TÍTULO DA CONSULTA
 echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 echo "<b>$titulo por $s_select_origem_reicidencia</b>";
 echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
+echo "<br><br><b><i>Critérios de Filtro:</i></b> $criterios";
 echo '</div>';
 
 
@@ -63,17 +146,17 @@ echo "<thead><tr class='w3-indigo'>";
 	echo "<td><b>Qtde de Ligações</b></td>";
 	
 	echo "</tr></thead><tdoby>";
+	
+	
 
 	$sql = "select t2.valor_dado , count(distinct t.callid) qtde_ligacoes from tb_pesq_satisfacao t
 					inner join tb_dados_cadastrais t2 on (t2.callid = t.callid)
 					where 
 					t.data_hora between '$data_inicial' and '$data_final 23:59:59.999'
 					and t2.data_hora between '$data_inicial' and '$data_final 23:59:59.999'
+                    
 					$sql_tipo_dado				 
-					and t.perg1 = '$pesq_satisf_perg1'
-					and t.perg2 = '$pesq_satisf_perg2'
-					and t.perg3 = '$pesq_satisf_perg3'
-					and t.perg4 = '$pesq_satisf_perg4'
+					$swhere
 					group by t2.valor_dado
 					order by count(distinct t.callid) desc";
 					

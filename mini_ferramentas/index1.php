@@ -1,6 +1,6 @@
 ﻿<?php
 	include "conecta.php";
-	
+	//preenchendo o select de filas
 	$iniciou = 0;
 	$in_filas = "108,109,";
 	$query = $pdo->prepare("select cod_fila from tb_filas where desc_fila liKe '%CXA%'");
@@ -13,6 +13,18 @@
 			$in_filas = "$in_filas"."$cod_fila";
 		}
 		else $in_filas = "$in_filas".",$cod_fila";
+	}
+	
+	//preenchendo o select de motivo 
+	$in_motivos = "";
+	//carregando o motivo das categorizações, pois não temos uma tabela de cadastros destes..
+	$query = $pdo->prepare("select distinct  cd_motivo, ds_motivo from tb_log_categorizacao
+                            where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
+                            order by ds_motivo");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{	    	    
+	    $in_motivos .= '<option value="'.$row['cd_motivo'].'">'.$row['ds_motivo'].'</option>';	   
 	}
 ?>
 
@@ -205,7 +217,8 @@ $(document).ready(function(){
 				$("#div_qual_mes").hide();
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();				
+				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();				
 				$("#btn_pesquisar").html("Consultar");
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
@@ -239,6 +252,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();				
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -286,6 +300,7 @@ $(document).ready(function(){
 				$("#btn_pesquisar").html("Consultar");
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_select_ilhas").hide();
 				$("#div_ilhas").hide();
 				$("#div_tempo_de_corte").hide();
@@ -315,6 +330,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -360,6 +376,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -393,6 +410,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -436,6 +454,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -469,6 +488,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -512,6 +532,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -556,6 +577,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -600,6 +622,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_dmm").hide();
 				$("#div_dias_excluir").hide();
 				$("#div_filas").hide();
@@ -649,6 +672,7 @@ $(document).ready(function(){
 				$("#div_qual_ano").show();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_select_ilhas").hide();
 				$("#div_ilhas").hide();
 				$("#div_tempo_de_corte").hide();
@@ -683,6 +707,7 @@ $(document).ready(function(){
 				$("#div_dia_semana").hide();
 				$("#div_qual_rechamadas").hide();
 				$("#div_reicidencia_pesq_satisfacao").hide();
+				$("#div_motivo_submtivo_pesq_satisfacao").hide();
 				$("#div_select_ilhas").hide();
 				$("#div_ilhas").hide();
 				$("#div_tempo_de_corte").hide();
@@ -712,6 +737,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").show();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dia_semana").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
@@ -750,6 +776,7 @@ $(document).ready(function(){
 					$("#btn_pesquisar").html("Consultar");
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_select_ilhas").hide();
 					$("#div_ilhas").hide();
 					$("#div_tempo_de_corte").hide();
@@ -791,6 +818,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -826,6 +854,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -861,6 +890,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -896,6 +926,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -931,6 +962,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -966,6 +998,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -1001,6 +1034,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").hide();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -1015,7 +1049,7 @@ $(document).ready(function(){
 					$("#div_perg_satisfacao").show();
 					$("#div_parametros_retencao_ura_c24").hide();
 					$("#div_localiza_atendimentos").hide();
-					$('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+					$('#frame_230', top.document).eq(0).attr ('rows', '320,*');
 					$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");
 					$("#div_datas").show();
 					$("#div_datas1").hide();
@@ -1037,6 +1071,7 @@ $(document).ready(function(){
 					$("#div_qual_ano").hide();
 					$("#div_qual_rechamadas").hide();
 					$("#div_reicidencia_pesq_satisfacao").show();
+					$("#div_motivo_submtivo_pesq_satisfacao").hide();
 					$("#div_dmm").hide();
 					$("#div_dias_excluir").hide();
 					$("#div_filas").hide();
@@ -1056,7 +1091,7 @@ $(document).ready(function(){
 						$("#div_button").show();
 						$("#div_tex_detalhes").show();
 						$("#div_parametros_retencao_ura_c24").show();
-						$('#frame_230', top.document).eq(0).attr ('rows', '300,*');
+						$('#frame_230', top.document).eq(0).attr ('rows', '320,*');
 						
 						$("#data_final").show();						
 						$("#txt_data_inicial").html("Data Inicial:");
@@ -1074,6 +1109,7 @@ $(document).ready(function(){
 						$("#div_qual_ano").hide();
 						$("#div_qual_rechamadas").hide();
 						$("#div_reicidencia_pesq_satisfacao").hide();
+						$("#div_motivo_submtivo_pesq_satisfacao").hide();
 						$("#div_dmm").hide();
 						$("#div_dias_excluir").hide();
 						$("#div_filas").hide();
@@ -1082,6 +1118,40 @@ $(document).ready(function(){
 						$("#div_ilhas").hide();
 						$("#div_tempo_de_corte").hide();
 						
+						break;
+						
+					case '25':
+						$("#div_perg_satisfacao").show();																		
+						$("#div_datas1").show();
+						$("#div_motivo_submtivo_pesq_satisfacao").show();						
+						$("#div_button").show();				
+						$("#div_tex_detalhes").show();												
+						$("#div_datas").hide();
+						$("#div_datas2").hide();
+						$("#div_reicidencia_pesq_satisfacao").hide();						
+						$("#div_parametros_retencao_ura_c24").hide();
+						$("#div_localiza_atendimentos").hide();
+						$('#frame_230', top.document).eq(0).attr ('rows', '360,*');
+						$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");																	
+						$("#div_select_dias_semana").hide();
+						$("#div_dia_semana").hide();											
+						//$("#txt_data_inicial").html("Data:");
+						$("#div_qtd_transf").hide();
+						$("#div_select_operador_supervisor").hide();
+						$("#div_select_intervalo").hide();
+						$("#div_codigo_eventos").hide();
+						$("#div_fonte").hide();
+						$("#div_select_filas").hide();
+						$("#div_qual_mes").hide();
+						$("#div_qual_ano").hide();
+						$("#div_qual_rechamadas").hide();						
+						$("#div_dmm").hide();
+						$("#div_dias_excluir").hide();
+						$("#div_filas").hide();
+						$("#btn_pesquisar").html("Consultar");
+						$("#div_select_ilhas").hide();
+						$("#div_ilhas").hide();
+						$("#div_tempo_de_corte").hide();						
 						break;
 		}
 	});
@@ -1163,8 +1233,8 @@ $(document).ready(function(){
             dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-    		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//beforeShow: aumentaFrame,
+    		//onClose: diminuiFrame
         });
     });
 
@@ -1211,8 +1281,8 @@ $(document).ready(function(){
             dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-    		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//beforeShow: aumentaFrame,
+    		//onClose: diminuiFrame
         });
     });
 
@@ -1300,6 +1370,7 @@ function diminuiFrame(){
     				<option value="21">Transferências para Mesma Fila</option>
     				<option value="17">Pesquisa de Satisfação</option>
     				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
+    				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
     				
     				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
     				<option value="02">Percentual de Retenção URA</option>
@@ -1365,6 +1436,28 @@ function diminuiFrame(){
     		    	<option value="02">CPF Demandante</option>
     		    	<option value="01">Cartão Demandante</option>		    	    	
     			</select>
+    		</div>
+    		
+    		<!-- CAIXA DE SELEÇÃO "REICIDENCIA PESQUISA SATISFAÇÃO" --> 
+    		<div id="div_motivo_submtivo_pesq_satisfacao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<fieldset style="display:block !important;">
+    				<legend>Motivo/SubMotivo</legend> 
+        			<div id="div_motivo" class="w3-left w3-margin-bottom w3-margin-left">
+                       <b><label for="cd_motivo" style="display:block !important;">Motivos</label></b> 
+                        <select name="cd_motivo" id="cd_motivo">
+                            <option value=""></option>
+                            <?php echo $in_motivos;?>
+                        </select>
+                    </div>  
+           
+                    <div id="div_submotivo" class="w3-left w3-margin-bottom w3-margin-left" >
+                        <b><label for="cd_submotivo" style="display:block !important;">SubMotivos</label></b>       
+                        <select name="cd_submotivo" id="cd_submotivo">
+                            <option value="">-- Escolha um submotivo --</option>
+                        </select>       
+                        <span class="carregando" >Aguarde, carregando...</span>                                                     
+                    </div>
+                </fieldset>
     		</div>
 		
 		
@@ -1459,24 +1552,33 @@ function diminuiFrame(){
 		
     		<!-- DIV DATAS - div_datas -->
     		<div id="div_datas1" class="w3-left w3-margin">	
-    			<fieldset>	
+    			<fieldset style="display: block; height: 75px; padding: 10px;">	
     			 	<legend>Intervalo</legend>		
-            			<b id="txt_data_inicial">Data Inicial:</b>
-            			<input id="data_inicial1" type='text' size='10' name="data_inicial1" value='' onkeypress="mascaraData_inicial(this, event, 1);" maxlength="10">
-            			
-            			<b id="txt_data_final" class='w3-margin-left'>Data Final:</b>
-            			<input id="data_final1" type='text' size='10' name="data_final1" value='' onkeypress="mascaraData_final(this, event, 1);" maxlength="10">
+    			 		 <div class="w3-left w3-margin-bottom w3-margin-left" >
+        			 		 <b><label for="data_inicial1" style="display:block !important;">Data Inicial:</label></b>             			
+                			 <input id="data_inicial1" type='text' size='13' name="data_inicial1" value='' onkeypress="mascaraData_inicial(this, event, 1);" maxlength="10">             			            			
+     					 </div>       			
+	           			 <div class="w3-left w3-margin-bottom w3-margin-left">
+    	           			 <b><label for="data_final1" style="display:block !important;">Data Final:</label></b>
+                			 <input id="data_final1" type='text' size='14' name="data_final1" value='' onkeypress="mascaraData_final(this, event, 1);" maxlength="10">
+						 </div>            			 
             	</fieldset>				
     		</div>
     		<!-- DIV DATAS 2 - Para usar como comparativo (benchmark) -->
     		<div disabled id="div_datas2" class="w3-left w3-margin">		
-    			 <fieldset>	
+    			<fieldset style="display: block; height: 75px; padding: 10px;">	
     			 	<legend>Benchmark</legend>	
-        			<b id="txt_data_inicial2">Data Inicial:</b>
-        			<input disabled id="data_inicial2" type='text' size='10' name="data_inicial2" value='' onkeypress="mascaraData_inicial(this, event, 2);" maxlength="10">
-        			
-        			<b id="txt_data_final2" class='w3-margin-left'>Data Final:</b>
-        			<input disabled id="data_final2" type='text' size='10' name="data_final2" value='' onkeypress="mascaraData_final(this, event, 2);" maxlength="10">
+    			 	<div class="w3-left w3-margin-bottom w3-margin-left" >
+    			 		 <b><label for="data_inicial1" style="display:block !important;">Data Inicial:</label></b>             			
+            			 <input disabled id="data_inicial2" type='text' size='13' name="data_inicial1" value='' onkeypress="mascaraData_inicial(this, event, 1);" maxlength="10">             			            			
+ 					 </div>       			
+           			 <div class="w3-left w3-margin-bottom w3-margin-left">
+	           			 <b><label for="data_final1" style="display:block !important;">Data Final:</label></b>
+            			 <input disabled id="data_final2" type='text' size='14' name="data_final1" value='' onkeypress="mascaraData_final(this, event, 1);" maxlength="10">
+					 </div>
+    			 	
+    			 	
+            		
         		</fieldset>			
     		</div>
 		
@@ -1533,42 +1635,49 @@ function diminuiFrame(){
     		?>
     	</div>
 	
-    	<div id="div_perg_satisfacao" class="w3-container">            
-    		<div id="div_perg_satisfacao_perg1" class="w3-left w3-margin-bottom ">
-    		   <b><label for="perg1" style="display:block !important;">No Geral, qual seu grau de satisfação?</label></b> 
-    			<select name="perg1" id="perg1" style="width:260px">
-    				<option value="1">Satisfeito</option>
-    				<option value="2">Indiferente</option>
-    				<option value="3" selected="selected">Insatisfeito</option>                   
-    			</select>
-    		</div>             		                  
-                            
-    		<div id="div_perg_satisfacao_perg2" class="w3-left w3-margin-bottom w3-margin-left">
-    		   <b><label for="perg2" style="display:block !important;" >Quanto ao tempo de espera, você se considera:</label></b> 
-    			<select name="perg2" id="perg2" style="width:320px">
-    				<option value="1">Satisfeito</option>
-    				<option value="2">Indiferente</option>
-    				<option value="3" selected="selected">Insatisfeito</option>   
-    			</select>
-    		</div>                                     
-    		
-    		<div id="div_perg_satisfacao_perg3" class="w3-left w3-margin-bottom w3-margin-left">
-    		   <b><label for="perg3" style="display:block !important;">Quanto à cordialidade do atendente, você se considera:</label></b> 
-    			<select name="perg3" id="perg3" style="width:320px">
-    				<option value="1">Satisfeito</option>
-    				<option value="2">Indiferente</option>
-    				<option value="3" selected="selected">Insatisfeito</option>                      
-    			</select>
-    		</div>  
-    
-    		<div id="div_perg_satisfacao_perg4" class="w3-left w3-margin-bottom w3-margin-left">
-    		   <b><label for="perg4" style="display:block !important;">A solicitação foi atendida ao final do atendimento?</label></b> 
-    			<select name="perg4" id="perg4" style="width:320px">
-    				<option value="1">Sim</option>
-    				<option value="2">Parcialmente</option>
-    				<option value="3" selected="selected">Não</option>                        
-    			</select>
-    		</div>                       
+    	<div id="div_perg_satisfacao" class="w3-container">  
+	    	<fieldset style="display: inline-block; height: 70px; padding: 10px;">
+    			<legend>Perguntas - Pesquisa de Satisfação</legend>          
+        		<div id="div_perg_satisfacao_perg1" class="w3-left w3-margin-bottom ">
+        		   <b><label for="perg1" style="display:block !important;">No Geral, qual seu grau de satisfação?</label></b> 
+        			<select name="perg1" id="perg1" style="width:240px">
+        				<option value="0" selected>Todas</option>  
+        				<option value="1">Satisfeito</option>
+        				<option value="2">Indiferente</option>
+        				<option value="3">Insatisfeito</option>                   
+        			</select>
+        		</div>             		                  
+                                
+        		<div id="div_perg_satisfacao_perg2" class="w3-left w3-margin-bottom w3-margin-left">
+        		   <b><label for="perg2" style="display:block !important;" >Quanto ao tempo de espera, você se considera:</label></b> 
+        			<select name="perg2" id="perg2" style="width:300px">
+        				<option value="0" selected>Todas</option>
+        				<option value="1">Satisfeito</option>
+        				<option value="2">Indiferente</option>
+        				<option value="3" >Insatisfeito</option>   
+        			</select>
+        		</div>                                     
+        		
+        		<div id="div_perg_satisfacao_perg3" class="w3-left w3-margin-bottom w3-margin-left">
+        		   <b><label for="perg3" style="display:block !important;">Quanto à cordialidade do atendente, você se considera:</label></b> 
+        			<select name="perg3" id="perg3" style="width:310px">
+        				<option value="0" selected>Todas</option>
+        				<option value="1">Satisfeito</option> 
+        				<option value="2">Indiferente</option>
+        				<option value="3" >Insatisfeito</option>                      
+        			</select>
+        		</div>  
+        
+        		<div id="div_perg_satisfacao_perg4" class="w3-left w3-margin-bottom w3-margin-left">
+        		   <b><label for="perg4" style="display:block !important;">A solicitação foi atendida ao final do atendimento?</label></b> 
+        			<select name="perg4" id="perg4" style="width:300px">
+        				<option value="0" selected>Todas</option>
+        				<option value="1">Sim</option>
+        				<option value="2">Parcialmente</option>
+        				<option value="3">Não</option>                        
+        			</select>
+        		</div> 
+        	</fieldset>                      
         </div> <!-- final div pesq satisfacao -->	
     
         <!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
@@ -1660,6 +1769,7 @@ function diminuiFrame(){
 	$("#div_qual_ano").hide();
 	$("#div_qual_rechamadas").hide();
 	$("#div_reicidencia_pesq_satisfacao").hide();
+	$("#div_motivo_submtivo_pesq_satisfacao").hide();
 	$("#div_dmm").hide();
 	$("#div_filas").hide();
 	$("#div_dias_excluir").hide();
@@ -1668,6 +1778,32 @@ function diminuiFrame(){
 	$("#div_tempo_de_corte").hide();
 	$("#div_perg_satisfacao").hide();
 	$("#div_parametros_retencao_ura_c24").hide();
+
+	
+    $(function(){
+        $('#cd_motivo').change(function()
+        {
+            if( $(this).val() ) 
+            {
+                $('#cd_submotivo').hide();
+                $('.carregando').show();
+                $.getJSON('sub_motivos.ajax.php?search=',{cd_motivo: $(this).val(), ajax: 'true'}, 
+                function(j)
+                {
+                    var options = '<option value=""></option>'; 
+                    for (var i = 0; i < j.length; i++) {
+                        options += '<option value="' + j[i].cd_submotivo + '">' + j[i].ds_submotivo + '</option>';
+                    }   
+                    $('#cd_submotivo').html(options).show();
+                    $('.carregando').hide();
+                });
+            } else {
+                $('#cd_submotivo').html('<option value="">– Escolha um Motivo –</option>');
+            }
+        });
+    });
+    
+
 </script>
 
 </body>
