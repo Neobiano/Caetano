@@ -189,7 +189,15 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
 	    
 	case '25':
 	    include "consulta_25.php"; // Pesquisa de Satisfação - Motivo/Submotivo
-	    break;	
+	    break;
+	    
+    case '26':
+	    include "consulta_26.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+	    break;
+	    
+    case '27':
+        include "consulta_27.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+        break;	
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

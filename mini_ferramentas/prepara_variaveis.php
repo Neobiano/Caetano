@@ -9,6 +9,9 @@ $data_final1 = $_POST['data_final1'];
 $data_inicial2 = $_POST['data_inicial2'];
 $data_final2 = $_POST['data_final2'];
 
+$hora_inicial = $_POST['hora_inicial'];
+$hora_final = $_POST['hora_final'];
+
 $tipo_consulta = $_POST['tipo_consulta'];
 $select_dias_semana = $_POST['select_dias_semana'];
 $qtd_transf = $_POST['qtd_transf'];
@@ -30,11 +33,9 @@ $pesq_satisf_perg2 = $_POST['perg2'];
 $pesq_satisf_perg3 = $_POST['perg3'];
 $pesq_satisf_perg4 = $_POST['perg4'];
 
-
 $cd_motivo = $_POST['cd_motivo'];
 if ($cd_motivo  > 0)
     $cd_motivo = number_format($cd_motivo, 0, ',', '.');
-
 
     
 $cd_submotivo = $_POST['cd_submotivo'];
@@ -44,6 +45,12 @@ if ($cd_submotivo > 0)
 
 $in_filas = $_POST['in_filas'];
 $in_filas = str_replace(" ","",$in_filas);
+
+$cb_motivos = $_POST['cb_motivos'];
+$cb_motivos = str_replace(" ","",trim($cb_motivos));
+
+$cb_submotivos = $_POST['cb_submotivos'];
+$cb_submotivos = str_replace(" ","",trim($cb_submotivos));
 
 $dmm = $_POST['dmm'];
 $dmm = str_replace(" ","",$dmm);

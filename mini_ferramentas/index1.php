@@ -24,7 +24,7 @@
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++)
 	{	    	    
-	    $in_motivos .= '<option value="'.$row['cd_motivo'].'">'.$row['ds_motivo'].'</option>';	   
+	    $in_motivos .= '<option value="'.$row['cd_motivo'].'">'.$row['cd_motivo'].' - '.$row['ds_motivo'].'</option>';	   
 	}
 ?>
 
@@ -37,6 +37,8 @@
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
 <link rel="stylesheet" href="css/jquery-ui.css" />
+
+
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
 <script src="js/jquery-1.8.2.js"></script>
 <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
@@ -192,967 +194,496 @@ function mascaraData_final(campoData, e,tipodata=0){
 </script>
 
 <script>
+    function hideAll(){
+    	$("#div_datas").hide();
+    	$("#div_horas").hide();
+    	$("#div_datas1").hide();
+    	$("#div_datas2").hide();
+    	$("#div_button").hide();
+    	$("#div_button2").hide();    	
+    	$("#div_tex_detalhes").hide();
+    	$("#div_select_dias_semana").hide();
+    	$("#div_dia_semana").hide();
+    	$("#div_qtd_transf").hide();
+    	$("#div_select_operador_supervisor").hide();
+    	$("#div_select_intervalo").hide();
+    	$("#div_codigo_eventos").hide();
+    	$("#div_fonte").hide();
+    	$("#div_localiza_atendimentos").hide();
+    	$("#div_select_filas").hide();
+    	$("#div_qual_mes").hide();
+    	$("#div_qual_ano").hide();
+    	$("#div_qual_rechamadas").hide();
+    	$("#div_reicidencia_pesq_satisfacao").hide();
+    	$("#div_motivo_submtivo_pesq_satisfacao").hide();
+    	$("#div_motivo_submotivo_det_resposta").hide();
+    	
+    	$("#div_dmm").hide();
+    	$("#div_filas").hide();
+    	$("#div_dias_excluir").hide();
+    	$("#div_select_ilhas").hide();
+    	$("#div_ilhas").hide();
+    	$("#div_tempo_de_corte").hide();
+    	$("#div_perg_satisfacao").hide();
+    	$("#div_parametros_retencao_ura_c24").hide();
+    
+    	return true;		
+    }
+    
 $(document).ready(function(){
+	
 	$("#tipo_consulta").change(function(){
 			switch($("#tipo_consulta").val()){
 				
 				case '00':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-				$("#div_datas").hide();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").hide();
-				$("#div_tex_detalhes").hide();
-				$("#div_select_dias_semana").hide();
-				$("#div_dia_semana").hide();
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();				
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
+					hideAll();	
+    				
 				break;
 				
 				case '01':
-				$("#div_localiza_atendimentos").hide();
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#txt_detalhes").text("Exibe os percentuais de transferências.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
+			    hideAll();	
+			    $("#div_datas").show();	
+			    $("#div_button").show();
 				$("#div_tex_detalhes").show();
 				$("#div_select_dias_semana").show();
 				$("#txt_data_final").show();
 				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
 				$("#div_select_filas").show();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();				
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				$("#btn_pesquisar").html("Consultar");
+				$("#txt_data_inicial").html("Data Inicial:");
+			    $("#txt_detalhes").text("Exibe os percentuais de transferências.");
+			    $("#btn_pesquisar").html("Consultar");
+
 				switch($("#select_dias_semana").val()){				
 					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_dia_semana").hide();
+        				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+        				$("#div_dia_semana").hide();
 					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_dia_semana").show();
-					break;
-				}
+    				case '01':
+        				$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        				$("#div_dia_semana").show();
+    				break;
+				}			    				
+				
+				
 				break;
 				
 				case '02':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe o percentual de retenção na URA dia a dia.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
+					hideAll();	
+					$("#div_datas").show();
+					$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();
+    				$("#txt_data_inicial").html("Data Inicial:");
+					$("#txt_detalhes").text("Exibe o percentual de retenção na URA dia a dia.");
+					$("#btn_pesquisar").html("Consultar");					    				
 				break;
 				
 				case '03':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe a quantidade de operadores.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").show();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").show();
-				$("#div_ilhas").hide();
-				$("#div_dia_semana").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_ilhas").val()){				
+					hideAll();
+					$("#div_datas").show();
+					$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();
+    				$("#div_select_intervalo").show();    			
+    				$("#div_select_ilhas").show();
+					$("#txt_detalhes").text("Exibe a quantidade de operadores.");
+					$("#txt_data_inicial").html("Data Inicial:");
+					$("#btn_pesquisar").html("Consultar");
+					switch($("#select_ilhas").val()){				
 					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_ilhas").hide();
-					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_ilhas").show();
-					break;
-				}
-				break;
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#div_ilhas").hide();
+    					break;					
+    					case '01':
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+    					$("#div_ilhas").show();
+    					break;
+    				}
+    				break;				    				    				
 				
-				case '04':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-				$("#txt_detalhes").text("Pesquisa ligações multitransferências. A quantidade mínima de transferências a serem listadas deve ser informada.");
-				$("#div_datas").show();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#div_dia_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				//$("#txt_data_inicial").html("Data:");
-				$("#div_qtd_transf").show();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				break;
-				
+				case '04':	
+					hideAll();				    				
+    				$("#div_datas").show();
+    				$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();
+    				$("#div_qtd_transf").show();
+    				$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    				$("#txt_detalhes").text("Pesquisa ligações multitransferências. A quantidade mínima de transferências a serem listadas deve ser informada.");
+    				$("#btn_pesquisar").html("Consultar");
+    				    				
+    				break;
+    				
 				case '05':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe a categorização de chamadas referente ao período informado.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").show();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_dias_semana").val()){				
-					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_dia_semana").hide();
-					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_dia_semana").show();
+					hideAll();
+					$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#div_select_dias_semana").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();    				
+    				$("#div_datas").show();
+    				$("#btn_pesquisar").html("Consultar");
+    				$("#txt_data_inicial").html("Data Inicial:");
+					$("#txt_detalhes").text("Exibe a categorização de chamadas referente ao período informado.");
+					
+    				switch($("#select_dias_semana").val()){				
+    					case '00':
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#div_dia_semana").hide();
+    					break;					
+    					case '01':
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+    					$("#div_dia_semana").show();
+    					break;
+    				}    				    				    				
 					break;
-				}
-				break;
 				
-				case '06':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe o total de ligações / TMA / NSA 45 e NSA 90 referente ao período informado.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").show();
+				case '06': //TMA e Nível de Serviço
+					hideAll();
+										
+					$("#div_datas").show();
+					$("#div_button").show();
+					$("#div_tex_detalhes").show();
+					$("#txt_data_final").show();
+					$("#data_final").show();
+					$("#div_tempo_de_corte").show();
+					$("#txt_detalhes").text("Exibe o total de ligações / TMA / NSA 45 e NSA 90 referente ao período informado.");
+					$("#txt_data_inicial").html("Data Inicial:");
+					$("#btn_pesquisar").html("Consultar");															
 				break;
 				
 				case '07':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe o TMA dos operadores/supervisores referente ao período informado.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").show();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").show();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_dias_semana").val()){				
-					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_dia_semana").hide();
-					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_dia_semana").show();
-					break;
-				}
-				break;
-				
-				case '08':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Exibe o percentual de não categorização dos atendimentos pelos operadores referente ao período informado.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").show();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_dias_semana").val()){				
-					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_dia_semana").hide();
-					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_dia_semana").show();
-					break;
-				}
-				break;
-				
-				case '09':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-				$("#txt_detalhes").text("Traduz sequência de eventos.");
-				$("#div_datas").hide();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").hide();
-				$("#data_final").hide();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").show();
-				$("#div_fonte").show();
-				$("#div_select_filas").hide();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Traduzir");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_fonte").val()){				
-					case '00':
-					$("#codigo_evento").attr("placeholder", "Exemplo: MENU001;MENU005;MENU007;MENU009");
-					break;					
-					case '01':
-					$("#codigo_evento").attr("placeholder", "Exemplo: 001;002;003;004");
-					break;
-					case '02':
-					$("#codigo_evento").attr("placeholder", "Exemplo: LOG_10;LOG_11;LOG_12;LOG_13");
-					break;
-				}
-				break;
-				
-				case '11':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").show();
-				$("#txt_detalhes").text("Localiza atendimentos a partir de alguns dados.");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide(); 
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				switch($("#select_dias_semana").val()){				
-					case '00':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#div_dia_semana").hide();
-					break;					
-					case '01':
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-					$("#div_dia_semana").show();
-					break;
-				}
-				break;
-				
-				case '12':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-				$("#txt_detalhes").text("Calcula o DNS - Dispersão de Nível de Serviço por Faixa de Horário.");
-				$("#div_datas").hide();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#div_dia_semana").hide();
-				$("#txt_data_final").hide();
-				$("#data_final").hide();
-				$("#txt_data_inicial").html("Data:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").hide();
-				$("#div_dmm").show();
-				$("#div_dias_excluir").show();
-				$("#div_filas").show();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_qual_mes").show();
-				$("#div_qual_ano").show();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				break;
-				
-				case '13':
-				$("#div_perg_satisfacao").hide();
-				$("#div_parametros_retencao_ura_c24").hide();
-				$("#div_localiza_atendimentos").hide();
-				$("#txt_detalhes").text("Comparativo tb_eventos_DAC X tb_fila_acumulado");
-				$("#div_datas").show();
-				$("#div_datas1").hide();
-				$("#div_datas2").hide();
-				$("#div_button").show();
-				$("#div_tex_detalhes").show();
-				$("#div_select_dias_semana").hide();
-				$("#txt_data_final").show();
-				$("#data_final").show();
-				$("#txt_data_inicial").html("Data Inicial:");
-				$("#div_qtd_transf").hide();
-				$("#div_select_operador_supervisor").hide();
-				$("#div_select_intervalo").hide();
-				$("#div_codigo_eventos").hide();
-				$("#div_fonte").hide();
-				$("#div_select_filas").show();
-				$("#div_qual_mes").hide();
-				$("#div_qual_ano").hide();
-				$("#div_dmm").hide();
-				$("#div_dias_excluir").hide();
-				$("#div_filas").hide();
-				$("#btn_pesquisar").html("Consultar");
-				$("#div_dia_semana").hide();
-				$("#div_qual_rechamadas").hide();
-				$("#div_reicidencia_pesq_satisfacao").hide();
-				$("#div_motivo_submtivo_pesq_satisfacao").hide();
-				$("#div_select_ilhas").hide();
-				$("#div_ilhas").hide();
-				$("#div_tempo_de_corte").hide();
-				break;
-
-				case '14':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$("#txt_detalhes").text("Exibe a incidência de rechamadas dia a dia.");
+					hideAll();			
 					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					$("#txt_data_inicial").html("Data Inicial:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").show();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dia_semana").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					break;
-
-				case '15':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$("#txt_detalhes").text("Exibe os eventos acessados na URA e a quantidade em um determinado período.");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
+					$("#div_select_operador_supervisor").show();
 					$("#div_button").show();
 					$("#div_tex_detalhes").show();
 					$("#div_select_dias_semana").show();
 					$("#txt_data_final").show();
 					$("#data_final").show();
 					$("#txt_data_inicial").html("Data Inicial:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
 					$("#btn_pesquisar").html("Consultar");
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
+					$("#txt_detalhes").text("Exibe o TMA dos operadores/supervisores referente ao período informado.");		
+					
 					switch($("#select_dias_semana").val()){				
-						case '00':
-						$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-						$("#div_dia_semana").hide();
-						break;					
-						case '01':
-						$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
-						$("#div_dia_semana").show();
-						break;
-					}
-					break;
-
-				case '16':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Pesquisa transferências recorrentes.");
+					case '00':
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#div_dia_semana").hide();
+    					break;					
+    					case '01':
+    					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+    					$("#div_dia_semana").show();
+    					break;
+    				}
+    				break;																				
+				
+				case '08': //Perc. Atend. não Categorizados		
+					hideAll();						
+    				$("#div_datas").show();
+    				$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#div_select_dias_semana").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();    				
+    				$("#btn_pesquisar").html("Consultar");
+    				$("#txt_detalhes").text("Exibe o percentual de não categorização dos atendimentos pelos operadores referente ao período informado.");
+					$("#txt_data_inicial").html("Data Inicial:");
+    				switch($("#select_dias_semana").val()){				
+    					case '00':
+        						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+        						$("#div_dia_semana").hide();
+        					break;					
+        				case '01':
+        						$('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        						$("#div_dia_semana").show();
+        					break;
+    				}
+    				break;    	
+    							    				    								
+				case '09': //URA / FRONTEND - Tradutor de Evento
+					hideAll();
+					$("#div_codigo_eventos").show();
+    				$("#div_fonte").show();
+					$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    				$("#txt_detalhes").text("Traduz sequência de eventos.");
+    				$("#txt_data_inicial").html("Data Inicial:");
+    				$("#btn_pesquisar").html("Traduzir");
+    				switch($("#select_fonte").val()){				
+    					case '00':
+    						$("#codigo_evento").attr("placeholder", "Exemplo: MENU001;MENU005;MENU007;MENU009");
+    					break;					
+    					case '01':
+    						$("#codigo_evento").attr("placeholder", "Exemplo: 001;002;003;004");
+    					break;
+    					case '02':
+    						$("#codigo_evento").attr("placeholder", "Exemplo: LOG_10;LOG_11;LOG_12;LOG_13");
+    					break;
+    				}
+    				break;
+    				    			    								
+				case '11':
+					hideAll();
+    				$("#txt_detalhes").text("Localiza atendimentos a partir de alguns dados.");
+    				$("#txt_data_inicial").html("Data Inicial:");
+    				$("#btn_pesquisar").html("Consultar");
+    				$("#div_localiza_atendimentos").show();
+    				$("#div_datas").show();
+    				$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				$("#txt_data_final").show();
+    				$("#data_final").show();
+    				switch($("#select_dias_semana").val()){				
+    					case '00':
+        					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+        					$("#div_dia_semana").hide();
+    					break;					
+    					case '01':
+        					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        					$("#div_dia_semana").show();
+    					break;
+        			}
+        			break;				    				    			
+				
+				case '12': //DNS - Dispersão de Nível de Serviço
+					hideAll();
+					$("#div_dmm").show();
+    				$("#div_dias_excluir").show();
+    				$("#div_filas").show();    				
+    				$("#div_qual_mes").show();
+    				$("#div_qual_ano").show();
+					$("#div_button").show();
+    				$("#div_tex_detalhes").show();
+    				
+					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    				$("#txt_detalhes").text("Calcula o DNS - Dispersão de Nível de Serviço por Faixa de Horário.");
+    				$("#txt_data_inicial").html("Data:");
+    				$("#btn_pesquisar").html("Consultar");
+    				    				    				
+				break;
+				
+				case '13': //Comparativo tb_eventos_DAC X tb_fila_acumulado
+					hideAll();
 					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
 					$("#div_button").show();
 					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
 					$("#txt_data_final").show();
 					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
+					$("#div_select_filas").show();
+					$("#txt_data_inicial").html("Data Inicial:");
 					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
+					$("#txt_detalhes").text("Comparativo tb_eventos_DAC X tb_fila_acumulado");										
+				break;
+
+				case '14': //Incidência de Rechamadas
+					hideAll();
+					$("#div_datas").show();
+					$("#div_button").show();
+					$("#div_tex_detalhes").show();
+					$("#div_qual_rechamadas").show();
+					$("#txt_data_final").show();
+					$("#data_final").show();
+					$("#txt_data_inicial").html("Data Inicial:");
+					$("#btn_pesquisar").html("Consultar");
+					$("#txt_detalhes").text("Exibe a incidência de rechamadas dia a dia.");
+
 					break;
 
-					case '17':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
+				case '15': //URA - Eventos x Quantidade
+					hideAll();
+					$("#div_datas").show();
+					$("#div_button").show();
+					$("#div_tex_detalhes").show();
+					$("#div_select_dias_semana").show();
+					$("#txt_data_final").show();
+					$("#data_final").show();
+					
+					$("#txt_detalhes").text("Exibe os eventos acessados na URA e a quantidade em um determinado período.");
+					$("#txt_data_inicial").html("Data Inicial:");
+					$("#btn_pesquisar").html("Consultar");
+
+					switch($("#select_dias_semana").val()){				
+    					case '00':
+        					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+        					$("#div_dia_semana").hide();
+    					break;					
+    					case '01':
+        					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        					$("#div_dia_semana").show();
+    					break;
+    				}
+
+					break;
+
+				case '16': //Transferências Recorrentes
+					hideAll();
+					$("#div_button").show();
+					$("#div_tex_detalhes").show();
+					$("#div_datas").show();
+					$("#txt_data_final").show();
+					$("#data_final").show();
+					
+					$("#btn_pesquisar").html("Consultar");
+					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
+					$("#txt_detalhes").text("Pesquisa transferências recorrentes.");
+					
+					break;
+
+				case '17': //Pesquisa de Satisfação
+					hideAll();
+					
+					$("#div_datas").show();
+					$("#div_button").show();
+					$("#div_tex_detalhes").show();
+					$("#txt_data_final").show();
+					$("#data_final").show();
 					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
 					$("#txt_detalhes").text("Exibe os totalizadores da Pesquisa de Satisfação.");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
 					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
+				
 					break;
 					
-					case '18':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Monitora as Desconexões da URA");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					break;
+					case '18': //URA - Monitora Desconexões
+						hideAll();
+						$("#txt_data_final").show();
+    					$("#data_final").show();
+						$("#div_button").show();
+    					$("#div_tex_detalhes").show();
+						$("#div_datas").show();
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#txt_detalhes").text("Monitora as Desconexões da URA");  
+    					$("#btn_pesquisar").html("Consultar");  					
+    				
+    					break;
 					
-					case '19':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Monitora erros de Webservice URA");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					break;
+					case '19': //URA - Monitora Erros de Webservice
+						hideAll();
+						$("#div_datas").show();
+						$("#div_button").show();
+						$("#txt_data_final").show();
+    					$("#data_final").show();
+    					$("#div_tex_detalhes").show();
+    					$("#btn_pesquisar").html("Consultar");
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#txt_detalhes").text("Monitora erros de Webservice URA");
+    					    					    					
+    					break;
 					
-					case '20':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Monitora desbloqueio de cartão via URA");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					break;
+					case '20': //URA - Monitora Desbl. Cartão via URA	
+						hideAll();   
+						$("#div_button").show();
+        				$("#div_tex_detalhes").show();     				
+        				$("#div_datas").show();
+        				$("#txt_data_final").show();
+        				$("#data_final").show();
+        				$("#btn_pesquisar").html("Consultar");
+        				$("#txt_detalhes").text("Monitora desbloqueio de cartão via URA");
+        				$('#frame_230',top.document).eq(0).attr ('rows', '260,*');        				        									        			
+        				break;
 					
-					case '21':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Pesquisa transferências pra mesma fila.");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					break;
+					case '21': //Transferências para Mesma Fila
+						hideAll();  
+										
+    					$("#div_datas").show();
+    					$("#div_button").show();
+    					$("#div_tex_detalhes").show();
+    					$("#txt_data_final").show();
+    					$("#data_final").show();
+
+    					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#txt_detalhes").text("Pesquisa transferências pra mesma fila.");   
+    					$("#btn_pesquisar").html("Consultar"); 	
+    					    					
+    					break;
 					
-					case '22':
-					$("#div_perg_satisfacao").hide();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
-					$("#txt_detalhes").text("Verifica se as tabelas no Banco de Dados foram alimentadas corretamente.");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").hide();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
+					case '22': //BD - Verifica Alimentação BD
+						hideAll();  									
+    					$("#div_datas").show();					
+    					$("#div_button").show();
+    					$("#div_tex_detalhes").show();					
+    					$("#txt_data_final").show();
+    					$("#data_final").show();
+    					    					    					
+    					$("#btn_pesquisar").html("Consultar");
+    					$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+    					$("#txt_detalhes").text("Verifica se as tabelas no Banco de Dados foram alimentadas corretamente.");
+					
 					break;
 					
 					
-					case '23':
-					$("#div_perg_satisfacao").show();
-					$("#div_parametros_retencao_ura_c24").hide();
-					$("#div_localiza_atendimentos").hide();
-					$('#frame_230', top.document).eq(0).attr ('rows', '320,*');
-					$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");
-					$("#div_datas").show();
-					$("#div_datas1").hide();
-					$("#div_datas2").hide();
-					$("#div_button").show();
-					$("#div_tex_detalhes").show();
-					$("#div_select_dias_semana").hide();
-					$("#div_dia_semana").hide();
-					$("#txt_data_final").show();
-					$("#data_final").show();
-					//$("#txt_data_inicial").html("Data:");
-					$("#div_qtd_transf").hide();
-					$("#div_select_operador_supervisor").hide();
-					$("#div_select_intervalo").hide();
-					$("#div_codigo_eventos").hide();
-					$("#div_fonte").hide();
-					$("#div_select_filas").hide();
-					$("#div_qual_mes").hide();
-					$("#div_qual_ano").hide();
-					$("#div_qual_rechamadas").hide();
-					$("#div_reicidencia_pesq_satisfacao").show();
-					$("#div_motivo_submtivo_pesq_satisfacao").hide();
-					$("#div_dmm").hide();
-					$("#div_dias_excluir").hide();
-					$("#div_filas").hide();
-					$("#btn_pesquisar").html("Consultar");
-					$("#div_select_ilhas").hide();
-					$("#div_ilhas").hide();
-					$("#div_tempo_de_corte").hide();
-					
+					case '23': //Pesquisa de Satisfação - Detalhamento
+						hideAll();
+						$("#div_perg_satisfacao").show();
+						$("#div_datas").show();
+						$("#div_button2").show();
+						$("#div_tex_detalhes").show();
+						$("#txt_data_final").show();
+						$("#data_final").show();
+						$("#div_reicidencia_pesq_satisfacao").show();
+						$('#frame_230', top.document).eq(0).attr ('rows', '320,*');
+						$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");
+						$("#btn_pesquisar2").html("Consultar");
+																											
 					break;
 
-					case '24':
-						
-						$("#txt_detalhes").text("Exibe a análise de retenção da URA");
-						$("#div_datas").hide();
+					case '24': //URA - Análise de Retenção/Desconexão
+						hideAll();
+						$("#txt_detalhes").text("Exibe a análise de retenção da URA");						
 						$("#div_datas1").show();
 						$("#div_datas2").show();
+						$("#data_final").show();
 						$("#div_button").show();
 						$("#div_tex_detalhes").show();
-						$("#div_parametros_retencao_ura_c24").show();
-						$('#frame_230', top.document).eq(0).attr ('rows', '320,*');
-						
-						$("#data_final").show();						
+						$("#div_parametros_retencao_ura_c24").show();						
+						$('#frame_230', top.document).eq(0).attr ('rows', '320,*');																		
 						$("#txt_data_inicial").html("Data Inicial:");
-						$("#div_select_dias_semana").hide();
-						$("#div_select_operador_supervisor").hide();
-						$("#div_perg_satisfacao").hide();
-						$("#div_localiza_atendimentos").hide();
-						$("#div_qtd_transf").hide();
-						
-						$("#div_select_intervalo").hide();
-						$("#div_codigo_eventos").hide();
-						$("#div_fonte").hide();
-						$("#div_select_filas").hide();
-						$("#div_qual_mes").hide();
-						$("#div_qual_ano").hide();
-						$("#div_qual_rechamadas").hide();
-						$("#div_reicidencia_pesq_satisfacao").hide();
-						$("#div_motivo_submtivo_pesq_satisfacao").hide();
-						$("#div_dmm").hide();
-						$("#div_dias_excluir").hide();
-						$("#div_filas").hide();
-						$("#btn_pesquisar").html("Consultar");
-						$("#div_select_ilhas").hide();
-						$("#div_ilhas").hide();
-						$("#div_tempo_de_corte").hide();
+						$("#btn_pesquisar").html("Consultar");						
 						
 						break;
 						
-					case '25':
+					case '25': //Pesquisa de Satisfação - Motivo/SubMotivo
+						hideAll();
+						
 						$("#div_perg_satisfacao").show();																		
 						$("#div_datas1").show();
 						$("#div_motivo_submtivo_pesq_satisfacao").show();						
-						$("#div_button").show();				
-						$("#div_tex_detalhes").show();												
-						$("#div_datas").hide();
-						$("#div_datas2").hide();
-						$("#div_reicidencia_pesq_satisfacao").hide();						
-						$("#div_parametros_retencao_ura_c24").hide();
-						$("#div_localiza_atendimentos").hide();
+						$("#div_button2").show();				
+						$("#div_tex_detalhes").show();																		
 						$('#frame_230', top.document).eq(0).attr ('rows', '360,*');
-						$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");																	
-						$("#div_select_dias_semana").hide();
-						$("#div_dia_semana").hide();											
-						//$("#txt_data_inicial").html("Data:");
-						$("#div_qtd_transf").hide();
-						$("#div_select_operador_supervisor").hide();
-						$("#div_select_intervalo").hide();
-						$("#div_codigo_eventos").hide();
-						$("#div_fonte").hide();
-						$("#div_select_filas").hide();
-						$("#div_qual_mes").hide();
-						$("#div_qual_ano").hide();
-						$("#div_qual_rechamadas").hide();						
-						$("#div_dmm").hide();
-						$("#div_dias_excluir").hide();
-						$("#div_filas").hide();
-						$("#btn_pesquisar").html("Consultar");
-						$("#div_select_ilhas").hide();
-						$("#div_ilhas").hide();
-						$("#div_tempo_de_corte").hide();						
+						$("#txt_detalhes").text("Exibe os registros de reicidência de clientes insatisfeitos");
+						$("#btn_pesquisar2").html("Consultar");
+							
+												
 						break;
+
+					case '26': //Pesquisa de Satisfação - Monitoramento de Respostas
+						hideAll();																								
+						$("#div_datas1").show();
+						$("#div_motivo_submotivo_det_resposta").show();																		
+						$("#div_button").show();				
+						$("#div_tex_detalhes").show();
+						$("#txt_detalhes").text("Exibe o quantitativo de resposta de acordo com os filtros aplicados");																										
+						$('#frame_230', top.document).eq(0).attr ('rows', '360,*');		
+						$("#btn_pesquisar").html("Consultar");																															
+						break;
+
+					case '27': //Quantidade de Operadores - Detalhamento
+						hideAll();
+						$("#div_horas").show();
+						$("#div_datas").show();
+						$("#div_button").show();
+	    				$("#div_tex_detalhes").show();
+	    				$("#txt_data_final").show();
+	    				$("#data_final").show();	    				    				    			
+						$("#txt_detalhes").text("Exibe a quantidade de operadores atuantes de forma detalhada.");
+						$("#txt_data_inicial").html("Data Inicial:");
+						$("#btn_pesquisar").html("Consultar");						
+	    				break;																																	
+						
 		}
 	});
 });
@@ -1371,11 +902,13 @@ function diminuiFrame(){
     				<option value="17">Pesquisa de Satisfação</option>
     				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
     				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
+    				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
     				
     				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
     				<option value="02">Percentual de Retenção URA</option>
     				<option value="14">Incidência de Rechamadas</option>
     				<option value="03">Quantidade de Operadores</option>
+    				<option value="27">Quantitativo de Operadores - Detalhamento</option>
     				<option value="06">TMA e Nível de Serviço</option> <!-- Incluir Consulta por Faixa de Horário / Geral (Dia-a-Dia / Faixa Horário) / Por Ilha -->
     				<option value="07">TMA - Operador / Supervisor</option>
     				<option value="08">Perc. Atend. não Categorizados</option> <!-- Por Skill -->
@@ -1457,6 +990,20 @@ function diminuiFrame(){
                         </select>       
                         <span class="carregando" >Aguarde, carregando...</span>                                                     
                     </div>
+                </fieldset>
+    		</div>
+    		
+    		<!-- caixa multiseletora para motivo/submotivo no detalhamento de resposta - pesquisa de satisfação --> 
+    		<div id="div_motivo_submotivo_det_resposta" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<fieldset style="display:block !important;">
+    				<div id='div_motivos' class='w3-left w3-margin-top w3-margin-bottom w3-margin-left'>	
+    					<b id='txt_motivos'>Motivos :</b>
+    					<input id='cb_motivos' type='text' size='20' name='cb_motivos'  placeholder='19,12,13,25'>
+    				</div>
+    				<div id='div_submotivos' class='w3-left w3-margin-top w3-margin-bottom w3-margin-left'>	
+    					<b id='txt_submotivos'>Submotivos :</b>
+    					<input id='cb_submotivos' type='text' size='25' name='cb_submotivos'  placeholder='150,138,240'>
+    				</div>
                 </fieldset>
     		</div>
 		
@@ -1549,6 +1096,15 @@ function diminuiFrame(){
     			<b id="txt_data_final" class='w3-margin-left'>Data Final:</b>
     			<input id="data_final" type='text' size='10' name="data_final" value='' onkeypress="mascaraData_final(this, event);" maxlength="10">        					
     		</div>
+    		
+    		<!-- DIV Horas - div_horas -->
+    		<div id="div_horas" class="w3-left w3-margin">										
+    			<b id="txt_hr_inicial">Hora Inicial:</b>
+    			<input id="hora_inicial" type='text' size='10' name="hora_inicial" value='00:00:00' onkeypress="mascaraHora_Inicial(this, event);" maxlength="10">
+    			
+    			<b id="txt_hora_final" class='w3-margin-left'>Hora Final:</b>
+    			<input id="hora_final" type='text' size='10' name="hora_final" value='23:59:59' onkeypress="mascaraHora_Final(this, event);" maxlength="10">        					
+    		</div>
 		
     		<!-- DIV DATAS - div_datas -->
     		<div id="div_datas1" class="w3-left w3-margin">	
@@ -1636,48 +1192,60 @@ function diminuiFrame(){
     	</div>
 	
     	<div id="div_perg_satisfacao" class="w3-container">  
-	    	<fieldset style="display: inline-block; height: 70px; padding: 10px;">
-    			<legend>Perguntas - Pesquisa de Satisfação</legend>          
-        		<div id="div_perg_satisfacao_perg1" class="w3-left w3-margin-bottom ">
-        		   <b><label for="perg1" style="display:block !important;">No Geral, qual seu grau de satisfação?</label></b> 
-        			<select name="perg1" id="perg1" style="width:240px">
-        				<option value="0" selected>Todas</option>  
-        				<option value="1">Satisfeito</option>
-        				<option value="2">Indiferente</option>
-        				<option value="3">Insatisfeito</option>                   
-        			</select>
-        		</div>             		                  
-                                
-        		<div id="div_perg_satisfacao_perg2" class="w3-left w3-margin-bottom w3-margin-left">
-        		   <b><label for="perg2" style="display:block !important;" >Quanto ao tempo de espera, você se considera:</label></b> 
-        			<select name="perg2" id="perg2" style="width:300px">
-        				<option value="0" selected>Todas</option>
-        				<option value="1">Satisfeito</option>
-        				<option value="2">Indiferente</option>
-        				<option value="3" >Insatisfeito</option>   
-        			</select>
-        		</div>                                     
-        		
-        		<div id="div_perg_satisfacao_perg3" class="w3-left w3-margin-bottom w3-margin-left">
-        		   <b><label for="perg3" style="display:block !important;">Quanto à cordialidade do atendente, você se considera:</label></b> 
-        			<select name="perg3" id="perg3" style="width:310px">
-        				<option value="0" selected>Todas</option>
-        				<option value="1">Satisfeito</option> 
-        				<option value="2">Indiferente</option>
-        				<option value="3" >Insatisfeito</option>                      
-        			</select>
-        		</div>  
-        
-        		<div id="div_perg_satisfacao_perg4" class="w3-left w3-margin-bottom w3-margin-left">
-        		   <b><label for="perg4" style="display:block !important;">A solicitação foi atendida ao final do atendimento?</label></b> 
-        			<select name="perg4" id="perg4" style="width:300px">
-        				<option value="0" selected>Todas</option>
-        				<option value="1">Sim</option>
-        				<option value="2">Parcialmente</option>
-        				<option value="3">Não</option>                        
-        			</select>
-        		</div> 
-        	</fieldset>                      
+    		<div>
+    	    	<fieldset style="display: inline-block; height: 70px; padding: 10px;">
+        			<legend>Perguntas - Pesquisa de Satisfação</legend>          
+            		<div id="div_perg_satisfacao_perg1" class="w3-left w3-margin-bottom ">
+            		   <b><label for="perg1" style="display:block !important;">No Geral, qual seu grau de satisfação?</label></b> 
+            			<select name="perg1" id="perg1" style="width:240px">
+            				<option value="0" selected>Todas</option>  
+            				<option value="1">Satisfeito</option>
+            				<option value="2">Indiferente</option>
+            				<option value="3">Insatisfeito</option>                   
+            			</select>
+            		</div>             		                  
+                                    
+            		<div id="div_perg_satisfacao_perg2" class="w3-left w3-margin-bottom w3-margin-left">
+            		   <b><label for="perg2" style="display:block !important;" >Quanto ao tempo de espera, você se considera:</label></b> 
+            			<select name="perg2" id="perg2" style="width:300px">
+            				<option value="0" selected>Todas</option>
+            				<option value="1">Satisfeito</option>
+            				<option value="2">Indiferente</option>
+            				<option value="3" >Insatisfeito</option>   
+            			</select>
+            		</div>                                     
+            		
+            		<div id="div_perg_satisfacao_perg3" class="w3-left w3-margin-bottom w3-margin-left">
+            		   <b><label for="perg3" style="display:block !important;">Quanto à cordialidade do atendente, você se considera:</label></b> 
+            			<select name="perg3" id="perg3" style="width:310px">
+            				<option value="0" selected>Todas</option>
+            				<option value="1">Satisfeito</option> 
+            				<option value="2">Indiferente</option>
+            				<option value="3" >Insatisfeito</option>                      
+            			</select>
+            		</div>  
+            
+            		<div id="div_perg_satisfacao_perg4" class="w3-left w3-margin-bottom w3-margin-left">
+            		   <b><label for="perg4" style="display:block !important;">A solicitação foi atendida ao final do atendimento?</label></b> 
+            			<select name="perg4" id="perg4" style="width:300px">
+            				<option value="0" selected>Todas</option>
+            				<option value="1">Sim</option>
+            				<option value="2">Parcialmente</option>
+            				<option value="3">Não</option>                        
+            			</select>
+            		</div> 
+            		<!-- DIV BOTÃO CONSULTAR - div_button -->		
+            		
+            	</fieldset>
+            	<div class="w3-right ">
+        			<br>
+        			<br>
+        			<br>
+    				<button id="btn_pesquisar2" class="w3-btn w3-deep-orange w3-round w3-tiny" type="submit" name="btn_pesquisar2" value="Gerar">Consultar</button>
+    			</div>
+            </div>	    
+        	
+        	             
         </div> <!-- final div pesq satisfacao -->	
     
         <!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
@@ -1751,35 +1319,10 @@ function diminuiFrame(){
 
 <!-- OCULTAR CAMPOS DO FORMULÁRIO -->
 <script>
-	$("#div_datas").hide();
-	$("#div_datas1").hide();
-	$("#div_datas2").hide();
-	$("#div_button").hide();
-	$("#div_tex_detalhes").hide();
-	$("#div_select_dias_semana").hide();
-	$("#div_dia_semana").hide();
-	$("#div_qtd_transf").hide();
-	$("#div_select_operador_supervisor").hide();
-	$("#div_select_intervalo").hide();
-	$("#div_codigo_eventos").hide();
-	$("#div_fonte").hide();
-	$("#div_localiza_atendimentos").hide();
-	$("#div_select_filas").hide();
-	$("#div_qual_mes").hide();
-	$("#div_qual_ano").hide();
-	$("#div_qual_rechamadas").hide();
-	$("#div_reicidencia_pesq_satisfacao").hide();
-	$("#div_motivo_submtivo_pesq_satisfacao").hide();
-	$("#div_dmm").hide();
-	$("#div_filas").hide();
-	$("#div_dias_excluir").hide();
-	$("#div_select_ilhas").hide();
-	$("#div_ilhas").hide();
-	$("#div_tempo_de_corte").hide();
-	$("#div_perg_satisfacao").hide();
-	$("#div_parametros_retencao_ura_c24").hide();
 
-	
+	hideAll();
+
+	//função que carrega os submotivos dinamicamente 
     $(function(){
         $('#cd_motivo').change(function()
         {
@@ -1792,7 +1335,7 @@ function diminuiFrame(){
                 {
                     var options = '<option value=""></option>'; 
                     for (var i = 0; i < j.length; i++) {
-                        options += '<option value="' + j[i].cd_submotivo + '">' + j[i].ds_submotivo + '</option>';
+                        options += '<option value="' + j[i].cd_submotivo + '">' + j[i].cd_submotivo +' - '+ j[i].ds_submotivo + '</option>';
                     }   
                     $('#cd_submotivo').html(options).show();
                     $('.carregando').hide();

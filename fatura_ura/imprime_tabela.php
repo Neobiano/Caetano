@@ -83,7 +83,8 @@ $array_tabela = array();
 $query = $pdo->prepare("select * from tb_eventos_novaura");
 $query->execute();
 
-for($i=0; $row = $query->fetch(); $i++){
+for($i=0; $row = $query->fetch(); $i++)
+{
 	$cod_evento = $row['cod_evento'];
 	$desc_evento = utf8_encode($row['desc_evento']);
 	
@@ -100,7 +101,8 @@ for($i=0; $row = $query->fetch(); $i++){
 		array_push($array_like_eventos,$cod_evento);
 		$in_like_eventos = $in_like_eventos." or cod_evento like '%$cod_evento%'";
 		
-		if($contador==0) {
+		if($contador==0) 
+		{
 			$imprime_eventos_faturados = "$cod_evento";
 			$contador++;
 		} else $imprime_eventos_faturados = $imprime_eventos_faturados.", $cod_evento";

@@ -58,10 +58,15 @@ echo '<td><b>ID OPERADOR</b></td>';
 echo '<td><b>NOME OPERADOR</b></td>';
 echo '</tr></thead><tbody>';
 
-$query = $pdo->prepare("select a.*, b.desc_fila from tb_eventos_dac as a
+$sql = "select a.*, b.desc_fila from tb_eventos_dac as a
 						left join tb_filas as b
 						on a.cod_fila = b.cod_fila
-						where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and id_operador = '$ID' and datepart(dw,data_hora) in $in_semana");
+						where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+                        and tempo_atend > 0
+                        and id_operador = '$ID' and datepart(dw,data_hora) in $in_semana";
+
+echo($sql);
+$query = $pdo->prepare($sql);
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){
 	$callid = $row['callid'];

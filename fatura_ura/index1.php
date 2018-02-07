@@ -142,7 +142,7 @@ $(document).ready(function(){
 <?php	
 include "conecta.php";
 
-$eventos_faturaveis = array('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140');
+$eventos_faturaveis = array('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140','149','790');
 
 $query = $pdo->prepare("select * from tb_eventos_novaura");
 $query->execute();

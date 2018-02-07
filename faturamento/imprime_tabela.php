@@ -1880,8 +1880,24 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			$qtd_ura = $row['TOTAL'];
 		}
 	}
-		
+	
+	//consulta/imprime sql quantidade de atendimentos ura (mês)
 	if($sel_eventos_ura=='02')
+	{
+	    $query = $pdo->prepare("select count(*) TOTAL
+                                from tb_eventos_ura_2 t
+                                where t.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL
+                                and t.cod_evento in  ('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140')    
+                                ");
+	    $query->execute();
+	    for($i=0; $row = $query->fetch(); $i++)
+	    {
+	        $qtd_ura = $row['TOTAL'];
+	    }
+	}
+		
+	//obs, código retirado pois o calculo feito acima, somente com sql é mais simples e produz o mesmo resultado
+	if($sel_eventos_ura=='02RETIRADO')
 	{
 		$qtd_ura = 0;
 		$valida_callid = 0;
