@@ -141,35 +141,7 @@ for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
 		//evento posterior a idpos
 		$passou_pelo_014 = 0; // PARA EXCLUIR EVENTOS INDEVIDOS - 014;xx;031 ou 014;031 (031 não é para contar aqui) **
 		$passou_pelo_022 = 0;
-		/*$arrlength=count($array_cod_linha);		
-		for($cont=0; $cont<$arrlength ;$cont++)
-		{
-		    $fatura = true;
-		    $cod_evento = $array_cod_linha[$cont];
-		    
-		    if($cod_evento == '031')
-		    {
-		        if (($array_cod_linha[$cont-1] == '014') or  (($array_cod_linha[$cont-2] == '014') && ($array_cod_linha[$cont-1] != '022')))
-		           $fatura = false;		        		              
-		    }    
-		    
-		    if ($fatura)
-		    {		        
-    		    if(in_array($cod_evento,$array_like_eventos))
-    		    {
-    		        
-    		        $array_tabela[$cod_evento][$pos_dia]++; // INCREMENTA $array_tabela
-    		        $total_faturados++;
-    		        $soma_total_faturados++;
-    		        if(isset($array_eventos_periodo[$cod_evento]))
-    		            $array_eventos_periodo[$cod_evento]++;
-    		            else
-    		                $array_eventos_periodo[$cod_evento] = 1;
-    		                
-    		    }
-		    }
-		}*/
-		
+				
 		foreach($array_cod_linha as $cod_evento)
 		{	
 			$nao_fatura = 0; 

@@ -52,7 +52,7 @@ echo "</div>";
 	
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
-	// INFORMA A CONSULTA
+	// INFORMA A CONSULTA - deus me defenda.. muito confusa essa consulta
 	$query = $pdo->prepare("select x.DIA_SEMANA, x.DATA, x.TOTAL_URA as TOTAL_RECEBIDAS, TOTAL_URA_LIQUIDO as TOTAL_RECEBIDAS_LIQUIDO,
 							(x.TOTAL_URA - TOTAL_DAC_TODAS) as TOTAL_RETIDAS,
 							(TOTAL_URA_LIQUIDO - y.TOTAL_DAC) as TOTAL_RETIDAS_LIQUIDO,

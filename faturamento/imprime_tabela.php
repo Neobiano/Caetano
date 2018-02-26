@@ -45,8 +45,8 @@ $acp_contestacao = '25';//$_POST['acp_contestacao'];
 $acp_pontos = '25';//$_POST['acp_pontos'];
 //$acp_geral_normal = '00';//$_POST['acp_geral_normal']-ORIGINAL;
 $acp_geral_normal = '00';//$_POST['acp_geral_normal'];
-//$acp_todas_premium = '05';//$_POST['acp_geral_premium']-ORIGINAL;
-$acp_todas_premium = '25';//$_POST['acp_geral_premium'];
+$acp_todas_premium = '05';//$_POST['acp_geral_premium']-ORIGINAL;
+//$acp_todas_premium = '25';//$_POST['acp_geral_premium'];
 $acp_pj = '00';//$_POST['acp_pj'];
 $acp_100 = '00';//$_POST['acp_pj'];
 $acp_130 = '00';//$_POST['acp_pj'];
@@ -150,7 +150,7 @@ $vet_triagem = array('150');
 $vet_parcelamento = array('72','76','80',/*'84',*/'111');//tirei
 $vet_contestacao = array('60','88','90','93'/*,'96'*/);//tirei
 $vet_pontos = array('87','91','94',/*'97',*/'120'); //tirei
-$vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118'/*,'57'*/);//tirei 57 é perda e roubo
+$vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
 //$vet_geral_premium = array('82','83','98'); tirei, pois já esta na vet_todas_premium
 
 $vet_pj = array('99','101','110');/*,'100' ,'100','130'*/
@@ -191,13 +191,13 @@ $ilha_130 = "'130'";
 $ilha_caixa_empregado = "'63'";
 $ilha_deficiente_auditivo = "'61'";
 $ilha_mala_direta = "'64'";
-$ilha_geral_normal = "'70','71','74','75','78','79','86','58','89','92','95','114','118','57'";/*'102',*/
+$ilha_geral_normal = "'70','71','74','75','78','79','86','58','89','92','95','114','118','57','137','126'";/*'102',*/
 $ilha_geral_premium = "'82','83','98'";
 $ilha_bloqueio_cobranca = "'117','106','107','108','109'";
 $ilha_app = "'102'";
 
 //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130',
-$in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125'";
+$in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126'";
 
 $in_filas_premium = "'82','83','84','85','96','97','98','107'";
 
@@ -1569,9 +1569,10 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		        $fator = 1.11;
 		    }
 			else */if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
-			    or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
-			    /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel */
-			    or in_array("$cont", $vet_todas_premium))  
+			           or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
+			           /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel 
+			           or in_array("$cont", $vet_todas_premium)*/
+			         )  
 			{
 				//apenas para printar a linha com formato diferenciado	
 				$acp_aut = true;	 	
@@ -1884,16 +1885,29 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 	//consulta/imprime sql quantidade de atendimentos ura (mês)
 	if($sel_eventos_ura=='02')
 	{
+	    //atendimentos eletronico - TB_EVENTOS_URA
 	    $query = $pdo->prepare("select count(*) TOTAL
                                 from tb_eventos_ura_2 t
                                 where t.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL
-                                and t.cod_evento in  ('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140')    
+                                and t.cod_evento in  ('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140','149','790')    
                                 ");
 	    $query->execute();
 	    for($i=0; $row = $query->fetch(); $i++)
 	    {
 	        $qtd_ura = $row['TOTAL'];
 	    }
+	    
+	    //PESQUISA DE SATISFAÇÃO
+	    $query = $pdo->prepare("select count(distinct callid) qtd_pesquisa from tb_pesq_satisfacao (nolock)
+	    where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'");
+		$query->execute();
+		
+		for($i=0; $row = $query->fetch(); $i++)
+		{
+		    $qtd_pesquisa = $row['qtd_pesquisa'];
+		}
+		
+		$qtd_ura = $qtd_ura + $qtd_pesquisa;
 	}
 		
 	//obs, código retirado pois o calculo feito acima, somente com sql é mais simples e produz o mesmo resultado
