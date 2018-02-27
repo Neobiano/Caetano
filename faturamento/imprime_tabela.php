@@ -13,602 +13,621 @@
 </div>	
 <?php
 
-include "conecta.php";
+    include "conecta.php";
 
-//tempo limite consultas sql
-set_time_limit(99999);
-ini_set('max_execution_time', 99999);
+    //tempo limite consultas sql
+    set_time_limit(99999);
+    ini_set('max_execution_time', 99999);
 
-//---------------------iniciando contador de tempo de execução da consulta---------------------//
-list($usec, $sec) = explode(' ', microtime());
-$script_start = (float) $sec + (float) $usec;
+    //---------------------iniciando contador de tempo de execução da consulta---------------------//
+    list($usec, $sec) = explode(' ', microtime());
+    $script_start = (float) $sec + (float) $usec;
 
-//recebe variáveis do formulário
-$qual_mes = $_POST['qual_mes'];
-$qual_ano = $_POST['qual_ano'];
-$shortcall_porcentagem = $_POST['shortcall_porcentagem'];
-$shortcall_tempo = $_POST['shortcall_tempo'];
-$nsr = ($_POST['nsr']/100);
-$nsr_premium = ($_POST['nsr_premium']/100);
-$ns_normal = $_POST['ns_normal'];
-$ns_diferenciado = $_POST['ns_diferenciado'];
-$valor_atendimento = $_POST['valor_atendimento'];
-$valor_atendimento_ura = $_POST['valor_atendimento_ura'];
+    //recebe variáveis do formulário
+    $qual_mes = $_POST['qual_mes'];
+    $qual_ano = $_POST['qual_ano'];
+    $shortcall_porcentagem = $_POST['shortcall_porcentagem'];
+    $shortcall_tempo = $_POST['shortcall_tempo'];
+    $ns_normal = $_POST['ns_normal']; //Tempo de Espera Padrão(segundos):
+    
+    //-------------------DIA NORMAL-------------------//
+    $nsr = ($_POST['nsr']/100); //nivel de serviço referencial - Filas Convencionais
+    $nsr_premium = ($_POST['nsr_premium']/100); //nivel de serviço referencial - Filas Premium
+    
+    //----------------------DMM---------------------//
+    $dmm_nsr = ($_POST['dmm_nsr']/100); //nivel de serviço referencial - Filas Convencionais
+    $dmm_nsr_premium = ($_POST['dmm_nsr_premium']/100); //nivel de serviço referencial - Filas Premium
+    
+    
+    $ns_diferenciado = $_POST['ns_diferenciado'];
+    $valor_atendimento = $_POST['valor_atendimento'];
+    $valor_atendimento_ura = $_POST['valor_atendimento_ura'];
+    
+    $acp_retencao = '25';//$_POST['acp_retencao'];
+    $acp_triagem = '25';//$_POST['acp_triagem'];
+    $acp_aviso_viagem = '00';//$_POST['acp_triagem'];
+    $acp_app = '00';//$_POST['acp_triagem'];
+    $acp_parcelamento = '25';//$_POST['acp_parcelamento'];
+    $acp_perda_roubo = '25';//$_POST['acp_parcelamento'];
+    $acp_contestacao = '25';//$_POST['acp_contestacao'];
+    $acp_pontos = '25';//$_POST['acp_pontos'];
+    //$acp_geral_normal = '00';//$_POST['acp_geral_normal']-ORIGINAL;
+    $acp_geral_normal = '00';//$_POST['acp_geral_normal'];
+    //$acp_todas_premium = '05';//$_POST['acp_geral_premium']-ORIGINAL;
+    $acp_todas_premium = '25';//$_POST['acp_geral_premium'];
+    $acp_pj = '00';//$_POST['acp_pj'];
+    $acp_100 = '00';//$_POST['acp_pj'];
+    $acp_130 = '00';//$_POST['acp_pj'];
+    $acp_caixa_empregado = '00';//$_POST['acp_caixa_empregado'];
+    $acp_deficiente_auditivo = '00';//$_POST['acp_deficiente_auditivo'];
+    $acp_mala_direta = '00';//$_POST['acp_mala_direta'];
+    
+    $ansm1 = $_POST['ansm1'];
+    $ansm2 = $_POST['ansm2'];
+    $ansm3 = $_POST['ansm3'];
+    $ansm4 = $_POST['ansm4'];
+    $ansm5 = $_POST['ansm5'];
+    $ansm6 = $_POST['ansm6'];
+    $ansm7 = $_POST['ansm7'];
+    $ansm8 = $_POST['ansm8'];
+    $ansm9 = $_POST['ansm9'];
+    $ansm10 = $_POST['ansm10'];
+    $ansm11 = $_POST['ansm11'];
+    $ansm12 = $_POST['ansm12'];
+    $ansm13 = $_POST['ansm13'];
+    $ansm14 = $_POST['ansm14'];
+    $ansm15 = $_POST['ansm15'];
+    $ansm16 = $_POST['ansm16'];
+    $ansm17 = $_POST['ansm17'];
+    $ansm18 = $_POST['ansm18'];
+    $ansm19 = $_POST['ansm19'];
+    $ansm20 = $_POST['ansm20'];
+    $ansm21 = $_POST['ansm21'];
+    $ansm22 = $_POST['ansm22'];
+    $ansm23 = $_POST['ansm23'];
+    $ansm24 = $_POST['ansm24'];
+    $ansm25 = $_POST['ansm25'];
+    $ansm26 = $_POST['ansm26'];
+    $ansm27 = $_POST['ansm27'];
+    $ansm28 = $_POST['ansm28'];
+    $ansm29 = $_POST['ansm29'];
+    $ansm30 = $_POST['ansm30'];
+    $ansm31 = $_POST['ansm31'];
 
-$acp_retencao = '25';//$_POST['acp_retencao'];
-$acp_triagem = '25';//$_POST['acp_triagem'];
-$acp_aviso_viagem = '00';//$_POST['acp_triagem'];
-$acp_app = '00';//$_POST['acp_triagem'];
-$acp_parcelamento = '25';//$_POST['acp_parcelamento'];
-$acp_perda_roubo = '25';//$_POST['acp_parcelamento'];
-$acp_contestacao = '25';//$_POST['acp_contestacao'];
-$acp_pontos = '25';//$_POST['acp_pontos'];
-//$acp_geral_normal = '00';//$_POST['acp_geral_normal']-ORIGINAL;
-$acp_geral_normal = '00';//$_POST['acp_geral_normal'];
-$acp_todas_premium = '05';//$_POST['acp_geral_premium']-ORIGINAL;
-//$acp_todas_premium = '25';//$_POST['acp_geral_premium'];
-$acp_pj = '00';//$_POST['acp_pj'];
-$acp_100 = '00';//$_POST['acp_pj'];
-$acp_130 = '00';//$_POST['acp_pj'];
-$acp_caixa_empregado = '00';//$_POST['acp_caixa_empregado'];
-$acp_deficiente_auditivo = '00';//$_POST['acp_deficiente_auditivo'];
-$acp_mala_direta = '00';//$_POST['acp_mala_direta'];
+    $glosa1 = $_POST['glosa1'];
+    $iqf = $_POST['iqf'];
+    
+    $dns_automatico = $_POST['dns_automatico'];
+    $qual_dns = $_POST['qual_dns'];
+    $sel_eventos_ura = $_POST['sel_eventos_ura'];
+    
+    $acertos_acre = $_POST['acertos_acre'];
+    $acertos_decre = $_POST['acertos_decre'];
+    
+    // define valores NSR
+    /* NSR irá variar de acordo com o DMM
+    $nsr_premium_valor = $nsr_premium;
+    $nsr_valor = $nsr;
+    */
 
-$ansm1 = $_POST['ansm1'];
-$ansm2 = $_POST['ansm2'];
-$ansm3 = $_POST['ansm3'];
-$ansm4 = $_POST['ansm4'];
-$ansm5 = $_POST['ansm5'];
-$ansm6 = $_POST['ansm6'];
-$ansm7 = $_POST['ansm7'];
-$ansm8 = $_POST['ansm8'];
-$ansm9 = $_POST['ansm9'];
-$ansm10 = $_POST['ansm10'];
-$ansm11 = $_POST['ansm11'];
-$ansm12 = $_POST['ansm12'];
-$ansm13 = $_POST['ansm13'];
-$ansm14 = $_POST['ansm14'];
-$ansm15 = $_POST['ansm15'];
-$ansm16 = $_POST['ansm16'];
-$ansm17 = $_POST['ansm17'];
-$ansm18 = $_POST['ansm18'];
-$ansm19 = $_POST['ansm19'];
-$ansm20 = $_POST['ansm20'];
-$ansm21 = $_POST['ansm21'];
-$ansm22 = $_POST['ansm22'];
-$ansm23 = $_POST['ansm23'];
-$ansm24 = $_POST['ansm24'];
-$ansm25 = $_POST['ansm25'];
-$ansm26 = $_POST['ansm26'];
-$ansm27 = $_POST['ansm27'];
-$ansm28 = $_POST['ansm28'];
-$ansm29 = $_POST['ansm29'];
-$ansm30 = $_POST['ansm30'];
-$ansm31 = $_POST['ansm31'];
+    // define variável $mes por extenso
+    if ($qual_mes == '01') $mes = 'Janeiro';
+    if ($qual_mes == '02') $mes = 'Fevereiro';
+    if ($qual_mes == '03') $mes = 'Março';
+    if ($qual_mes == '04') $mes = 'Abril';
+    if ($qual_mes == '05') $mes = 'Maio';
+    if ($qual_mes == '06') $mes = 'Junho';
+    if ($qual_mes == '07') $mes = 'Julho';
+    if ($qual_mes == '08') $mes = 'Agosto';
+    if ($qual_mes == '09') $mes = 'Setembro';
+    if ($qual_mes == '10') $mes = 'Outubro';
+    if ($qual_mes == '11') $mes = 'Novembro';
+    if ($qual_mes == '12') $mes = 'Dezembro';
 
-$glosa1 = $_POST['glosa1'];
-$iqf = $_POST['iqf'];
+    //define quantidade de dias de cada mês
+    if($qual_mes=='01') $qtd_dias = 31;
+    if($qual_mes=='02') $qtd_dias = 28;
+    if($qual_mes=='03') $qtd_dias = 31;
+    if($qual_mes=='04') $qtd_dias = 30;
+    if($qual_mes=='05') $qtd_dias = 31;
+    if($qual_mes=='06') $qtd_dias = 30;
+    if($qual_mes=='07') $qtd_dias = 31;
+    if($qual_mes=='08') $qtd_dias = 31;
+    if($qual_mes=='09') $qtd_dias = 30;
+    if($qual_mes=='10') $qtd_dias = 31;
+    if($qual_mes=='11') $qtd_dias = 30;
+    if($qual_mes=='12') $qtd_dias = 31;
 
-$dns_automatico = $_POST['dns_automatico'];
-$qual_dns = $_POST['qual_dns'];
-$sel_eventos_ura = $_POST['sel_eventos_ura'];
-
-$acertos_acre = $_POST['acertos_acre'];
-$acertos_decre = $_POST['acertos_decre'];
-
-// define valores NSR
-$nsr_premium_valor = $nsr_premium;
-$nsr_valor = $nsr;
-
-// define variável $mes por extenso
-if ($qual_mes == '01') $mes = 'Janeiro';
-if ($qual_mes == '02') $mes = 'Fevereiro';
-if ($qual_mes == '03') $mes = 'Março';
-if ($qual_mes == '04') $mes = 'Abril';
-if ($qual_mes == '05') $mes = 'Maio';
-if ($qual_mes == '06') $mes = 'Junho';
-if ($qual_mes == '07') $mes = 'Julho';
-if ($qual_mes == '08') $mes = 'Agosto';
-if ($qual_mes == '09') $mes = 'Setembro';
-if ($qual_mes == '10') $mes = 'Outubro';
-if ($qual_mes == '11') $mes = 'Novembro';
-if ($qual_mes == '12') $mes = 'Dezembro';
-
-//define quantidade de dias de cada mês
-if($qual_mes=='01') $qtd_dias = 31;
-if($qual_mes=='02') $qtd_dias = 28;
-if($qual_mes=='03') $qtd_dias = 31;
-if($qual_mes=='04') $qtd_dias = 30;
-if($qual_mes=='05') $qtd_dias = 31;
-if($qual_mes=='06') $qtd_dias = 30;
-if($qual_mes=='07') $qtd_dias = 31;
-if($qual_mes=='08') $qtd_dias = 31;
-if($qual_mes=='09') $qtd_dias = 30;
-if($qual_mes=='10') $qtd_dias = 31;
-if($qual_mes=='11') $qtd_dias = 30;
-if($qual_mes=='12') $qtd_dias = 31;
-
-//define variáveis final total geral - mensal
-$pg_total_mes; // pagamento total mês - sem adicionais (acp, etc)
-$mensal_total_ca = 0;
-$mensal_total_qtd_ura = 0;
-$mensal_total_bruto = 0;
-$mensal_total_desc_ansm = 0;
-$mensal_total_acre_acp = 0;
-
-//$mensal_retido = 0;
-$mensal_ura = 0;
-$mensal_humano = 0;
-$mensal_total = 0;
-
-//120
-
-//define vetores das ilhas 
-$vet_retencao = array('73','77','81'/*,'85'*/,'116');
-$vet_aviso_viagem = array('125');
-$vet_triagem = array('150');
-$vet_parcelamento = array('72','76','80',/*'84',*/'111');//tirei
-$vet_contestacao = array('60','88','90','93'/*,'96'*/);//tirei
-$vet_pontos = array('87','91','94',/*'97',*/'120'); //tirei
-$vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
-//$vet_geral_premium = array('82','83','98'); tirei, pois já esta na vet_todas_premium
-
-$vet_pj = array('99','101','110');/*,'100' ,'100','130'*/
-$vet_130 = array('130');
-$vet_100 = array('100');
-$vet_caixa_empregado = array('63');
-$vet_deficiente_auditivo = array('61');
-$vet_mala_direta = array('64');
-$vet_perda_roubo = array('57');
-$vet_bloqueio_cobranca = array('117','106',/*'107',*/'108','109');//tirei
-
-$vet_app = array('102');
-$vet_todas_premium = array('82','83','84','85','96','97','98','107');
-
-$vet_todas_filas = array_merge($vet_todas_premium, $vet_app, $vet_bloqueio_cobranca, 
-							   $vet_retencao, $vet_triagem, $vet_aviso_viagem, 
-							   $vet_parcelamento, $vet_contestacao, $vet_pontos, 
-							   $vet_geral_normal,$vet_pj, 
-							   $vet_caixa_empregado, $vet_deficiente_auditivo, 
-							   $vet_mala_direta,$vet_perda_roubo,$vet_100,$vet_130);
-
-//conta tamanho vet_todas_filas
-$num_filas = count($vet_todas_filas);
-
-//define todas as filas nsr maior
+    //define variáveis final total geral - mensal
+    $pg_total_mes; // pagamento total mês - sem adicionais (acp, etc)
+    $mensal_total_ca = 0;
+    $mensal_total_qtd_ura = 0;
+    $mensal_total_bruto = 0;
+    $mensal_total_desc_ansm = 0;
+    $mensal_total_acre_acp = 0;
+    
+    //$mensal_retido = 0;
+    $mensal_ura = 0;
+    $mensal_humano = 0;
+    $mensal_total = 0;
 
 
-//define 'in' das ilhas
-$ilha_retencao = "'73','77','81','85','116'";
-$ilha_triagem = "'150'";
-$ilha_aviso_viagem = "'125'";
-$ilha_parcelamento = "'72','76','80','84','111'";
-$ilha_contestacao = "'60','88','90','93','96'";
-$ilha_pontos = "'87','91','94','97','120'";
-$ilha_pj = "'99','101','110'";/*'100', ,'100','130'*/
-$ilha_100 = "'100'";
-$ilha_130 = "'130'";
-$ilha_caixa_empregado = "'63'";
-$ilha_deficiente_auditivo = "'61'";
-$ilha_mala_direta = "'64'";
-$ilha_geral_normal = "'70','71','74','75','78','79','86','58','89','92','95','114','118','57','137','126'";/*'102',*/
-$ilha_geral_premium = "'82','83','98'";
-$ilha_bloqueio_cobranca = "'117','106','107','108','109'";
-$ilha_app = "'102'";
 
-//31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130',
-$in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126'";
+    //define vetores das ilhas 
+    $vet_retencao = array('73','77','81'/*,'85'*/,'116');
+    $vet_aviso_viagem = array('125');
+    $vet_triagem = array('150');
+    $vet_parcelamento = array('72','76','80',/*'84',*/'111');//tirei
+    $vet_contestacao = array('60','88','90','93'/*,'96'*/);//tirei
+    $vet_pontos = array('87','91','94',/*'97',*/'120'); //tirei
+    $vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
+    //$vet_geral_premium = array('82','83','98'); tirei, pois já esta na vet_todas_premium
 
-$in_filas_premium = "'82','83','84','85','96','97','98','107'";
+    $vet_pj = array('99','101','110');/*,'100' ,'100','130'*/
+    $vet_130 = array('130');
+    $vet_100 = array('100');
+    $vet_caixa_empregado = array('63');
+    $vet_deficiente_auditivo = array('61');
+    $vet_mala_direta = array('64');
+    $vet_perda_roubo = array('57');
+    $vet_bloqueio_cobranca = array('117','106',/*'107',*/'108','109');//tirei
 
-// inclui variáveis
-for($cont=0; $cont<$num_filas; $cont++)
-{
-	$fila_atual = $vet_todas_filas[$cont];
-	
-	$var_b = "b_$fila_atual"; // Total de Ligações
-	$$var_b = 0;
+    $vet_app = array('102');
+    $vet_todas_premium = array('82','83','84','85','96','97','98','107');
 
-	$var_a = "a_$fila_atual"; // Atendidas até o Tempo Limite (NS)
-	$$var_a = 0;
+    $vet_todas_filas = array_merge($vet_todas_premium, $vet_app, $vet_bloqueio_cobranca, 
+    							   $vet_retencao, $vet_triagem, $vet_aviso_viagem, 
+    							   $vet_parcelamento, $vet_contestacao, $vet_pontos, 
+    							   $vet_geral_normal,$vet_pj, 
+    							   $vet_caixa_empregado, $vet_deficiente_auditivo, 
+    							   $vet_mala_direta,$vet_perda_roubo,$vet_100,$vet_130);
 
-	$var_c = "c_$fila_atual"; // Ligações Abandonadas Após Tempo Limite (NS)
-	$$var_c = 0;
+    //conta tamanho vet_todas_filas
+    $num_filas = count($vet_todas_filas);
 
-	$var_ca = "ca_$fila_atual"; // Chamadas Pagas
-	$$var_ca = 0;
+    //define todas as filas nsr maior
 
-	$var_tma = "tma_$fila_atual"; // TMA
-	$$var_tma = 0;
 
-	$var_sc = "sc_$fila_atual"; // SHORTCALL
-	$$var_sc = 0;
-	
-	$var_pg = "pg_$fila_atual"; // PG por fila
-	$$var_pg = 0;
-	
-	$var_nsa = "nsa_$fila_atual";
-	$$var_nsa = 0;
-	
-	$var_ns = "ns_$fila_atual";
-	$$var_ns = 0;
-	
-	$pg_total_dia = 0; // PG total do dia, sem adicionais (ACP, etc)
+    //define 'in' das ilhas
+    $ilha_retencao = "'73','77','81','85','116'";
+    $ilha_triagem = "'150'";
+    $ilha_aviso_viagem = "'125'";
+    $ilha_parcelamento = "'72','76','80','84','111'";
+    $ilha_contestacao = "'60','88','90','93','96'";
+    $ilha_pontos = "'87','91','94','97','120'";
+    $ilha_pj = "'99','101','110'";/*'100', ,'100','130'*/
+    $ilha_100 = "'100'";
+    $ilha_130 = "'130'";
+    $ilha_caixa_empregado = "'63'";
+    $ilha_deficiente_auditivo = "'61'";
+    $ilha_mala_direta = "'64'";
+    $ilha_geral_normal = "'70','71','74','75','78','79','86','58','89','92','95','114','118','57','137','126'";/*'102',*/
+    $ilha_geral_premium = "'82','83','98'";
+    $ilha_bloqueio_cobranca = "'117','106','107','108','109'";
+    $ilha_app = "'102'";
 
-	$soma_ansm = 0;
-	$cont_ansm = 0;
+    //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130',
+    $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126'";
+    
+    $in_filas_premium = "'82','83','84','85','96','97','98','107'";
 
-	$qtd_ura = 0;
+    // inclui variáveis
+    for($cont=0; $cont<$num_filas; $cont++)
+    {
+    	$fila_atual = $vet_todas_filas[$cont];
+    	
+    	$var_b = "b_$fila_atual"; // Total de Ligações
+    	$$var_b = 0;
+    
+    	$var_a = "a_$fila_atual"; // Atendidas até o Tempo Limite (NS)
+    	$$var_a = 0;
+    
+    	$var_c = "c_$fila_atual"; // Ligações Abandonadas Após Tempo Limite (NS)
+    	$$var_c = 0;
+    
+    	$var_ca = "ca_$fila_atual"; // Chamadas Pagas
+    	$$var_ca = 0;
+    
+    	$var_tma = "tma_$fila_atual"; // TMA
+    	$$var_tma = 0;
+    
+    	$var_sc = "sc_$fila_atual"; // SHORTCALL
+    	$$var_sc = 0;
+    	
+    	$var_pg = "pg_$fila_atual"; // PG por fila
+    	$$var_pg = 0;
+    	
+    	$var_nsa = "nsa_$fila_atual";
+    	$$var_nsa = 0;
+    	
+    	$var_ns = "ns_$fila_atual";
+    	$$var_ns = 0;
+    	
+    	$pg_total_dia = 0; // PG total do dia, sem adicionais (ACP, etc)
+    
+    	$soma_ansm = 0;
+    	$cont_ansm = 0;
+    
+    	$qtd_ura = 0;
+    
+    	$perc_sc = 0;
+    
+    	$total_ca = 0;
+    	
+    	$valor_bruto_diario = 0;
+    	
+    	$total_ansm = 0;
+    
+    	$total_ura = 0;
+    
+    	$qtd_ura = 0;
+    
+    	$total_faturamento = 0;
+    }//FINAL FOR
 
-	$perc_sc = 0;
+    // calcula iqm
+    if ($iqf < 90)
+    {
+    	$iqf_perc = $iqf / 100;
+    	$iqm = ($iqf_perc + ( (1-$iqf_perc)*0.8) );
+    } 
+    else 
+    	$iqm = 1;
 
-	$total_ca = 0;
-	
-	$valor_bruto_diario = 0;
-	
-	$total_ansm = 0;
-
-	$total_ura = 0;
-
-	$qtd_ura = 0;
-
-	$total_faturamento = 0;
-}//FINAL FOR
-
-// calcula iqm
-if ($iqf < 90)
-{
-	$iqf_perc = $iqf / 100;
-	$iqm = ($iqf_perc + ( (1-$iqf_perc)*0.8) );
-} 
-else 
-	$iqm = 1;
-
-//todo o bloco abaixo, é para calcular o DNS Automático, no caso utilizamos o fixo 1.0, FECHAR 
-if ($dns_automatico == 'sim')
-{ // verifica se valor de dns automático ou manual
-
-	// calcula dns
-	$a_mes = 0;
-	$b_mes = 0;
-	$c_mes = 0;
-	$soma_nsa = 0;
-
-	//rotina executada para efetuar o calculo do nivel de servico, considerando o intervalo de 30 minutos, vide linha 264
-	for ($contador=1; $contador<49; $contador++)
-	{
-			//'{' adicionada apenas para agrupar e 'esconder' no IDE, código redundante 	
-			if(1==1)
-			{
-				if ($contador == 1){
-					$periodo_inicial = '00:00:00.000';
-					$periodo_final = '00:29:59.999';
-				}
-				
-				if ($contador == 2){
-					$periodo_inicial = '00:30:00.000';
-					$periodo_final = '00:59:59.999';
-				}
-				
-				if ($contador == 3){
-					$periodo_inicial = '01:00:00.000';
-					$periodo_final = '01:29:59.999';
-				}
-				
-				if ($contador == 4){
-					$periodo_inicial = '01:30:00.000';
-					$periodo_final = '01:59:59.999';
-				}
-				
-				if ($contador == 5){
-					$periodo_inicial = '02:00:00.000';
-					$periodo_final = '02:29:59.999';
-				}
-				
-				if ($contador == 6){
-					$periodo_inicial = '02:30:00.000';
-					$periodo_final = '02:59:59.999';
-				}
-				
-				if ($contador == 7){
-					$periodo_inicial = '03:00:00.000';
-					$periodo_final = '03:29:59.999';
-				}
-				
-				if ($contador == 8){
-					$periodo_inicial = '03:30:00.000';
-					$periodo_final = '03:59:59.999';
-				}
-				
-				if ($contador == 9){
-					$periodo_inicial = '04:00:00.000';
-					$periodo_final = '04:29:59.999';
-				}
-				
-				if ($contador == 10){
-					$periodo_inicial = '04:30:00.000';
-					$periodo_final = '04:59:59.999';
-				}
-				
-				if ($contador == 11){
-					$periodo_inicial = '05:00:00.000';
-					$periodo_final = '05:29:59.999';
-				}
-				
-				if ($contador == 12){
-					$periodo_inicial = '05:30:00.000';
-					$periodo_final = '05:59:59.999';
-				}
-				
-				if ($contador == 13){
-					$periodo_inicial = '06:00:00.000';
-					$periodo_final = '06:29:59.999';
-				}
-				
-				if ($contador == 14){
-					$periodo_inicial = '06:30:00.000';
-					$periodo_final = '06:59:59.999';
-				}
-				
-				if ($contador == 15){
-					$periodo_inicial = '07:00:00.000';
-					$periodo_final = '07:29:59.999';
-				}
-				
-				if ($contador == 16){
-					$periodo_inicial = '07:30:00.000';
-					$periodo_final = '07:59:59.999';
-				}
-				
-				if ($contador == 17){
-					$periodo_inicial = '08:00:00.000';
-					$periodo_final = '08:29:59.999';
-				}
-				
-				if ($contador == 18){
-					$periodo_inicial = '08:30:00.000';
-					$periodo_final = '08:59:59.999';
-				}
-				
-				if ($contador == 19){
-					$periodo_inicial = '09:00:00.000';
-					$periodo_final = '09:29:59.999';
-				}
-				
-				if ($contador == 20){
-					$periodo_inicial = '09:30:00.000';
-					$periodo_final = '09:59:59.999';
-				}
-				
-				if ($contador == 21){
-					$periodo_inicial = '10:00:00.000';
-					$periodo_final = '10:29:59.999';
-				}
-				
-				if ($contador == 22){
-					$periodo_inicial = '10:30:00.000';
-					$periodo_final = '10:59:59.999';
-				}
-				
-				if ($contador == 23){
-					$periodo_inicial = '11:00:00.000';
-					$periodo_final = '11:29:59.999';
-				}
-				
-				if ($contador == 24){
-					$periodo_inicial = '11:30:00.000';
-					$periodo_final = '11:59:59.999';
-				}
-				
-				if ($contador == 25){
-					$periodo_inicial = '12:00:00.000';
-					$periodo_final = '12:29:59.999';
-				}
-				
-				if ($contador == 26){
-					$periodo_inicial = '12:30:00.000';
-					$periodo_final = '12:59:59.999';
-				}
-				
-				if ($contador == 27){
-					$periodo_inicial = '13:00:00.000';
-					$periodo_final = '13:29:59.999';
-				}
-				
-				if ($contador == 28){
-					$periodo_inicial = '13:30:00.000';
-					$periodo_final = '13:59:59.999';
-				}
-				
-				if ($contador == 29){
-					$periodo_inicial = '14:00:00.000';
-					$periodo_final = '14:29:59.999';
-				}
-				
-				if ($contador == 30){
-					$periodo_inicial = '14:30:00.000';
-					$periodo_final = '14:59:59.999';
-				}
-				
-				if ($contador == 31){
-					$periodo_inicial = '15:00:00.000';
-					$periodo_final = '15:29:59.999';
-				}
-				
-				if ($contador == 32){
-					$periodo_inicial = '15:30:00.000';
-					$periodo_final = '15:59:59.999';
-				}
-				
-				if ($contador == 33){
-					$periodo_inicial = '16:00:00.000';
-					$periodo_final = '16:29:59.999';
-				}
-				
-				if ($contador == 34){
-					$periodo_inicial = '16:30:00.000';
-					$periodo_final = '16:59:59.999';
-				}
-				
-				if ($contador == 35){
-					$periodo_inicial = '17:00:00.000';
-					$periodo_final = '17:29:59.999';
-				}
-				
-				if ($contador == 36){
-					$periodo_inicial = '17:30:00.000';
-					$periodo_final = '17:59:59.999';
-				}
-				
-				if ($contador == 37){
-					$periodo_inicial = '18:00:00.000';
-					$periodo_final = '18:29:59.999';
-				}
-				
-				if ($contador == 38){
-					$periodo_inicial = '18:30:00.000';
-					$periodo_final = '18:59:59.999';
-				}
-				
-				if ($contador == 39){
-					$periodo_inicial = '19:00:00.000';
-					$periodo_final = '19:29:59.999';
-				}
-				
-				if ($contador == 40){
-					$periodo_inicial = '19:30:00.000';
-					$periodo_final = '19:59:59.999';
-				}
-				
-				if ($contador == 41){
-					$periodo_inicial = '20:00:00.000';
-					$periodo_final = '20:29:59.999';
-				}
-				
-				if ($contador == 42){
-					$periodo_inicial = '20:30:00.000';
-					$periodo_final = '20:59:59.999';
-				}
-				
-				if ($contador == 43){
-					$periodo_inicial = '21:00:00.000';
-					$periodo_final = '21:29:59.999';
-				}
-				
-				if ($contador == 44){
-					$periodo_inicial = '21:30:00.000';
-					$periodo_final = '21:59:59.999';
-				}
-				
-				if ($contador == 45){
-					$periodo_inicial = '22:00:00.000';
-					$periodo_final = '22:29:59.999';
-				}
-				
-				if ($contador == 46){
-					$periodo_inicial = '22:30:00.000';
-					$periodo_final = '22:59:59.999';
-				}
-				
-				if ($contador == 47){
-					$periodo_inicial = '23:00:00.000';
-					$periodo_final = '23:29:59.999';
-				}
-				
-				if ($contador == 48){
-					$periodo_inicial = '23:30:00.000';
-					$periodo_final = '23:59:59.999';
-				}
-			}
-		
-			$a_per = 0;
-			$b_per = 0;
-			$c_per = 0;
-		
-			//percorrendo todo o intervalo de dadas a cada subintervalo de 30 minutos, ou seja, sumarizando a cada subintervalo
-			for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++) //aqui
-		  	//for($pos_dia=01; ( $pos_dia<(01+1) ); $pos_dia++)
-		  	{			
-			
-				// verifica ns (tempo de espera) 45s ou 90s
-				if(isset($_POST["chk_$pos_dia"]))
-				{
-					$ns = $ns_diferenciado;
-					$nsr_premium = $nsr_valor;
-				}
-				else
-				{
-					$ns = $ns_normal;
-					$nsr_premium = $nsr_premium_valor;
-				}			
-				
-				// A - Quantidade de atendimentos em que tiveram tempo de espera MENOR do que o determinado para o dia (45 ou 90) 
-				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-										FROM TB_EVENTOS_DAC
-										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND TEMPO_ESPERA <= '$ns'");
-				$query->execute();
-				for($i=0; $row = $query->fetch(); $i++)
-				{
-					$a_per = $a_per + $row['TOTAL'];
-				}
-			
-				// B - Totais de atendimento no dia
-				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-										FROM TB_EVENTOS_DAC
-										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0'");
-				$query->execute();
-				for($i=0; $row = $query->fetch(); $i++)
-				{
-					$b_per = $b_per + $row['TOTAL'];
-				}
-			
-				// C - Quantidade de atendimentos em que tiveram tempo de espera MAIOR do que o determinado para o dia (45 ou 90)
-				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-										FROM TB_EVENTOS_DAC
-										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-										AND CALLID IS NOT NULL AND TEMPO_ATEND = '0' AND TEMPO_ESPERA > '$ns'");
-				$query->execute();
-				for($i=0; $row = $query->fetch(); $i++)
-				{
-					$c_per = $c_per + $row['TOTAL'];
-				}	
-			}//final FOR - Intervalo de datas
-	
-			$a_mes = $a_mes + $a_per;
-			$b_mes = $b_mes + $b_per;
-			$c_mes = $c_mes + $c_per;
-			
-			//NSA - Nivel de Servico apurado no período
-			$nsa_periodo = ($a_per/($b_per+$c_per));
-			
-			$soma_nsa = $soma_nsa + $nsa_periodo;
-			
-	}//final FOR - Subintervalo de 30 minutos
-
-	/*NSA - Nivel de Servico apurado no Mês	
-	 * Divide-se a quantidade de chamados que atingiram o NS (Valor de A) 
-	 * pela soma do Total de Chamados(Total de B) + Total de Chamados que Estouraram o NS (Total de C)	
-	*/
-	$nsa_mes = ($a_mes/($b_mes+$c_mes));
-	
-	//somatório das NSA dos periodos, dividido pelo total de periodos (média aritimetica simples)
-	$nsh_mes = $soma_nsa/48;
-
-	//Calculo DNS - Dispersão de Nível de Serviço por Faixa de Horário
-	$dif_nsa_nsh = $nsa_mes - $nsh_mes;
-
-	if ($dif_nsa_nsh < 0) 
-		$dif_nsa_nsh = $dif_nsa_nsh * (-1);
-
-	if ($dif_nsa_nsh > 0.05) 
-		$dns = 1 - ( $dif_nsa_nsh - 0.05 );
-	else 
-		$dns = 1;
-}// FINAL if ($dns_automatico == 'sim')
-else 
-	$dns = $qual_dns; 
+    //todo o bloco abaixo, é para calcular o DNS Automático, no caso utilizamos o fixo 1.0, FECHAR 
+    if ($dns_automatico == 'sim')
+    { // verifica se valor de dns automático ou manual
+    
+    	// calcula dns
+    	$a_mes = 0;
+    	$b_mes = 0;
+    	$c_mes = 0;
+    	$soma_nsa = 0;
+    
+    	//rotina executada para efetuar o calculo do nivel de servico, considerando o intervalo de 30 minutos, vide linha 264
+    	for ($contador=1; $contador<49; $contador++)
+    	{
+    			//'{' adicionada apenas para agrupar e 'esconder' no IDE, código redundante 	
+    			if(1==1)
+    			{
+    				if ($contador == 1){
+    					$periodo_inicial = '00:00:00.000';
+    					$periodo_final = '00:29:59.999';
+    				}
+    				
+    				if ($contador == 2){
+    					$periodo_inicial = '00:30:00.000';
+    					$periodo_final = '00:59:59.999';
+    				}
+    				
+    				if ($contador == 3){
+    					$periodo_inicial = '01:00:00.000';
+    					$periodo_final = '01:29:59.999';
+    				}
+    				
+    				if ($contador == 4){
+    					$periodo_inicial = '01:30:00.000';
+    					$periodo_final = '01:59:59.999';
+    				}
+    				
+    				if ($contador == 5){
+    					$periodo_inicial = '02:00:00.000';
+    					$periodo_final = '02:29:59.999';
+    				}
+    				
+    				if ($contador == 6){
+    					$periodo_inicial = '02:30:00.000';
+    					$periodo_final = '02:59:59.999';
+    				}
+    				
+    				if ($contador == 7){
+    					$periodo_inicial = '03:00:00.000';
+    					$periodo_final = '03:29:59.999';
+    				}
+    				
+    				if ($contador == 8){
+    					$periodo_inicial = '03:30:00.000';
+    					$periodo_final = '03:59:59.999';
+    				}
+    				
+    				if ($contador == 9){
+    					$periodo_inicial = '04:00:00.000';
+    					$periodo_final = '04:29:59.999';
+    				}
+    				
+    				if ($contador == 10){
+    					$periodo_inicial = '04:30:00.000';
+    					$periodo_final = '04:59:59.999';
+    				}
+    				
+    				if ($contador == 11){
+    					$periodo_inicial = '05:00:00.000';
+    					$periodo_final = '05:29:59.999';
+    				}
+    				
+    				if ($contador == 12){
+    					$periodo_inicial = '05:30:00.000';
+    					$periodo_final = '05:59:59.999';
+    				}
+    				
+    				if ($contador == 13){
+    					$periodo_inicial = '06:00:00.000';
+    					$periodo_final = '06:29:59.999';
+    				}
+    				
+    				if ($contador == 14){
+    					$periodo_inicial = '06:30:00.000';
+    					$periodo_final = '06:59:59.999';
+    				}
+    				
+    				if ($contador == 15){
+    					$periodo_inicial = '07:00:00.000';
+    					$periodo_final = '07:29:59.999';
+    				}
+    				
+    				if ($contador == 16){
+    					$periodo_inicial = '07:30:00.000';
+    					$periodo_final = '07:59:59.999';
+    				}
+    				
+    				if ($contador == 17){
+    					$periodo_inicial = '08:00:00.000';
+    					$periodo_final = '08:29:59.999';
+    				}
+    				
+    				if ($contador == 18){
+    					$periodo_inicial = '08:30:00.000';
+    					$periodo_final = '08:59:59.999';
+    				}
+    				
+    				if ($contador == 19){
+    					$periodo_inicial = '09:00:00.000';
+    					$periodo_final = '09:29:59.999';
+    				}
+    				
+    				if ($contador == 20){
+    					$periodo_inicial = '09:30:00.000';
+    					$periodo_final = '09:59:59.999';
+    				}
+    				
+    				if ($contador == 21){
+    					$periodo_inicial = '10:00:00.000';
+    					$periodo_final = '10:29:59.999';
+    				}
+    				
+    				if ($contador == 22){
+    					$periodo_inicial = '10:30:00.000';
+    					$periodo_final = '10:59:59.999';
+    				}
+    				
+    				if ($contador == 23){
+    					$periodo_inicial = '11:00:00.000';
+    					$periodo_final = '11:29:59.999';
+    				}
+    				
+    				if ($contador == 24){
+    					$periodo_inicial = '11:30:00.000';
+    					$periodo_final = '11:59:59.999';
+    				}
+    				
+    				if ($contador == 25){
+    					$periodo_inicial = '12:00:00.000';
+    					$periodo_final = '12:29:59.999';
+    				}
+    				
+    				if ($contador == 26){
+    					$periodo_inicial = '12:30:00.000';
+    					$periodo_final = '12:59:59.999';
+    				}
+    				
+    				if ($contador == 27){
+    					$periodo_inicial = '13:00:00.000';
+    					$periodo_final = '13:29:59.999';
+    				}
+    				
+    				if ($contador == 28){
+    					$periodo_inicial = '13:30:00.000';
+    					$periodo_final = '13:59:59.999';
+    				}
+    				
+    				if ($contador == 29){
+    					$periodo_inicial = '14:00:00.000';
+    					$periodo_final = '14:29:59.999';
+    				}
+    				
+    				if ($contador == 30){
+    					$periodo_inicial = '14:30:00.000';
+    					$periodo_final = '14:59:59.999';
+    				}
+    				
+    				if ($contador == 31){
+    					$periodo_inicial = '15:00:00.000';
+    					$periodo_final = '15:29:59.999';
+    				}
+    				
+    				if ($contador == 32){
+    					$periodo_inicial = '15:30:00.000';
+    					$periodo_final = '15:59:59.999';
+    				}
+    				
+    				if ($contador == 33){
+    					$periodo_inicial = '16:00:00.000';
+    					$periodo_final = '16:29:59.999';
+    				}
+    				
+    				if ($contador == 34){
+    					$periodo_inicial = '16:30:00.000';
+    					$periodo_final = '16:59:59.999';
+    				}
+    				
+    				if ($contador == 35){
+    					$periodo_inicial = '17:00:00.000';
+    					$periodo_final = '17:29:59.999';
+    				}
+    				
+    				if ($contador == 36){
+    					$periodo_inicial = '17:30:00.000';
+    					$periodo_final = '17:59:59.999';
+    				}
+    				
+    				if ($contador == 37){
+    					$periodo_inicial = '18:00:00.000';
+    					$periodo_final = '18:29:59.999';
+    				}
+    				
+    				if ($contador == 38){
+    					$periodo_inicial = '18:30:00.000';
+    					$periodo_final = '18:59:59.999';
+    				}
+    				
+    				if ($contador == 39){
+    					$periodo_inicial = '19:00:00.000';
+    					$periodo_final = '19:29:59.999';
+    				}
+    				
+    				if ($contador == 40){
+    					$periodo_inicial = '19:30:00.000';
+    					$periodo_final = '19:59:59.999';
+    				}
+    				
+    				if ($contador == 41){
+    					$periodo_inicial = '20:00:00.000';
+    					$periodo_final = '20:29:59.999';
+    				}
+    				
+    				if ($contador == 42){
+    					$periodo_inicial = '20:30:00.000';
+    					$periodo_final = '20:59:59.999';
+    				}
+    				
+    				if ($contador == 43){
+    					$periodo_inicial = '21:00:00.000';
+    					$periodo_final = '21:29:59.999';
+    				}
+    				
+    				if ($contador == 44){
+    					$periodo_inicial = '21:30:00.000';
+    					$periodo_final = '21:59:59.999';
+    				}
+    				
+    				if ($contador == 45){
+    					$periodo_inicial = '22:00:00.000';
+    					$periodo_final = '22:29:59.999';
+    				}
+    				
+    				if ($contador == 46){
+    					$periodo_inicial = '22:30:00.000';
+    					$periodo_final = '22:59:59.999';
+    				}
+    				
+    				if ($contador == 47){
+    					$periodo_inicial = '23:00:00.000';
+    					$periodo_final = '23:29:59.999';
+    				}
+    				
+    				if ($contador == 48){
+    					$periodo_inicial = '23:30:00.000';
+    					$periodo_final = '23:59:59.999';
+    				}
+    			}
+    		
+    			$a_per = 0;
+    			$b_per = 0;
+    			$c_per = 0;
+    		
+    			//percorrendo todo o intervalo de dadas a cada subintervalo de 30 minutos, ou seja, sumarizando a cada subintervalo
+    			for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++) //aqui
+    		  	//for($pos_dia=01; ( $pos_dia<(01+1) ); $pos_dia++)
+    		  	{			    			
+    				// verifica ns (tempo de espera) 45s ou 90s - DMM
+    				if(isset($_POST["chk_$pos_dia"]))
+    				{
+    				    $nsr_premium_valor = $dmm_nsr_premium;
+    				    $nsr_valor = $dmm_nsr;
+    				    
+    				    $nsr_premium = $nsr_valor;
+    				    
+    				    //Tempo de Espera Diferenciado(segundos):
+    					$ns = $ns_diferenciado;    					
+    				}
+    				else
+    				{
+    				    $nsr_premium_valor = $nsr_premium;
+    				    $nsr_valor = $nsr;
+    				  
+    				    $nsr_premium = $nsr_premium_valor;
+    				    
+    				    //Tempo de Espera Padrão(segundos):
+    				    $ns = $ns_normal;    					
+    				}			
+    				
+    				// A - Quantidade de atendimentos em que tiveram tempo de espera MENOR do que o determinado para o dia (45 ou 90) 
+    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
+    										FROM TB_EVENTOS_DAC
+    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
+    										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND TEMPO_ESPERA <= '$ns'");
+    				$query->execute();
+    				for($i=0; $row = $query->fetch(); $i++)
+    				{
+    					$a_per = $a_per + $row['TOTAL'];
+    				}
+    			
+    				// B - Totais de atendimento no dia
+    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
+    										FROM TB_EVENTOS_DAC
+    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
+    										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0'");
+    				$query->execute();
+    				for($i=0; $row = $query->fetch(); $i++)
+    				{
+    					$b_per = $b_per + $row['TOTAL'];
+    				}
+    			
+    				// C - Quantidade de atendimentos em que tiveram tempo de espera MAIOR do que o determinado para o dia (45 ou 90)
+    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
+    										FROM TB_EVENTOS_DAC
+    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
+    										AND CALLID IS NOT NULL AND TEMPO_ATEND = '0' AND TEMPO_ESPERA > '$ns'");
+    				$query->execute();
+    				for($i=0; $row = $query->fetch(); $i++)
+    				{
+    					$c_per = $c_per + $row['TOTAL'];
+    				}	
+    			}//final FOR - Intervalo de datas
+    	
+    			$a_mes = $a_mes + $a_per;
+    			$b_mes = $b_mes + $b_per;
+    			$c_mes = $c_mes + $c_per;
+    			
+    			//NSA - Nivel de Servico apurado no período
+    			$nsa_periodo = ($a_per/($b_per+$c_per));
+    			
+    			$soma_nsa = $soma_nsa + $nsa_periodo;
+    			
+    	}//final FOR - Subintervalo de 30 minutos
+    
+    	/*NSA - Nivel de Servico apurado no Mês	
+    	 * Divide-se a quantidade de chamados que atingiram o NS (Valor de A) 
+    	 * pela soma do Total de Chamados(Total de B) + Total de Chamados que Estouraram o NS (Total de C)	
+    	*/
+    	$nsa_mes = ($a_mes/($b_mes+$c_mes));
+    	
+    	//somatório das NSA dos periodos, dividido pelo total de periodos (média aritimetica simples)
+    	$nsh_mes = $soma_nsa/48;
+    
+    	//Calculo DNS - Dispersão de Nível de Serviço por Faixa de Horário
+    	$dif_nsa_nsh = $nsa_mes - $nsh_mes;
+    
+    	if ($dif_nsa_nsh < 0) 
+    		$dif_nsa_nsh = $dif_nsa_nsh * (-1);
+    
+    	if ($dif_nsa_nsh > 0.05) 
+    		$dns = 1 - ( $dif_nsa_nsh - 0.05 );
+    	else 
+    		$dns = 1;
+    }// FINAL if ($dns_automatico == 'sim')
+    else 
+    	$dns = $qual_dns; 
 
 // imprime parâmetros - início
 echo "<div class = 'w3-leftbar w3-border-black w3-margin-left'><div class='w3-margin-left w3-tiny'><b>Parâmetros Utilizados:</b></div>";
@@ -620,10 +639,14 @@ echo "<div class='w3-margin-left w3-tiny'>Tempo Shortcall: $shortcall_tempo segu
 $imp_nsr = $nsr * 100;
 $imp_nsr_premium = $nsr_premium * 100;
 
-echo "<div class='w3-margin-left w3-tiny'>NSR Normal: $imp_nsr%</div>";
-echo "<div class='w3-margin-left w3-tiny'>NSR Diferenciado: $imp_nsr_premium%</div>";
+$dmm_imp_nsr = $dmm_nsr * 100;
+$dmm_imp_nsr_premium = $dmm_nsr_premium * 100;
+
+echo "<div class='w3-margin-left w3-tiny'>NSR (S/DMM) - Filas Normais: $imp_nsr%</div>";
+echo "<div class='w3-margin-left w3-tiny'>NSR (S/DMM) - Filas Premium: $imp_nsr_premium%</div>";
+echo "<div class='w3-margin-left w3-tiny'>NSR (C/DMM) - Filas Normais: $dmm_imp_nsr%</div>";
+echo "<div class='w3-margin-left w3-tiny'>NSR (c/DMM) - Filas Premium: $dmm_imp_nsr_premium%</div>";
 echo "<div class='w3-margin-left w3-tiny'>Tempo de espera padrão: $ns_normal segundos</div>";
-echo "<div class='w3-margin-left w3-tiny'>Tempo de espera para dias de maior movimento: $ns_diferenciado segundos</div>";
 echo "<div class='w3-margin-left w3-tiny'>Tempo de espera para dias de maior movimento: $ns_diferenciado segundos</div>";
 echo "<div class='w3-margin-left w3-tiny'>Preço do minutos (Atendimento Humano): R$ $valor_atendimento</div>";
 echo "<div class='w3-margin-left w3-tiny'>Preço do minutos (Atendimento Eletrônico): R$ $valor_atendimento_ura</div>";
@@ -713,21 +736,26 @@ echo "<br>";
 echo "<hr>";
 
 // imprime dia a dia - início
-for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
+for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 {
-	
+	//utilizado para avaliar a concessão de ACP de filas com NS < 90%
 	$ns_todas_filas_2 = 1; //regra mensal
 	
 	// verifica ns (tempo de espera) 45s ou 90s
 	if(isset($_POST["chk_$pos_dia"]))
 	{
 		$ns = $ns_diferenciado;
-		$nsr_premium = $nsr_valor;
+				
+		$nsr_valor = $dmm_nsr;				
+		$nsr_premium_valor = $dmm_nsr_premium;
+				
 	}
 	else
 	{
-		$ns = $ns_normal;
-		$nsr_premium = $nsr_premium_valor;
+		$ns = $ns_normal;			
+		
+		$nsr_valor = $nsr;
+		$nsr_premium_valor = $nsr_premium;
 	}	
 	
 	// imprime container da data	
@@ -762,7 +790,12 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 	echo '</tr>';
 	
 	//regra mensal * consultas
-	if ($ns == '45')
+	//variaveis a ser utilizada na regra do ACP, para verificar o NS de serviço das demais filas
+	
+	
+	$menor_ns_faixa_horario = 1;
+	
+    if ($ns == '45')
 	{
 		/*--------- Calculando o Nivel de Serviço Apurado - DIA
 		 *  Atendidas_1 = Atendidas até 10 segundos
@@ -833,6 +866,9 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		else 
 			$ns_faixa_horario = 0;
 		
+		if ($n_ns < $menor_ns_faixa_horario)
+		    $menor_ns_faixa_horario = $n_ns;
+		
 		//Não entendi, porque duas vezes verificiação premium e nao premium, agora por fila, se a primeira ja der inferior a 1, então já era.. pra tudo
 		// diário não premium - por fila
 		$query = $pdo->prepare("select top 1 cod_fila, 
@@ -874,13 +910,16 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		{
 			$nd_nsa = $row['nd_nsa'];
 			$xx = $nd_nsa / $nsr_premium_valor;
-			if ($xx < $nd_ns) $nd_ns = $nd_nsa / $nsr_premium_valor;
+			if ($xx < $nd_ns) 
+			   $nd_ns = $nd_nsa / $nsr_premium_valor; 
 		}
-				
+		
+		//utilizado para avaliar a concessão de ACP de filas com NS < 95% - Primeiro Grupo
 		if ($nd_ns >= '0.95') 
 			$ns_todas_filas = 1;
 		else 
-			$ns_todas_filas = 0;
+			$ns_todas_filas = 0;		
+		
 	}//FINAL if ($ns == '45')
 	else
 	{
@@ -935,6 +974,9 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		else 
 			$ns_faixa_horario = 0;
 		
+		if ($n_ns < $menor_ns_faixa_horario)
+		    $menor_ns_faixa_horario = $n_ns;
+		
 		// diário não premium
 		$query = $pdo->prepare("select top 1 cod_fila, 
 													( 
@@ -984,10 +1026,13 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 				$nd_ns = $nd_nsa / $nsr_premium_valor;
 		}
 		
+		//utilizado para avaliar a concessão de ACP de filas com NS < 95% - Primeiro Grupo
 		if ($nd_ns >= '0.95') 
 			$ns_todas_filas = 1;
 		else 
 			$ns_todas_filas = 0;
+	   
+		
 	}//FINAL ELSE if ($ns == '45')
 	
 	//consulta sql (a) - [a_xx]
@@ -1377,7 +1422,9 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}	
-		
+
+	
+	$menor_ns_filas = 1;
 	// PRIMEIRA TABELA		
 	for($i=0; $i<$num_filas ; $i++)
 	{
@@ -1409,7 +1456,10 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		$valor_nsa = $$var_nsa;
 		
 		$var_ns = "ns_$cont";
-		$valor_ns = $$var_ns;			
+		$valor_ns = $$var_ns;	
+		
+		
+				
 		
 		if( ($valor_b > 0) || ($valor_a > 0) || ($valor_tma > 0) || ($valor_c > 0) || ($valor_sc > 0) )
 		{		
@@ -1435,12 +1485,12 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			//verifica se é ou não fila premium
 			if (in_array($cont, $vet_todas_premium))
 			{
-				if($nsa >= $nsr_premium) 
+				if($nsa >= $nsr_premium_valor) 
 					$nivel_de_servico = 1;
 				else 
-					$nivel_de_servico = $nsa/$nsr_premium;
+				    $nivel_de_servico = $nsa/$nsr_premium_valor;
 				
-				$imprime_nsr_premium = number_format($nsr_premium, 2, ',', '.');
+				    $imprime_nsr_premium = number_format($nsr_premium_valor, 2, ',', '.');  
 				echo "<td>$imprime_nsr_premium</td>";
 				
 			}
@@ -1449,14 +1499,14 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 				if($nsa >= $nsr ) 
 					$nivel_de_servico = 1;
 				else 
-					$nivel_de_servico = $nsa/$nsr;
+				    $nivel_de_servico = $nsa/$nsr_valor;
 				
-				$imprime_nsr = number_format($nsr, 2, ',', '.');
+				    $imprime_nsr = number_format($nsr_valor, 2, ',', '.');
 				echo "<td>$imprime_nsr</td>";
 			} 
 			
 			if ($nivel_de_servico < 0.90) 
-				$ns_todas_filas_2 = 0; // regra mensal
+				$ns_todas_filas_2 = 0; // Segundo critério de 90% do NS - Segundo Grupo
 				
 			// soma o nível de serviço para gerar valor ansm
 			$soma_ansm = $soma_ansm + $nivel_de_servico;
@@ -1464,6 +1514,9 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			$imprime_nivel_de_servico = number_format($nivel_de_servico, 10, ',', '.');
 			
 			$$var_ns = $nivel_de_servico; // variável ns
+			
+			if ($nivel_de_servico < $menor_ns_filas)
+			   $menor_ns_filas = $nivel_de_servico;
 			
 			echo "<td>$imprime_nivel_de_servico</td>";
 			echo "<td>$valor_tma</td>";				
@@ -1506,7 +1559,7 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			// imprime pg e soma ao pg_diário
 			$valor_pg = $valor_ca * $valor_atendimento;
 			$imprime_valor_pg = number_format($valor_pg, 2, ',', '.');
-			echo "<td>R$ $imprime_valor_pg</td>";
+			echo "<td>R$ $imprime_valor_pg</td>";			
 			echo "</tr>";
 		}// final if( ($valor_b > 0) || ($valor_a > 0) || ($valor_tma > 0) || ($valor_c > 0) || ($valor_sc > 0) )			
 	}//final IMPRESSÃO - PRIMEIRA TABELA
@@ -1546,47 +1599,33 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 		$valor_ns = $$var_ns;
 		$qtde_acp = 0; //aqui
 		$fator = 1;
-		$acp_aut = false;
+		//$acp_aut = false;
 		
 		$vet_parcelamento_com_130 = array_merge($vet_parcelamento,$vet_130);
 		$vet_contestacao_com_100 = array_merge($vet_contestacao,$vet_100);
 		
+		//se há qtde de ligações a serem remuneradas
 		if( ($valor_ca > 0) )
 		{
-		    /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> bloco (remuneracao Filas GERA) Ladicionado apenas para compensar a desconexao embratel */
-		    /*if (in_array("$cont", $vet_geral_normal) )
-		    {
-		        $acp_aut = true;
-		        
-		        $qtde_acp = $valor_ca;
-		        $fator = 1.09;
-		    }
-		    if (in_array("$cont", $vet_pj))
-		    {
-		        $acp_aut = true;
-		        
-		        $qtde_acp = $valor_ca;
-		        $fator = 1.11;
-		    }
-			else */if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
+		   if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
 			           or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
-			           /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel 
-			           or in_array("$cont", $vet_todas_premium)*/
+			           /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel */
+			           or in_array("$cont", $vet_todas_premium)
 			         )  
 			{
 				//apenas para printar a linha com formato diferenciado	
-				$acp_aut = true;	 	
+				//$acp_aut = true;	 	
 				
 				$qtde_acp = $valor_ca;	
-				$fator = 1.25;
+				//$fator = 1.25;RETIRADO NOVO FORMATO ACP
 							
 			}//recebem 25% de ACP para atendimentos de transferência interna
 			else if(in_array("$cont", $vet_pj)){
 				//apenas para printar a linha com formato diferenciado	
-				$acp_aut = true;	 	
+				//$acp_aut = true;	 	
 				
 				$qtde_acp = $valor_ca;	
-				$fator = 1.1;
+				//$fator = 1.1; RETIRADO NOVO FORMATO ACP
 			}
 			else if (in_array("$cont", $vet_contestacao_com_100) or in_array("$cont", $vet_pontos) )
 			{
@@ -1619,29 +1658,12 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 																	
 																						
 																  ) as A
-				  						");
-				 /*
-				$query = $pdo->prepare(" select count(*) cont from (
-																		select  distinct callid from tb_eventos_dac ted 
-																		where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-													  					AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' 
-													  					AND ted.COD_FILA IN ('$cont')
-													  					and ted.callid in ( 
-													  										select ted2.callid from tb_eventos_dac ted2 
-																							where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-																							AND ted2.CALLID IS NOT NULL AND ted2.TEMPO_ATEND > '0'
-																							and ted2.CALLID = ted.CALLID
-																							and ted2.data_hora < ted.data_hora
-																						  )
-																	) as A
-					  						 ");*/
-											 
-				
+				  						");															 				
 				$query->execute();
 				for($tt=0; $row = $query->fetch(); $tt++)
 				{
 					$qtde_acp = $row['cont']; //aqui
-					$fator = 1.25;
+					//$fator = 1.25; RETIRADO NOVO FORMATO ACP
 				}	
 			} 
 			else if (in_array("$cont", $vet_todas_premium)) //recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
@@ -1672,12 +1694,66 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 					$query->execute();
 					for($tt=0; $row = $query->fetch(); $tt++)
 					{
-						$qtde_acp = $row['cont']; //aqui
-						$fator = 1.05;
+						$qtde_acp = $row['cont']; 
+						//$fator = 1.25; RETIRADO NOVO FORMATO ACP
 					}
 				//}
 			}
 			
+			$imp_acp_aplicado = 0.00;
+			//Agregando filas de acordo as particulares de remuneração de ACP
+			if (in_array($cont, $vet_retencao)  or  in_array($cont, $vet_triagem)
+			or in_array($cont, $vet_contestacao_com_100)  or in_array($cont, $vet_pontos)
+			or in_array($cont, $vet_perda_roubo)  or in_array($cont, $vet_pj))
+			{
+			    
+			    
+			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.95')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 95% - !SEM ACP!
+			        $imp_acp_aplicado = '00';
+			        else if ($menor_ns_faixa_horario >= '0.90') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
+			        {
+			            $imp_acp_aplicado = '25';
+			            $fator = 1.25;
+			        }
+			        else if ($menor_ns_faixa_horario >= '0.85') //Validando a 2º Condição (levemente dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 85%
+			        {
+			            $imp_acp_aplicado = '20';
+			            $fator = 1.20;
+			        }
+			        else //Validando a 1º Condição (a mais fácil), FILA com NS >= 98% e as demais filas com NS >= 95%
+			        {
+			            if (in_array($cont, $vet_pj)) //demais PJ
+			            {//Nesta condição se for atendimento PJ recebe 10%
+			                $imp_acp_aplicado = '10';
+			                $fator = 1.10;
+			            }
+			            else  //demais recebem 15%
+			            {
+			                $imp_acp_aplicado = '15';
+			                $fator = 1.15;
+			            }
+			        }
+			}
+			else if (in_array($cont, $vet_parcelamento_com_130)  or  in_array($cont, $vet_aviso_viagem)) //2º Grupo
+			{
+			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 90% - !SEM ACP!			    
+			        $imp_acp_aplicado = '00';			        
+			     else
+			     {			         
+			        $imp_acp_aplicado = '25';
+			        $fator = 1.25;
+			     }
+			}
+			else if (in_array($cont, $vet_todas_premium)) //3º Grupo
+			{
+			    if (($valor_ns < '0.95') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP!
+			        $imp_acp_aplicado = '00';
+			    else
+			    {    
+			       $imp_acp_aplicado = '05';
+			       $fator = 1.05;
+			    }
+			}
 							
 			echo "<tr>";
 			
@@ -1724,8 +1800,9 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			$ad_acp = (($p_acp*$fator) - $p_acp); 
 			$imp_ad_acp = number_format($ad_acp, 2, ',', '.');
 			
-			$imp_acp_aplicado = 0;
-			// calcula "acp aplicado(%)"					
+			
+			
+			/* Retirando por conta do novo formato de REMUNERAÇÃO ACP					
 			if (in_array($cont, $vet_retencao )) 
 				$imp_acp_aplicado = $acp_retencao;
 			
@@ -1770,11 +1847,15 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 			
 			if (in_array($cont, $vet_mala_direta )) 
 				$imp_acp_aplicado = $acp_mala_direta;
+			*/		  
+		    
 			
-			// regra mensal - anterior
-			/*		
-			$vet_filas_com_acp = array('73','77','81','116','150','72','76','80','111','60','88','90','93','87','91','94','120','99','101','110','57','117','106','108','109','102','125');/*'100',*/
-			/*if (!in_array($cont, $vet_filas_com_acp))
+			
+			
+			
+			/*	
+			$vet_filas_com_acp = array('73','77','81','116','150','72','76','80','111','60','88','90','93','87','91','94','120','99','101','110','57','117','106','108','109','102','125');
+			if (!in_array($cont, $vet_filas_com_acp))
 			{
 				if (in_array($cont, $vet_todas_premium))
 				{
@@ -1802,7 +1883,6 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 						if ( ($ns_todas_filas_2 == 1) && ($ns_faixa_horario == 0) ) $imp_acp_aplicado = '10';
 					}						
 			}*/
-			
 			
 			if (!isset($imp_acp_aplicado)) 
 			{
@@ -1851,8 +1931,17 @@ for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++)
 	echo "<td><b>$pos_dia de $mes de $qual_ano</b></td>";
 	echo '</tr>';
 
-	// imprime ansm
-
+	echo '<tr>';
+	echo "<td>MENOR NÍVEL DE SERVIÇO IDENTIFICADO - FAIXA DE HORÁRIO</td>";
+	echo "<td>$menor_ns_faixa_horario</td>";
+	echo '</tr>';
+	
+	echo '<tr>';
+	echo "<td>MENOR NÍVEL DE SERVIÇO IDENTIFICADO - FILA</td>";
+	echo "<td>$menor_ns_filas</td>";
+	echo '</tr>';
+	
+	// imprime ansm		
 	$imprime_media_ansm = number_format($media_ansm, 10, ',', '.');
 	if ($$dia_ansm != '0.00')
 	{
