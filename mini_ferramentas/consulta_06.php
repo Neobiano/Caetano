@@ -80,7 +80,7 @@ for($pos=0;$pos < $qtd_ilas;$pos++){
 		echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 		// INFORMA A CONSULTA
-		$query = $pdo->prepare("select a.cod_fila, D.desc_fila, TOTAL_ATENDIMENTOS, TMA, ATEND_ATE_45, ATEND_ATE_90, ABANDONADAS_APOS_45, ABANDONADAS_APOS_90
+		$sql = "select a.cod_fila, D.desc_fila, TOTAL_ATENDIMENTOS, TMA, ATEND_ATE_45, ATEND_ATE_90, ABANDONADAS_APOS_45, ABANDONADAS_APOS_90
 								from
 								(
 								select cod_fila, count (*) TOTAL_ATENDIMENTOS from tb_eventos_DAC (nolock)
@@ -124,10 +124,13 @@ for($pos=0;$pos < $qtd_ilas;$pos++){
 								where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend = 0 and tempo_espera > 90 and cod_fila in ($cod_filas_ilha) --and datepart(dw,data_hora) in $in_semana
 								group by cod_fila
 								) as f
-								on a.cod_fila = f.cod_fila								
+								on a.cod_fila = f.cod_fila
 								inner join tb_filas as d
 								on a.cod_fila = d.cod_fila
-								order by cod_fila");
+								order by cod_fila";
+	   // echo $sql;
+		$query = $pdo->prepare($sql);
+		
 		$query->execute(); // EXECUTA A CONSULTA
 		
 		// IMPRIME O RESULTADO DA CONSULTA - INÍCIO

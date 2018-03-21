@@ -68,7 +68,7 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         break;
 		
 	case '02':
-        include "consulta_02.php"; // Percentual de Retenção URA
+        include "consulta_02b.php"; // Percentual de Retenção URA
         break;
 	
 	case '03':

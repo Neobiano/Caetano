@@ -154,14 +154,14 @@
 
 
     //define vetores das ilhas 
-    $vet_retencao = array('73','77','81'/*,'85'*/,'116');
+    $vet_retencao = array('73','77','81','85','116');
     $vet_aviso_viagem = array('125');
     $vet_triagem = array('150');
-    $vet_parcelamento = array('72','76','80',/*'84',*/'111');//tirei
-    $vet_contestacao = array('60','88','90','93'/*,'96'*/);//tirei
-    $vet_pontos = array('87','91','94',/*'97',*/'120'); //tirei
+    $vet_parcelamento = array('72','76','80','84','111');//tirei
+    $vet_contestacao = array('60','88','90','93','96');//tirei
+    $vet_pontos = array('87','91','94','97','120'); //tirei
     $vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
-    //$vet_geral_premium = array('82','83','98'); tirei, pois já esta na vet_todas_premium
+    $vet_geral_premium = array('82','83','98'); //tirei, pois já esta na vet_todas_premium
 
     $vet_pj = array('99','101','110');/*,'100' ,'100','130'*/
     $vet_130 = array('130');
@@ -170,12 +170,12 @@
     $vet_deficiente_auditivo = array('61');
     $vet_mala_direta = array('64');
     $vet_perda_roubo = array('57');
-    $vet_bloqueio_cobranca = array('117','106',/*'107',*/'108','109');//tirei
+    $vet_bloqueio_cobranca = array('117','106','107','108','109');//tirei
 
     $vet_app = array('102');
-    $vet_todas_premium = array('82','83','84','85','96','97','98','107');
+    $vet_todas_premium = array('82','83','98','84','96','97','85','107');
 
-    $vet_todas_filas = array_merge($vet_todas_premium, $vet_app, $vet_bloqueio_cobranca, 
+    $vet_todas_filas = array_merge(/*$vet_todas_premium*/$vet_geral_premium, $vet_app, $vet_bloqueio_cobranca, 
     							   $vet_retencao, $vet_triagem, $vet_aviso_viagem, 
     							   $vet_parcelamento, $vet_contestacao, $vet_pontos, 
     							   $vet_geral_normal,$vet_pj, 
@@ -736,7 +736,7 @@ echo "<br>";
 echo "<hr>";
 
 // imprime dia a dia - início
-for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
+for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 {
 	//utilizado para avaliar a concessão de ACP de filas com NS < 90%
 	$ns_todas_filas_2 = 1; //regra mensal
@@ -1204,8 +1204,8 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
 
-	// contestacao
-	//
+	// contestacao	
+	/*
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL	FROM  TB_EVENTOS_DAC ted
 							inner join	(
 											SELECT distinct  CALLID, min(data_hora) d_hora
@@ -1216,16 +1216,16 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 									    ) AS A on (A.CALLID = ted.callid and A.d_hora = ted.data_hora)
 							WHERE ted.DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 							AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' AND ted.COD_FILA IN ($ilha_contestacao)
-							GROUP BY ted.COD_FILA");
+							GROUP BY ted.COD_FILA");*/
 	
-	/*$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
 																	FROM TB_EVENTOS_DAC
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_contestacao)
 																	GROUP BY CALLID
 																) AS A
-							GROUP BY COD_FILA");*/
+							GROUP BY COD_FILA");
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++)
 	{
@@ -1609,7 +1609,8 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 		{
 		   if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
 			           or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
-			           /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel */
+		                or in_array("$cont", $vet_aviso_viagem)
+			           /*<<<<<<<<<<<<<<<<<<ATENÇÃO>>>>>>>>>>>>>>> linha adicionada apenas para compensar a desconexao embratel*/ 
 			           or in_array("$cont", $vet_todas_premium)
 			         )  
 			{
@@ -1629,76 +1630,73 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 			}
 			else if (in_array("$cont", $vet_contestacao_com_100) or in_array("$cont", $vet_pontos) )
 			{
-				
-				if (in_array("$cont", $vet_contestacao_com_100))				
-				  $ilha_filtro = $ilha_contestacao.",'100'";				
-				else if (in_array("$cont", $vet_pontos))	
-				  $ilha_filtro = $ilha_pontos;
-								 
-				 $query = $pdo->prepare("select count(*) cont from (
-																	select distinct  callid from tb_eventos_dac ted 
-																	where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-																	AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' 						
-																	AND ted.COD_FILA IN ('$cont')
-																	and ted.callid in ( --codigo seleciona todas as chamadas com o mesmo callid e iniciada 'antes' 
-																						select ted2.callid from tb_eventos_dac ted2 
-																						where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-																						AND ted2.CALLID IS NOT NULL AND ted2.TEMPO_ATEND > '0'
-																						and ted2.CALLID = ted.CALLID
-																						and ted2.data_hora < ted.data_hora
-																						)
-																	and ted.callid not in ( --codigo seleciona as chamadas com o mesmo callid oriundas da mesma ilha iniciada 'antes' 
-																						select ted3.callid from tb_eventos_dac ted3 
-																						where ted3.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-																						AND ted3.CALLID IS NOT NULL AND ted3.TEMPO_ATEND > '0'
-																						and ted3.CALLID = ted.CALLID
-																						and ted3.data_hora < ted.data_hora
-																						and ted3.cod_fila in ($ilha_filtro)
-																						)
-																	
-																						
-																  ) as A
-				  						");															 				
-				$query->execute();
-				for($tt=0; $row = $query->fetch(); $tt++)
-				{
-					$qtde_acp = $row['cont']; //aqui
-					//$fator = 1.25; RETIRADO NOVO FORMATO ACP
-				}	
-			} 
-			else if (in_array("$cont", $vet_todas_premium)) //recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
-			{
-			   /*  if (($cont == 84) or ($cont == 85) or ($cont == 96) or ($cont == 97) or ($cont == 82) or ($cont == 83))
-				{
-					$qtde_acp = 0;
-					$fator = 1;
-				}    
-				else
-				{*/
-					$query = $pdo->prepare(" select count(*) cont from (
-																			select  distinct callid from tb_eventos_dac ted 
-																			where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-														  					and ted.callid is not null and ted.tempo_atend > '0' 
-														  					and ted.cod_fila in ('$cont')
-														  					and ted.callid NOT in ( 
-														  										select ted2.callid from tb_eventos_dac ted2 
-																								where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-																								and ted2.callid is not null and ted2.tempo_atend > '0'
-																								and ted2.callid = ted.callid
-																								and ted2.data_hora < ted.data_hora
-																							  )
-																		) as A
-						  						 ");
-												 
-					
-					$query->execute();
-					for($tt=0; $row = $query->fetch(); $tt++)
-					{
-						$qtde_acp = $row['cont']; 
-						//$fator = 1.25; RETIRADO NOVO FORMATO ACP
-					}
-				//}
-			}
+			    
+    				//if (in_array("$cont", $vet_contestacao_com_100))				
+    				//  $ilha_filtro = $ilha_contestacao.",'100'";				
+    			//	else if (in_array("$cont", $vet_pontos))	
+    			//	  $ilha_filtro = $ilha_pontos;
+    								 
+    				/* $query = $pdo->prepare("select count(*) cont from (
+    																	select distinct  callid from tb_eventos_dac ted 
+    																	where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
+    																	AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' 						
+    																	AND ted.COD_FILA IN ('$cont')
+    																	and ted.callid in ( --codigo seleciona todas as chamadas com o mesmo callid e iniciada 'antes' 
+    																						select ted2.callid from tb_eventos_dac ted2 
+    																						where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
+    																						AND ted2.CALLID IS NOT NULL AND ted2.TEMPO_ATEND > '0'
+    																						and ted2.CALLID = ted.CALLID
+    																						and ted2.data_hora < ted.data_hora
+    																						)
+    																	and ted.callid not in ( --codigo seleciona as chamadas com o mesmo callid oriundas da mesma ilha iniciada 'antes' 
+    																						select ted3.callid from tb_eventos_dac ted3 
+    																						where ted3.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
+    																						AND ted3.CALLID IS NOT NULL AND ted3.TEMPO_ATEND > '0'
+    																						and ted3.CALLID = ted.CALLID
+    																						and ted3.data_hora < ted.data_hora
+    																						and ted3.cod_fila in ($ilha_filtro)
+    																						)
+    																	
+    																						
+    																  ) as A
+    				  						");															 				
+    				$query->execute();
+    				for($tt=0; $row = $query->fetch(); $tt++)
+    				{
+    					$qtde_acp = $row['cont']; //aqui
+    					//$fator = 1.25; RETIRADO NOVO FORMATO ACP
+    				} */
+    				
+    				//basicamente anulando o codigo acima
+    				$qtde_acp = $valor_ca;
+    				
+    			} /*RETIRADO - AGORA TODAS AS PREMIUN RECEBEM 
+    			recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
+    			else if (in_array("$cont", $vet_todas_premium)) 
+    			{			  
+    					$query = $pdo->prepare(" select count(*) cont from (
+    																			select  distinct callid from tb_eventos_dac ted 
+    																			where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+    														  					and ted.callid is not null and ted.tempo_atend > '0' 
+    														  					and ted.cod_fila in ('$cont')
+    														  					and ted.callid NOT in ( 
+    														  										select ted2.callid from tb_eventos_dac ted2 
+    																								where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+    																								and ted2.callid is not null and ted2.tempo_atend > '0'
+    																								and ted2.callid = ted.callid
+    																								and ted2.data_hora < ted.data_hora
+    																							  )
+    																		) as A
+    						  						 ");
+    												 
+    					
+    					$query->execute();
+    					for($tt=0; $row = $query->fetch(); $tt++)
+    					{
+    						$qtde_acp = $row['cont']; 
+    						//$fator = 1.25; RETIRADO NOVO FORMATO ACP
+    					}				
+    			}*/ 
 			
 			$imp_acp_aplicado = 0.00;
 			//Agregando filas de acordo as particulares de remuneração de ACP
@@ -1706,8 +1704,7 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 			or in_array($cont, $vet_contestacao_com_100)  or in_array($cont, $vet_pontos)
 			or in_array($cont, $vet_perda_roubo)  or in_array($cont, $vet_pj))
 			{
-			    
-			    
+			    			   
 			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.95')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 95% - !SEM ACP!
 			        $imp_acp_aplicado = '00';
 			        else if ($menor_ns_faixa_horario >= '0.90') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
@@ -1744,7 +1741,7 @@ for($pos_dia=01; ($pos_dia < 16/*($qtd_dias+1)*/); $pos_dia++)
 			        $fator = 1.25;
 			     }
 			}
-			else if (in_array($cont, $vet_todas_premium)) //3º Grupo
+			else if (in_array($cont, $vet_geral_premium)) //3º Grupo
 			{
 			    if (($valor_ns < '0.95') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP!
 			        $imp_acp_aplicado = '00';
