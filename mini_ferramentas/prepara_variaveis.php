@@ -68,7 +68,8 @@ $parametros_adicionais = "";
 $txt_dias_semana = "";
 $qtd_dias_semana = 0;
 $in_semana = "(0";
-if(isset($_POST["chk_1"])){
+if(isset($_POST["chk_1"]))
+{
 		$in_semana = $in_semana.",1";
 		if($qtd_dias_semana==0) $txt_dias_semana = $txt_dias_semana."Domingo";
 		else $txt_dias_semana = $txt_dias_semana.", Domingo";
