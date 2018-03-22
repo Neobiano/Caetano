@@ -19,6 +19,7 @@ $nome_relatorio = "percentual_de_transferencias"; // NOME DO RELATÓRIO (UTILIZA
 $titulo = "Percentual de Transferências"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
 $TOTAL_SEM_TRANSFERENCIA = 0;
@@ -27,7 +28,7 @@ $PERCENTUAL_TOTAL = 0;
 $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 
 	//IMPRIME TÍTULO DA CONSULTA
-	echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+	echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 	echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
@@ -62,12 +63,15 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	$query = $pdo->prepare("select datepart(dw,data_hora) DIA_SEMANA, convert(date,data_hora,11) DATA, count(callid) TOTAL_ATENDIMENTOS, count(distinct callid) TOTAL_ATSTRANSF,((cast(count(callid) as float) - cast(count(distinct callid) as float))/cast(count(callid) as float)*100) PERCENTUAL_DE_TRANSFERENCIA from tb_eventos_DAC
+	$sql = "select datepart(dw,data_hora) DIA_SEMANA, convert(date,data_hora,11) DATA, count(callid) TOTAL_ATENDIMENTOS, count(distinct callid) TOTAL_ATSTRANSF,((cast(count(callid) as float) - cast(count(distinct callid) as float))/cast(count(callid) as float)*100) PERCENTUAL_DE_TRANSFERENCIA from tb_eventos_DAC
 							where data_hora between	'$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and datepart(dw,data_hora) in $in_semana and cod_fila in (select cod_fila from tb_filas where desc_fila like 'CXA%')
 							group by convert(date,data_hora,11), datepart(dw,data_hora)
-							order by convert(date,data_hora,11), datepart(dw,data_hora)");
-	$query->execute(); // EXECUTA A CONSULTA
+							order by convert(date,data_hora,11), datepart(dw,data_hora)";
 	
+	//echo $sql;
+	$query = $pdo->prepare($sql);
+	$query->execute(); // EXECUTA A CONSULTA
+	 
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO
 	for($i=0; $row = $query->fetch(); $i++){
 		$var_graf = 0; // VARIÁVEL UTILIZADA PARA VERIFICAR SE JÁ FOI INCLUÍDO ALGUM DADO NO $incrementa_grafico PARA A LINHA ATUAL DO RESULTADO DA CONSULTA
@@ -167,12 +171,15 @@ echo incrementa_tabela($texto);
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
 include"imprime_grafico.php"; // IMPRIME O GRÁFICO
+$fim = defineTime();
+echo tempoDecorrido($inicio,$fim);
 ?>
 
 </body>
 </html>
 
 <script>  
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
 $('#tabela').DataTable( {
 	"order": [[ 0, "asc" ]]
 } );

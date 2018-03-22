@@ -15,6 +15,8 @@ $titulo = "Percentual de Transferências - Por Fila / Ilha"; // MESMO NOME DO IN
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
 
+$inicio = defineTime();
+
 //VARIÁVEIS TOTALIZADORAS
 $SOMA_TOTAL_DE_ATENDIMENTOS = 0;
 $SOMA_TMA = 0;
@@ -102,10 +104,10 @@ for($i=0; $row = $query->fetch(); $i++){
 // GERA RELAÇÃO DE TRANSFERÊNCIAS - FIM *****
 
 	//IMPRIME TÍTULO DA CONSULTA
-	echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+	echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
-	echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
+	echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";	
 	echo '</div>';
 
 	include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
@@ -237,7 +239,7 @@ for($i=0; $row = $query->fetch(); $i++){
                             (select * from tb_filas where desc_fila like 'CXA%') as fi
                             on E.cod_fila = fi.cod_fila";
 	
-	echo $sql;
+	//echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
@@ -713,14 +715,18 @@ echo "</div>";
 
 // IMPRIME GRÁFICO - FIM (Sem Ilha Geral)
 } else echo "<div class = 'w3-container w3-center w3-margin w3-padding w3-tiny w3-deep-orange w3-card-4'><b>O período de consulta deve ser inferior à data atual.</b></div>";
+
+$fim = defineTime();
+echo tempoDecorrido($inicio,$fim);
 ?>
 
-<script>  
+<script>
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
 $('#tabela').DataTable( {
-	"order": [[ 1, "asc" ]],
+	"order": [[ 4, "desc" ]],
 	 "iDisplayLength": -1,
 	 "columnDefs": [ {
-      "targets": [ 2, 3, 5, 7 ],
+      "targets": [ 2, 3, 4, 5, 7 ],
       "orderable": false
     } ]
 } );
@@ -728,7 +734,7 @@ $('#tabela').DataTable( {
 
 <script>  
 $('#tabela2').DataTable( {
-	"order": [[ 0, "asc" ]],
+	"order": [[ 3, "desc" ]],
 	 "iDisplayLength": -1,
 	 "columnDefs": [ {
       "targets": [ 1, 2, 4, 6 ],

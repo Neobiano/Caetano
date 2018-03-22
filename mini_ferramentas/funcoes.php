@@ -64,10 +64,10 @@
 			  $texto_tempo = $texto_tempo."$segundos segundo";
 			else if ($segundos > 1)  
 			  $texto_tempo = $texto_tempo."$segundos segundos"; 
-		   
-			$html =  '<div class="w3-margin w3-tiny w3-center">'.
-					 "<b>Tempo de Execução: </b><i>$texto_tempo</i><br>".
-					 '<br><br>';
+			  
+			$html =  '<div id="tmp" class="w3-margin w3-tiny w3-center">'.
+					 '<b>Tempo de Execução: </b><i>'.$texto_tempo.'</i><br>'.
+					 '</div>';
 					 
 			return $html;  
 		}
@@ -122,7 +122,8 @@
 		                                  
 		                                  $parametros_adicionais
 		                                  
-		                                  legend: { position: 'top' }
+		                                  legend: { position: 'top' },
+                                          pointSize: 7
 		                                };
 		                        
 		                                var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));
