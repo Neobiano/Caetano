@@ -1251,11 +1251,11 @@ function diminuiFrame(){
         <!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
     	<div  id="div_parametros_retencao_ura_c24" class="w3-container">
     		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Parâmetros de Análise:</b> </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_1" name="chk_1" value = "1" checked>Total de Ligações &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_2" name="chk_2" value = "2" checked>Com Derivação / Sem Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_3" name="chk_3" value = "3" checked>Com Derivação / Com Serviço </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_4" name="chk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_5" name="chk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_1" name="uchk_1" value = "1" checked>Total de Ligações &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_2" name="uchk_2" value = "2" checked>Com Derivação / Sem Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_3" name="uchk_3" value = "3" checked>Com Derivação / Com Serviço </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_4" name="uchk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_5" name="uchk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
     	</div>
 	</form>
 	<!-- FORMULÁRIO - FIM -->

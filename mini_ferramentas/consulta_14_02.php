@@ -57,7 +57,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	$query = $pdo->prepare("select g.DIA DATA, g.DIA_SEMANA DIA_SEMANA, TOTAL_DAC, TOTAL_RECHAMADAS, cast(TOTAL_RECHAMADAS as float) / cast(TOTAL_DAC as float) * 100 PERC from
+	$sql = "select g.DIA DATA, g.DIA_SEMANA DIA_SEMANA, TOTAL_DAC, TOTAL_RECHAMADAS, cast(TOTAL_RECHAMADAS as float) / cast(TOTAL_DAC as float) * 100 PERC from
 							(
 							select DIA, a.DIA_SEMANA, sum(TOTAL) TOTAL_RECHAMADAS from
 							(
@@ -74,7 +74,9 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, count (distinct callid) TOTAL_DAC from tb_eventos_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
 							group by convert(date,data_hora,11), datepart(dw,data_hora)
-							) as h on g.DIA = h.DIA");
+							) as h on g.DIA = h.DIA";
+	echo $sql;
+	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO
