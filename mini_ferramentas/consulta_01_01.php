@@ -4,8 +4,10 @@
 <meta charset="iso-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
+<link rel="stylesheet" href="css/radar.css">
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
 <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
 
@@ -41,16 +43,24 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 	$texto = "<td><b>DATA &nbsp</b></td>";
 	echo incrementa_tabela($texto);
 
-	$texto = "<td><b>DIA DA SEMANA &nbsp</b></td>";
+	$texto = "<td ><b>DIA DA SEMANA &nbsp</b> 
+    
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE LIGAÇÕES &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE LIGAÇÕES * &nbsp</b> 
+    <span class='tooltiptext'>LIGAÇÕES distintas no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>QUANTIDADE DE TRANSFERÊNCIAS &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>QUANTIDADE DE TRANSFERÊNCIAS * &nbsp</b>
+    <span class='tooltiptext'>QUANTIDADE DE TRANSFERÊNCIAS = TOTAL DE ATENDIMENTOS - TOTAL DE LIGAÇÕES </span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE ATENDIMENTOS &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE ATENDIMENTOS *&nbsp</b>
+    <span class='tooltiptext'>ATENDIMENTOS no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
 	$texto = "<td><b>PERCENTUAL DE TRANSFERÊNCIAS &nbsp</b></td>";
