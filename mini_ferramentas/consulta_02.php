@@ -3,6 +3,7 @@ $nome_relatorio = "percentual_de_retencao_ura"; // NOME DO RELATÓRIO (UTILIZAR 
 $titulo = "Percentual de Retenção na URA"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
 $SOMA_RECEBIDAS = 0;
@@ -11,7 +12,7 @@ $SOMA_RECEBIDAS_LIQUIDO = 0;
 $SOMA_RETIDAS_LIQUIDO = 0;
 
 //IMPRIME TÍTULO DA CONSULTA
-echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 	echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
@@ -53,7 +54,7 @@ echo "</div>";
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA - deus me defenda.. muito confusa essa consulta
-	$query = $pdo->prepare("select x.DIA_SEMANA, x.DATA, x.TOTAL_URA as TOTAL_RECEBIDAS, TOTAL_URA_LIQUIDO as TOTAL_RECEBIDAS_LIQUIDO,
+	$sql = "select x.DIA_SEMANA, x.DATA, x.TOTAL_URA as TOTAL_RECEBIDAS, TOTAL_URA_LIQUIDO as TOTAL_RECEBIDAS_LIQUIDO,
 							(x.TOTAL_URA - TOTAL_DAC_TODAS) as TOTAL_RETIDAS,
 							(TOTAL_URA_LIQUIDO - y.TOTAL_DAC) as TOTAL_RETIDAS_LIQUIDO,
 							(cast(TOTAL_URA_LIQUIDO as float) - cast(y.TOTAL_DAC as float)) / cast(TOTAL_URA_LIQUIDO as float) * 100 as PERCENTUAL_DE_RETENCAO_LIQ,
@@ -63,7 +64,7 @@ echo "</div>";
 							select datepart(dw,data_hora) DIA_SEMANA, convert(date,data_hora,11) DATA, count(distinct callid) TOTAL_URA from tb_eventos_ura
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
 							group by datepart(dw,data_hora), convert(date,data_hora,11)
-
+							
 							) as x
 							inner join
 							(
@@ -80,7 +81,7 @@ echo "</div>";
 							group by callid
 							) as b on a.callid = b.callid and a.data_hora = b.data_hora
 							)
-							group by datepart(dw,data_hora), convert(date,data_hora,11)							
+							group by datepart(dw,data_hora), convert(date,data_hora,11)
 							) as h on x.DIA_SEMANA = h.DIA_SEMANA and x.DATA = h.DATA
 							inner join
 							(
@@ -111,7 +112,9 @@ echo "</div>";
 							group by callid
 							) as b on a.callid = b.callid and a.data_hora = b.data_hora
 							group by datepart(dw,a.data_hora), convert(date,a.data_hora,11)
-							) as z on x.DIA_SEMANA = z.DIA_SEMANA and x.DATA = z.DATA");
+							) as z on x.DIA_SEMANA = z.DIA_SEMANA and x.DATA = z.DATA";
+	//echo $sql;
+	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO
@@ -230,9 +233,12 @@ echo incrementa_tabela($texto);
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
 //include"imprime_grafico.php";// IMPRIME O GRÁFICO
+$fim = defineTime();
+echo tempoDecorrido($inicio,$fim);
 ?>
 
 <script>  
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
 $('#tabela').DataTable( {
 	 "columnDefs": [ {
       "targets": [ 0 ],

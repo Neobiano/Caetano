@@ -3,6 +3,7 @@ $nome_relatorio = "percentual_de_retencao_ura"; // NOME DO RELATÓRIO (UTILIZAR 
 $titulo = "Percentual de Retenção na URA"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
 $soma_recebidas = 0;
@@ -11,7 +12,7 @@ $soma_recebidas_liquido = 0;
 $soma_retidas_liquido = 0;
 
 //IMPRIME TÍTULO DA CONSULTA
-echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 	echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
@@ -52,20 +53,19 @@ echo "</div>";
 	
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
-	/*$data = $data_inicial;
-	     echo $i->format("Y-m-d");
-	}
-	while (strtotime($data) <= strtotime($data_final)) 
-	{
 	 
-	 */
+	
 	$data_inicial = new DateTime( $data_inicial );
-	$data_final = new DateTime( $data_final );
-	for($data = $data_inicial; $data <= $data_final; $data->modify('+1 day'))
+	$data_final = new DateTime($data_final);
+	date_add($data_final,date_interval_create_from_date_string("1 days"));
+	//$data_final =  date('d/m/Y', strtotime("+1 days",strtotime($data_final)));
+	
+	$daterange = new DatePeriod($data_inicial, new DateInterval('P1D'), $data_final);
+	
+	foreach($daterange as $data)
 	{	
-	    $sdata = date('d/m/Y', strtotime(str_replace('.', '-', $data)));
-	    $sdata = date('Y-m-d', strtotime($data));
-	    $sdata = strtr($sdata, '/', '-');
+	  
+	    $sdata = $data->format('Y-m-d');
 	    
 	    
 	    $qtd_linhas_consulta++; // INCREMENTA QUANTIDADE DE LINHAS DA TABELA	 
@@ -153,7 +153,7 @@ echo "</div>";
 	    $soma_retidas_liquido += $total_retidas_liquido;	
 	    
 	    //------------------impressões--------------
-	    $dia = date('w', strtotime($data));
+	    $dia = date('w', strtotime($sdata));
 	    $dia_semana = diaSemana($dia+1);
 	    $total_recebidas_bruto = number_format(utf8_encode($total_recebidas_bruto), 0, ',', '.');
 	    $total_retidas_bruto = number_format(utf8_encode($total_retidas_bruto), 0, ',', '.'); 
@@ -167,7 +167,7 @@ echo "</div>";
 	    $texto = '<tr>';
 	    echo incrementa_tabela($texto);
 	    
-	    $sdata = date("d-m-y", strtotime($data));
+	    $sdata = date("d-m-Y", strtotime($sdata));
 	    $texto = "<td>$sdata</td>";
 	    echo incrementa_tabela($texto);
 	    
@@ -194,8 +194,7 @@ echo "</div>";
 	    
 	    $texto = '</tr>';
 	    echo incrementa_tabela($texto);
-	    	    
-	    $sdata = date('d/m/Y', strtotime("+1 days",strtotime($data)));
+	   	    	   
 	}
 	
 	$media_pct_retidas_bruto =  $soma_retidas_bruto / $soma_recebidas_bruto * 100;
@@ -239,9 +238,12 @@ echo incrementa_tabela($texto);
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
 //include"imprime_grafico.php";// IMPRIME O GRÁFICO
+$fim = defineTime();
+echo tempoDecorrido($inicio,$fim);
 ?>
 
 <script>  
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
 $('#tabela').DataTable( {
 	 "columnDefs": [ {
       "targets": [ 0 ],
