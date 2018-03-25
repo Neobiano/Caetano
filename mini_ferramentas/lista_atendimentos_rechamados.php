@@ -41,6 +41,7 @@ echo '<div class="w3-margin w3-tiny w3-center">';
 echo '<div id="divtitulo">';
 echo "<b>Rastreio de Atendimentos (Incidência de Rechamados)</b>";
 echo "<br><br><b><i>Data da Consulta:</i></b> $data_inicial_texto";
+echo "<br><b><i>CPF/CNPJ:</i></b> $icpf";
 echo "<br><br>";
 echo "<b>Obs:</b> A quantidade de <b>Atendimentos</b> é em regra diferente da quantidade de <b>Rechamados.</b>";
 echo "<br>A cardinalidade para a relação é,'1' Chamada Originadora --> 'N' Rechamados e '1' Rechamado --> 'N' Atendimentos";
