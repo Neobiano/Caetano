@@ -251,7 +251,7 @@ $(document).ready(function(){
 				$("#data_final").show();
 				$("#div_select_filas").show();
 				$("#txt_data_inicial").html("Data Inicial:");
-			    $("#txt_detalhes").text("Exibe os percentuais de transferências.");
+			    $("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de transferências realizadas no dia (geral) ou detalhado por Fila/Ilha de atendimento");
 			    $("#btn_pesquisar").html("Consultar");
 
 				switch($("#select_dias_semana").val()){				
@@ -490,7 +490,7 @@ $(document).ready(function(){
 					$("#data_final").show();
 					$("#txt_data_inicial").html("Data Inicial:");
 					$("#btn_pesquisar").html("Consultar");
-					$("#txt_detalhes").text("Exibe a incidência de rechamadas dia a dia.");
+					$("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de rechamadas (contatos reincidentes de um mesmo CPF) realizados no dia");
 
 					break;
 

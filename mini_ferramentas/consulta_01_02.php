@@ -120,7 +120,9 @@ for($i=0; $row = $query->fetch(); $i++){
 	$texto = "<td><b>NOME DA FILA</b></td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE ATENDIMENTOS</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE ATENDIMENTOS *&nbsp</b>
+    <span class='tooltiptext'>ATENDIMENTOS no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
 	$texto = "<td><b>TRANSFERÊNCIAS EFETUADAS</b></td>";
@@ -135,10 +137,12 @@ for($i=0; $row = $query->fetch(); $i++){
 	$texto = "<td><b>TRANSFERÊNCIAS RECEBIDAS(%)</b></td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>RECEBIDAS DA URA</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE LIGAÇÕES * &nbsp</b>
+    <span class='tooltiptext'>LIGAÇÕES distintas no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>RECEBIDAS DA URA(%)</b></td>";
+	$texto = "<td><b>TOTAL DE LIGAÇÕES(%)</b></td>";
 	echo incrementa_tabela($texto);
 	
 	$texto = "</tr></thead><tbody>";

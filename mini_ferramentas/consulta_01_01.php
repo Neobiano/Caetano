@@ -4,7 +4,7 @@
 <meta charset="iso-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
-<link rel="stylesheet" href="css/radar.css">
+
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
 
@@ -21,6 +21,7 @@ $nome_relatorio = "percentual_de_transferencias"; // NOME DO RELATÓRIO (UTILIZA
 $titulo = "Percentual de Transferências"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$dados_grafico = "['Data','$titulo','Qtde Atendimentos']";
 $inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
@@ -135,7 +136,7 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 			$texto = "<td>$PERCENTUAL_DE_TRANSFERENCIA%</td>";
 			echo incrementa_tabela($texto);
 			
-			$incrementa_grafico = $incrementa_grafico.",$PERCENTUAL_DE_TRANSFERENCIA_grafico]"; // INCREMENTA OS DADOS DO GRÁFICO
+			$incrementa_grafico = $incrementa_grafico.",$PERCENTUAL_DE_TRANSFERENCIA_grafico,$TOTAL_ATENDIMENTOS]"; // INCREMENTA OS DADOS DO GRÁFICO
 			
 			if($PERCENTUAL_DE_TRANSFERENCIA_grafico > $max) $max = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÁXIMO DE 'Y' DO GRÁFICO
 			if($PERCENTUAL_DE_TRANSFERENCIA_grafico < $min) $min = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÍNIMO DE 'Y' DO GRÁFICO
