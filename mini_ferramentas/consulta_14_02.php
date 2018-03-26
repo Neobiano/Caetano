@@ -19,13 +19,15 @@ $nome_relatorio = "incidência_de_rechamadas"; // NOME DO RELATÓRIO (UTILIZAR U
 $titulo = "Incidência de Rechamadas - Total de Rechamadas (ATC)"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$dados_grafico = "['Data','$titulo','Qtde Ligações ATC']";
+$inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
 $SOMA_TOTAL_DAC = 0;
 $SOMA_TOTAL_RECHAMADAS = 0;
 
 	// IMPRIME TÍTULO DA CONSULTA
-	echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+	echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 	// echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
@@ -41,10 +43,14 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	$texto = "<td><b>DIA DA SEMANA &nbsp</b></td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE LIGAÇÕES ATC &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE LIGAÇÕES ATC *&nbsp</b>
+     <span class='tooltiptext'>LIGAÇÕES distintas recebidas no ATC (atendimento humano) atendidas ou NÃO</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE RECHAMADAS &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE RECHAMADAS *&nbsp</b>
+    <span class='tooltiptext'>LIGAÇÕES distintas recebidas no ATC (atendimento humano) de um MESMO CPF atendidas ou NÃO</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
 	$texto = "<td><b>PERCENTUAL DE RECHAMADAS &nbsp</b></td>";
@@ -57,13 +63,13 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	$query = $pdo->prepare("select g.DIA DATA, g.DIA_SEMANA DIA_SEMANA, TOTAL_DAC, TOTAL_RECHAMADAS, cast(TOTAL_RECHAMADAS as float) / cast(TOTAL_DAC as float) * 100 PERC from
+	$sql = "select g.DIA DATA, g.DIA_SEMANA DIA_SEMANA, TOTAL_DAC, TOTAL_RECHAMADAS, cast(TOTAL_RECHAMADAS as float) / cast(TOTAL_DAC as float) * 100 PERC from
 							(
 							select DIA, a.DIA_SEMANA, sum(TOTAL) TOTAL_RECHAMADAS from
 							(
 							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, valor_dado DADO, count(distinct callid) - 1 TOTAL
 							from tb_dados_cadastrais
-							where cod_dado = '3' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' and VALOR_dado <> '' and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999')
+							where cod_dado = '2' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' and VALOR_dado <> '' and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999')
 							group by convert(date,data_hora,11), datepart(dw,data_hora), valor_dado
 							having count(distinct callid) >= 2
 							) as a
@@ -74,7 +80,9 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, count (distinct callid) TOTAL_DAC from tb_eventos_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
 							group by convert(date,data_hora,11), datepart(dw,data_hora)
-							) as h on g.DIA = h.DIA");
+							) as h on g.DIA = h.DIA";
+	//echo $sql;
+	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO
@@ -100,7 +108,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 		// IMPRIME O RESULTADO DA LINHA DA CONSULTA NA TABELA - INÍCIO
 		$texto = '<tr>';
 		echo incrementa_tabela($texto);
-		
+		    $pDATA = date("Y-m-d", strtotime($DATA)); 
 			$DATA = date("d-m-Y", strtotime($DATA));   			
 			$texto = "<td>$DATA</td>";
 			echo incrementa_tabela($texto);
@@ -115,7 +123,8 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			echo incrementa_tabela($texto);
 			
 			$TOTAL_RECHAMADAS = number_format($TOTAL_RECHAMADAS, 0, ',', '.');
-			$texto = "<td>$TOTAL_RECHAMADAS</td>";
+			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
+			//$texto = "<td>$TOTAL_RECHAMADAS</td>";
 			echo incrementa_tabela($texto);
 			
 			$PERC_grafico = number_format($PERC, 2, '.', '');
@@ -123,7 +132,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			$texto = "<td>$PERC%</td>";
 			echo incrementa_tabela($texto);
 			
-			$incrementa_grafico = $incrementa_grafico.",$PERC_grafico]"; // INCREMENTA OS DADOS DO GRÁFICO
+			$incrementa_grafico = $incrementa_grafico.",$PERC_grafico,$TOTAL_DAC]"; // INCREMENTA OS DADOS DO GRÁFICO
 			
 			if($PERC_grafico > $max) $max = $PERC_grafico; // ALTERA O VALOR MÁXIMO DE 'Y' DO GRÁFICO
 			if($PERC_grafico < $min) $min = $PERC_grafico; // ALTERA O VALOR MÍNIMO DE 'Y' DO GRÁFICO
@@ -165,12 +174,15 @@ echo incrementa_tabela($texto);
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
 include"imprime_grafico.php";// IMPRIME O GRÁFICO
+$fim = defineTime();
+echo tempoDecorrido($inicio,$fim);
 ?>
 
 </body>
 </html>
 
 <script>  
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
 $('#tabela').DataTable( {
 	 "columnDefs": [ {
       "targets": [ 0 ],

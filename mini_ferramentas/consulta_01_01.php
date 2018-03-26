@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
 
+
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
 <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
 
@@ -19,6 +21,7 @@ $nome_relatorio = "percentual_de_transferencias"; // NOME DO RELATÓRIO (UTILIZA
 $titulo = "Percentual de Transferências"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 include "inicia_variaveis_grafico.php";
+$dados_grafico = "['Data','$titulo','Qtde Atendimentos']";
 $inicio = defineTime();
 
 //VARIÁVEIS TOTALIZADORAS
@@ -41,16 +44,24 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 	$texto = "<td><b>DATA &nbsp</b></td>";
 	echo incrementa_tabela($texto);
 
-	$texto = "<td><b>DIA DA SEMANA &nbsp</b></td>";
+	$texto = "<td ><b>DIA DA SEMANA &nbsp</b> 
+    
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE LIGAÇÕES &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE LIGAÇÕES * &nbsp</b> 
+    <span class='tooltiptext'>LIGAÇÕES distintas no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>QUANTIDADE DE TRANSFERÊNCIAS &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>QUANTIDADE DE TRANSFERÊNCIAS * &nbsp</b>
+    <span class='tooltiptext'>QUANTIDADE DE TRANSFERÊNCIAS = TOTAL DE ATENDIMENTOS - TOTAL DE LIGAÇÕES </span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
-	$texto = "<td><b>TOTAL DE ATENDIMENTOS &nbsp</b></td>";
+	$texto = "<td class='tooltip'><b>TOTAL DE ATENDIMENTOS *&nbsp</b>
+    <span class='tooltiptext'>ATENDIMENTOS no ATC (atendimento humano) com tempo de atendimento > 0 segundos</span>
+    </td>";
 	echo incrementa_tabela($texto);
 	
 	$texto = "<td><b>PERCENTUAL DE TRANSFERÊNCIAS &nbsp</b></td>";
@@ -125,7 +136,7 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 			$texto = "<td>$PERCENTUAL_DE_TRANSFERENCIA%</td>";
 			echo incrementa_tabela($texto);
 			
-			$incrementa_grafico = $incrementa_grafico.",$PERCENTUAL_DE_TRANSFERENCIA_grafico]"; // INCREMENTA OS DADOS DO GRÁFICO
+			$incrementa_grafico = $incrementa_grafico.",$PERCENTUAL_DE_TRANSFERENCIA_grafico,$TOTAL_ATENDIMENTOS]"; // INCREMENTA OS DADOS DO GRÁFICO
 			
 			if($PERCENTUAL_DE_TRANSFERENCIA_grafico > $max) $max = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÁXIMO DE 'Y' DO GRÁFICO
 			if($PERCENTUAL_DE_TRANSFERENCIA_grafico < $min) $min = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÍNIMO DE 'Y' DO GRÁFICO

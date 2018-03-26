@@ -34,6 +34,7 @@
 <meta charset="iso-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
+<link rel="stylesheet" href="css/radar.css">
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
 <link rel="stylesheet" href="css/jquery-ui.css" />
@@ -250,7 +251,7 @@ $(document).ready(function(){
 				$("#data_final").show();
 				$("#div_select_filas").show();
 				$("#txt_data_inicial").html("Data Inicial:");
-			    $("#txt_detalhes").text("Exibe os percentuais de transferências.");
+			    $("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de transferências realizadas no dia (geral) ou detalhado por Fila/Ilha de atendimento");
 			    $("#btn_pesquisar").html("Consultar");
 
 				switch($("#select_dias_semana").val()){				
@@ -489,7 +490,7 @@ $(document).ready(function(){
 					$("#data_final").show();
 					$("#txt_data_inicial").html("Data Inicial:");
 					$("#btn_pesquisar").html("Consultar");
-					$("#txt_detalhes").text("Exibe a incidência de rechamadas dia a dia.");
+					$("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de rechamadas (contatos reincidentes de um mesmo CPF) realizados no dia");
 
 					break;
 
@@ -1251,11 +1252,11 @@ function diminuiFrame(){
         <!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
     	<div  id="div_parametros_retencao_ura_c24" class="w3-container">
     		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Parâmetros de Análise:</b> </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_1" name="chk_1" value = "1" checked>Total de Ligações &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_2" name="chk_2" value = "2" checked>Com Derivação / Sem Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_3" name="chk_3" value = "3" checked>Com Derivação / Com Serviço </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_4" name="chk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="chk_5" name="chk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_1" name="uchk_1" value = "1" checked>Total de Ligações &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_2" name="uchk_2" value = "2" checked>Com Derivação / Sem Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_3" name="uchk_3" value = "3" checked>Com Derivação / Com Serviço </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_4" name="uchk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_5" name="uchk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
     	</div>
 	</form>
 	<!-- FORMULÁRIO - FIM -->

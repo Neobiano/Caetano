@@ -149,6 +149,7 @@ echo "<thead><tr class='w3-indigo'>";
                     //array("DIA","TOTAL_CHAMADAS","COM_DERIV_SEM_SERV","C_DERIV_C_SERV", "S_DERIV_C_SERV","S_DERIV_S_SERV")                    
                 );
     
+    //registros são trazidos na vertical, procedimento usado somente pra alinhar por 'linha' na horizontal
     for($i=0; $row = $query->fetch(); $i++)
     {
         if ($dia != $row['dia'])
