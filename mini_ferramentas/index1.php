@@ -227,6 +227,8 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_tempo_de_corte").hide();
     	$("#div_perg_satisfacao").hide();
     	$("#div_parametros_retencao_ura_c24").hide();
+    	$("#div_parametros_retencao_ura_c2").hide();
+    	
     
     	return true;		
     }
@@ -273,11 +275,23 @@ $(document).ready(function(){
 					$("#div_datas").show();
 					$("#div_button").show();
     				$("#div_tex_detalhes").show();
+    				$("#div_select_dias_semana").show();
     				$("#txt_data_final").show();
     				$("#data_final").show();
+    				$("#div_parametros_retencao_ura_c2").show();
     				$("#txt_data_inicial").html("Data Inicial:");
 					$("#txt_detalhes").text("Exibe o percentual de retenção na URA dia a dia.");
-					$("#btn_pesquisar").html("Consultar");					    				
+					$("#btn_pesquisar").html("Consultar");	
+					switch($("#select_dias_semana").val()){				
+					case '00':
+        				$ ('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+        				$("#div_dia_semana").hide();
+					break;					
+    				case '01':
+        				$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        				$("#div_dia_semana").show();
+    				break;
+				}							    				
 				break;
 				
 				case '03':
@@ -1257,6 +1271,12 @@ function diminuiFrame(){
     		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_3" name="uchk_3" value = "3" checked>Com Derivação / Com Serviço </div>
     		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_4" name="uchk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
     		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_5" name="uchk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
+    	</div>
+    	
+    	<!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
+    	<div  id="div_parametros_retencao_ura_c2" class="w3-container">
+    		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Parâmetros de Análise:</b> </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="rchk_1" name="ruchk_1" value = "1" checked>Incluir chamadas desconectadas (sem interação) na URA &nbsp &nbsp </div>    				
     	</div>
 	</form>
 	<!-- FORMULÁRIO - FIM -->
