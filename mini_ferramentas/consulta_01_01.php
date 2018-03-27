@@ -138,9 +138,7 @@ $TOTAL_TRANSFERENCIAS_PERIODO = 0;
 			
 			$incrementa_grafico = $incrementa_grafico.",$PERCENTUAL_DE_TRANSFERENCIA_grafico,$TOTAL_ATENDIMENTOS]"; // INCREMENTA OS DADOS DO GRÁFICO
 			
-			if($PERCENTUAL_DE_TRANSFERENCIA_grafico > $max) $max = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÁXIMO DE 'Y' DO GRÁFICO
-			if($PERCENTUAL_DE_TRANSFERENCIA_grafico < $min) $min = $PERCENTUAL_DE_TRANSFERENCIA_grafico; // ALTERA O VALOR MÍNIMO DE 'Y' DO GRÁFICO
-			
+						
 		$texto = '</tr>';
 		echo incrementa_tabela($texto);
 		
@@ -181,7 +179,8 @@ echo incrementa_tabela($texto);
 // IMPRIME <TR> FINALIZADORA - FIM
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
-include"imprime_grafico.php"; // IMPRIME O GRÁFICO
+$parametros_adicionais = " pointSize: 5,";
+include "imprime_grafico.php"; // IMPRIME O GRÁFICO
 $fim = defineTime();
 echo tempoDecorrido($inicio,$fim);
 ?>

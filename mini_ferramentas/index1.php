@@ -910,34 +910,40 @@ function diminuiFrame(){
     			<b>Consulta:</b>
     			<select id= "tipo_consulta" name="tipo_consulta"> <!-- 15 -->
     				<option value="00"></option>
-    				<option value="01">Percentual de Transferências</option>
-    				<option value="04">Ligações Multitransferências</option>
-    				<option value="16">Transferências Recorrentes</option>
-    				<option value="21">Transferências para Mesma Fila</option>
-    				<option value="17">Pesquisa de Satisfação</option>
-    				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
-    				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
-    				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
-    				
-    				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
-    				<option value="02">Percentual de Retenção URA</option>
-    				<option value="14">Incidência de Rechamadas</option>
-    				<option value="03">Quantidade de Operadores</option>
-    				<option value="27">Quantitativo de Operadores - Detalhamento</option>
-    				<option value="06">TMA e Nível de Serviço</option> <!-- Incluir Consulta por Faixa de Horário / Geral (Dia-a-Dia / Faixa Horário) / Por Ilha -->
-    				<option value="07">TMA - Operador / Supervisor</option>
-    				<option value="08">Perc. Atend. não Categorizados</option> <!-- Por Skill -->
-    				<option value="05">Categorização de Chamadas</option>
-    				<option value="12">DNS - Dispersão de Nível de Serviço</option>
-    				
-    				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
-    				<option value="15">URA - Eventos x Quantidade</option>
-    				<option value="24">URA - Análise de Retenção/Desconexão</option>
-    				<option value="18">URA - Monitora Desconexões</option>
-    				<option value="19">URA - Monitora Erros de Webservice</option>
-    				<option value="20">URA - Monitora Desbl. Cartão via URA</option>
-    				<option value="09">URA / FRONTEND - Tradutor de Evento</option>
-    				<option value="22">BD - Verifica Alimentação BD</option>
+    				<optgroup label="QUALIDADE">        			
+        				<option value="01">Percentual de Transferências</option>
+        				<option value="04">Ligações Multitransferências</option>
+        				<option value="16">Transferências Recorrentes</option>
+        				<option value="21">Transferências para Mesma Fila</option>
+        				<option value="17">Pesquisa de Satisfação</option>
+        				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
+        				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
+        				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
+        				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
+    				</optgroup>
+    				<optgroup label="PRODUÇÃO">         				
+        				<option value="02">Percentual de Retenção URA</option>
+        				<option value="14">Incidência de Rechamadas</option>
+        				<option value="03">Quantidade de Operadores</option>
+        				<option value="27">Quantitativo de Operadores - Detalhamento</option>
+        				<option value="06">TMA e Nível de Serviço</option> <!-- Incluir Consulta por Faixa de Horário / Geral (Dia-a-Dia / Faixa Horário) / Por Ilha -->
+        				<option value="07">TMA - Operador / Supervisor</option>
+        				<option value="08">Perc. Atend. não Categorizados</option> <!-- Por Skill -->
+        				<option value="05">Categorização de Chamadas</option>
+        				<option value="12">DNS - Dispersão de Nível de Serviço</option>
+        				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
+        			</optgroup>
+    				<optgroup label="TECNOLOGIA">
+        				
+        				<option value="15">URA - Eventos x Quantidade</option>
+        				<option value="24">URA - Análise de Retenção/Desconexão</option>
+        				<option value="18">URA - Monitora Desconexões</option>
+        				<option value="19">URA - Monitora Erros de Webservice</option>
+        				<option value="20">URA - Monitora Desbl. Cartão via URA</option>
+        				<option value="09">URA / FRONTEND - Tradutor de Evento</option>
+        				<option value="22">BD - Verifica Alimentação BD</option>
+        				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
+        			</optgroup>
     				
     				<!-- <option value="10">Pesquisa de Padrões em Eventos URA</option> -->
     				<!-- <option value="11">Localiza Atendimentos</option> -->

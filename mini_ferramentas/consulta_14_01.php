@@ -173,6 +173,7 @@ echo incrementa_tabela($texto);
 // IMPRIME <TR> FINALIZADORA - FIM
 	
 include "finaliza_tabela.php"; // FINALIZA A TABELA
+$parametros_adicionais = " pointSize: 5,";
 include"imprime_grafico.php";// IMPRIME O GRÁFICO
 $fim = defineTime();
 echo tempoDecorrido($inicio,$fim);

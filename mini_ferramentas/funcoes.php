@@ -51,9 +51,9 @@
 			
 			
 			if ($minutos == 1)
-			  $texto_tempo = "$minutos minuto ";
+			  $texto_tempo = "$minutos min";
 			else if ($minutos > 1) 
-			  $texto_tempo = "$minutos minutos ";
+			  $texto_tempo = "$minutos min";
 			else
 			  $texto_tempo = "";
 			
@@ -107,8 +107,9 @@
 						$dica = "titleTextStyle: {color:'red'},";
 						$titulo = "";
 					}
-					else $dica = "";
+					else $dica = "";												    
 					
+									
 		           $grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		                         <script type="text/javascript">'.
 		                             "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
@@ -119,11 +120,11 @@
 		                                var options = 
 		                                {
 		                                  title: '".$titulo."',
-		                                  
+		                                  curveType: 'function',
 		                                  $parametros_adicionais
-		                                  
-		                                  legend: { position: 'top' },
-                                          pointSize: 7
+                                                                                     	                                  
+                                            
+		                                  legend: { position: 'top' }
 		                                };
 		                        
 		                                var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));
