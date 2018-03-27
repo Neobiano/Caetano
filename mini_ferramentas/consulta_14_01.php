@@ -18,6 +18,13 @@
 $nome_relatorio = "incidência_de_rechamadas"; // NOME DO RELATÓRIO (UTILIZAR UNDERLINE, POIS É PARTE DO NOME DO ARQUIVO EXCEL)
 $titulo = "Incidência de Rechamadas - Total de Rechamadas (URA + ATC)"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
+//definindo o tipo de consulta CPF/CNPJ ou Telefone
+if ($qual_rechamadas_tipo=='2')
+    $tipo_rechamada = 'CPF/CNPJ';
+else
+    $tipo_rechamada = 'TELEFONE';
+
+ 
 include "inicia_variaveis_grafico.php";
 $dados_grafico = "['Data','$titulo','Qtde Ligações URA/ATC']";
 $inicio = defineTime();
@@ -49,7 +56,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	echo incrementa_tabela($texto);
 	
 	$texto = "<td class='tooltip'><b>TOTAL DE RECHAMADAS *&nbsp</b>
-    <span class='tooltiptext'>LIGAÇÕES distintas recebidas na URA/ATC (atendimentos eletrônico e humano) de um MESMO CPF atendidas ou NÃO</span>
+    <span class='tooltiptext'>LIGAÇÕES distintas recebidas na URA/ATC (atendimentos eletrônico e humano) de um MESMO $tipo_rechamada atendidas ou NÃO</span>
     </td>";
 	echo incrementa_tabela($texto);
 	
@@ -67,19 +74,20 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 							(
 							select DIA, a.DIA_SEMANA, sum(TOTAL) TOTAL_RECHAMADAS from
 							(
-							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, valor_dado DADO, count(distinct callid) - 1 TOTAL
-							from tb_dados_cadastrais
-							where cod_dado = '2' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' and VALOR_dado <> ''
-							group by convert(date,data_hora,11), datepart(dw,data_hora), valor_dado
-							having count(distinct callid) >= 2
+    							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, valor_dado DADO, count(distinct callid) - 1 TOTAL
+    							from tb_dados_cadastrais
+    							where cod_dado = '$qual_rechamadas_tipo' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' and VALOR_dado <> ''
+    							group by convert(date,data_hora,11), datepart(dw,data_hora), valor_dado
+    							having count(distinct callid) >= 2
 							) as a
 							group by DIA, a.DIA_SEMANA
 							) as g
 							inner join
 							(
-							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, count (distinct callid) TOTAL_URA from tb_eventos_ura
-							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
-							group by convert(date,data_hora,11), datepart(dw,data_hora)
+    							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, count (distinct callid) TOTAL_URA 
+                                from tb_eventos_ura
+    							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
+    							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as h on g.DIA = h.DIA";
 	
 	//echo $sql;

@@ -504,7 +504,7 @@ $(document).ready(function(){
 					$("#data_final").show();
 					$("#txt_data_inicial").html("Data Inicial:");
 					$("#btn_pesquisar").html("Consultar");
-					$("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de rechamadas (contatos reincidentes de um mesmo CPF) realizados no dia");
+					$("#txt_detalhes").text("O enfoque do relatório é mapear o percentual de rechamadas (contatos reincidentes de um mesmo CPF ou Telefone) realizados no dia");
 
 					break;
 
@@ -979,6 +979,11 @@ function diminuiFrame(){
     				<option value="00">Total de Rechamadas (URA + ATC)</option>
     		    	<option value="01">Total de Rechamadas (ATC)</option>
     		    	<!-- <option value="02">Atendimentos em Rechamadas (ATC)</option> -->	    	
+    			</select>
+    			<b>Tipo:</b>
+    			<select id= "qual_rechamadas_tipo" name="qual_rechamadas_tipo">
+    				<option value="3">Telefone</option>
+    		    	<option value="2">CPF/CNPJ</option>    		    		    	
     			</select>
     		</div>
 		

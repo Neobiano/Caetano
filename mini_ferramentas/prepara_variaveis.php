@@ -26,6 +26,7 @@ $qual_mes = $_POST['qual_mes'];
 $qual_ano = $_POST['qual_ano'];
 $qual_ano = $_POST['qual_ano'];
 $qual_rechamadas = $_POST['qual_rechamadas'];
+$qual_rechamadas_tipo = $_POST['qual_rechamadas_tipo'];
 $select_ilhas = $_POST['select_ilhas'];
 $select_origem_reicidencia = $_POST['select_origem_reicidencia']; 
 $pesq_satisf_perg1 = $_POST['perg1'];
