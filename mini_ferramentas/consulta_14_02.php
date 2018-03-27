@@ -137,7 +137,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			echo incrementa_tabela($texto);
 			
 			$TOTAL_RECHAMADAS = number_format($TOTAL_RECHAMADAS, 0, ',', '.');
-			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
+			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
 			//$texto = "<td>$TOTAL_RECHAMADAS</td>";
 			echo incrementa_tabela($texto);
 			

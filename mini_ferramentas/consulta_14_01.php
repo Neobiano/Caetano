@@ -90,7 +90,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
     							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as h on g.DIA = h.DIA";
 	
-	//echo $sql;
+	echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
@@ -117,7 +117,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 		// IMPRIME O RESULTADO DA LINHA DA CONSULTA NA TABELA - INÍCIO
 		$texto = '<tr>';
 		echo incrementa_tabela($texto);
-		
+		    $pDATA = date("Y-m-d", strtotime($DATA)); 
 			$DATA = date("d-m-Y", strtotime($DATA));   			
 			$texto = "<td>$DATA</td>";
 			echo incrementa_tabela($texto);
@@ -132,7 +132,8 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			echo incrementa_tabela($texto);
 			
 			$TOTAL_RECHAMADAS = number_format($TOTAL_RECHAMADAS, 0, ',', '.');
-			$texto = "<td>$TOTAL_RECHAMADAS</td>";
+			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
+			//$texto = "<td>$TOTAL_RECHAMADAS</td>";
 			echo incrementa_tabela($texto);
 			
 			$PERC_grafico = number_format($PERC, 2, '.', '');

@@ -157,7 +157,7 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
 		break;
 		
 	case '17':
-		include "consulta_17.php"; // Transferências Recorrentes
+		include "consulta_17b.php"; // Transferências Recorrentes
 		break;
 		
 	case '18':

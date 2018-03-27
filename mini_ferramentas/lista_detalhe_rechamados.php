@@ -27,6 +27,12 @@ set_time_limit(9999);
 ini_set('max_execution_time', 9999);
 
 $data = $_GET['data'];
+$qual_rechamadas_tipo = $_GET['qual_rechamadas_tipo'];
+ 
+ if ($qual_rechamadas_tipo=='2')
+    $tipo_rechamada = 'CPF/CNPJ';
+ else
+    $tipo_rechamada = 'TELEFONE';
 
 
 
@@ -45,12 +51,13 @@ echo '</div>';
 echo '<div class="w3-border" style="padding:16px 16px;">';
 echo '<table id = "tabela" class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-tiny w3-card-4">';
 echo '<thead><tr class="w3-indigo w3-tiny">';
-echo '<td><b>CPF/CNPJ</b></td>';
+echo "<td><b>$tipo_rechamada</b></td>";
 echo '<td><b>QTDE RECHAMADOS</b></td>';
 echo '</tr></thead><tbody>';
 $sql = "select 
         	valor_dado , count(distinct callid) - 1 total
-        from tb_dados_cadastrais where cod_dado = '2' 
+        from tb_dados_cadastrais 
+        where cod_dado = '$qual_rechamadas_tipo'  
         and data_hora between '$data' and '$data 23:59:59.999'
         and VALOR_dado <> '' 
         and callid in (
@@ -61,7 +68,7 @@ $sql = "select
         having count(distinct callid) >= 2 
         order by count(distinct callid) - 1 desc";
 
-//echo($sql);
+echo($sql);
 $query = $pdo->prepare($sql);
 $query->execute();
 $totalgeral = 0;
