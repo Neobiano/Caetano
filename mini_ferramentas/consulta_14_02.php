@@ -18,10 +18,11 @@
 $nome_relatorio = "incidência_de_rechamadas"; // NOME DO RELATÓRIO (UTILIZAR UNDERLINE, POIS É PARTE DO NOME DO ARQUIVO EXCEL)
 $titulo = "Incidência de Rechamadas - Total de Rechamadas (ATC)"; // MESMO NOME DO INDEX
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
-if ($qual_rechamadas_tipo='2')
+if ($qual_rechamadas_tipo=='2')
     $tipo_rechamada = 'CPF/CNPJ';
 else
     $tipo_rechamada = 'TELEFONE';
+
 include "inicia_variaveis_grafico.php";
 $dados_grafico = "['Data','$titulo','Qtde Ligações ATC']";
 $inicio = defineTime();
@@ -34,7 +35,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
-	// echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
+	echo "<br><br><b>Foco Relatório:</b> Atendimentos Humanos - ATC";
 	echo '</div>';
 
 	include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
@@ -137,7 +138,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			echo incrementa_tabela($texto);
 			
 			$TOTAL_RECHAMADAS = number_format($TOTAL_RECHAMADAS, 0, ',', '.');
-			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
+			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA&pGrupo=ATC&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
 			//$texto = "<td>$TOTAL_RECHAMADAS</td>";
 			echo incrementa_tabela($texto);
 			

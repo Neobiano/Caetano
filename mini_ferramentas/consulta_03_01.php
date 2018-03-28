@@ -182,5 +182,6 @@ $tabela = $tabela."<tr><td></td><td><b>Total de Operadores no Período:</b></td>
 
 echo incrementa_tabela($texto);
 include "finaliza_tabela.php"; // FINALIZA A TABELA
+$parametros_adicionais = " pointSize: 5,";
 include"imprime_grafico.php";// IMPRIME O GRÁFICO
 ?>

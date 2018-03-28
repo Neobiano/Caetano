@@ -27,7 +27,13 @@ set_time_limit(9999);
 ini_set('max_execution_time', 9999);
 
 $data = $_GET['data'];
-$icpf = $_GET['cpf'];
+$icpf_fone = $_GET['cpf_fone'];
+$qual_rechamadas_tipo = $_GET['qual_rechamadas_tipo'];
+
+if ($qual_rechamadas_tipo=='2')
+    $tipo_rechamada = 'CPF/CNPJ';
+ else
+   $tipo_rechamada = 'TELEFONE';
 
 
 
@@ -41,7 +47,7 @@ echo '<div class="w3-margin w3-tiny w3-center">';
 echo '<div id="divtitulo">';
 echo "<b>Rastreio de Atendimentos (Incidência de Rechamados)</b>";
 echo "<br><br><b><i>Data da Consulta:</i></b> $data_inicial_texto";
-echo "<br><b><i>CPF/CNPJ:</i></b> $icpf";
+echo "<br><b><i>$tipo_rechamada:</i></b> $icpf_fone";
 echo "<br><br>";
 echo "<b>Obs:</b> A quantidade de <b>Atendimentos</b> é em regra diferente da quantidade de <b>Rechamados.</b>";
 echo "<br>A cardinalidade para a relação é,'1' Chamada Originadora --> 'N' Rechamados e '1' Rechamado --> 'N' Atendimentos";
@@ -51,7 +57,7 @@ echo '</div>';
 echo '<div class="w3-border" style="padding:16px 16px;">';
 echo '<table id = "tabela" class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-tiny w3-card-4">';
 echo '<thead><tr class="w3-indigo w3-tiny">';
-echo '<td><b>CPF/CNPJ</b></td>';
+echo "<td><b>$tipo_rechamada</b></td>";
 echo '<td><b>DATA/HORA</b></td>';
 echo '<td><b>CALLID</b></td>';
 echo '<td><b>CÓD. FILA</b></td>';
@@ -68,14 +74,15 @@ $sql = "select distinct a.valor_dado, t.*, t2.desc_fila
         (
             select b.* from tb_dados_cadastrais b
             where b.data_hora between '$data' and '$data 23:59:59.999'
-            and b.cod_dado = 2
+            and b.cod_dado = $qual_rechamadas_tipo
             and b.valor_dado in (
-                select distinct c.cpf from (
+                select distinct c.cpf_fone from (
                     select
-                    valor_dado cpf , count(distinct callid) - 1 TOTAL
-                    from tb_dados_cadastrais where cod_dado = '2'
+                    valor_dado cpf_fone , count(distinct callid) - 1 TOTAL
+                    from tb_dados_cadastrais where 
+                    cod_dado = $qual_rechamadas_tipo
                     and data_hora between '$data' and '$data 23:59:59.999'
-                    and VALOR_dado = '$icpf'
+                    and VALOR_dado = '$icpf_fone'
                     and callid in (
                         select callid from tb_eventos_dac
                         where data_hora between '$data' and '$data 23:59:59.999'
@@ -89,13 +96,11 @@ $sql = "select distinct a.valor_dado, t.*, t2.desc_fila
                         and t.id_operador not like '%NULL%' /*ignorando os arquivos 'lixo' gerados no tb_eventos_dac*/
                         order by a.valor_dado, t.data_hora, t.callid";
 
-//$sql = "select a.*, b.desc_fila from tb_eventos_dac as a	left join tb_filas as b	on a.cod_fila = b.cod_fila	where data_hora between '$data' and '$data 23:59:59.999'";
-
 //echo($sql);
 $query = $pdo->prepare($sql);
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){
-    $cpf = $row['valor_dado'];
+    $cpf_fone = $row['valor_dado'];
 	$callid = $row['callid'];
 	$data_hora = $row['data_hora'];
 	$cod_fila = $row['cod_fila'];
@@ -109,7 +114,7 @@ for($i=0; $row = $query->fetch(); $i++){
 		if($desc_operador=='') $desc_operador = "OPERADOR SEM NOME CADASTRADO";
 	
 	echo '<tr>';
-	    echo "<td>$cpf</td>";
+	    echo "<td>$cpf_fone</td>";
 	    echo "<td>$data_hora</td>";
 	    echo "<td>$callid</td>";	
 		echo "<td>$cod_fila</td>";

@@ -65,7 +65,7 @@ $sql = "select a.*, b.desc_fila from tb_eventos_dac as a
                         and tempo_atend > 0
                         and id_operador = '$ID' and datepart(dw,data_hora) in $in_semana";
 
-echo($sql);
+//echo($sql);
 $query = $pdo->prepare($sql);
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){

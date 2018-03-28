@@ -71,8 +71,27 @@
     
     echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
     
-  
-    $j = ($data_inicial >='03/01/2018') ? 3 : 1;
+    $sOR = '';
+    $sANDi = '';
+    $sANDs = '';
+    $sANDind = '';
+    
+    //criterio para as pesquisas respondidas antes de 01/03 com 4 perguntas na pesquisa
+    if ($data_inicial < '03/01/2018') 
+    {
+    
+        //pelo menos uma pergunta respondida
+        $sOR = ' or b.perg1 > 0 or b.perg2 > 0 ';
+    
+        //totalmente insatisfeito
+        $sANDi = ' and b.perg1 = 3 and b.perg2 = 3 ';
+    
+        //totalmente satisfeito
+        $sANDs =  ' and b.perg1 = 1 and b.perg2 = 1 ';
+    
+        //totalmente indiferente
+        $sANDind = ' and b.perg1 = 2 and b.perg2 = 2 ';
+    }
 	
 	$sql =  "select cod_fila, count(callid) qtde_ligacoes,
                 	/*Pequisas realizadas*/	
@@ -84,7 +103,7 @@
                 				where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
                 				and t.cod_fila = a.cod_fila
                 			) as b
-                		where (b.perg3 > 0 or b.perg4 >0 )	
+                		where (b.perg3 > 0 or b.perg4 >0 $sOR )	
                 	) qtde_pesq,
                     
                     /*Pequisas realizadas TOTAL*/	
@@ -95,7 +114,7 @@
                 				select distinct callid, data_hora, cod_fila, perg1, perg2, perg3, perg4, perg5 from tb_pesq_satisfacao t
                 				where data_hora between '$data_inicial' and '$data_final 23:59:59.999'  				
                 			) as b
-                		where (b.perg3 > 0 or b.perg4 >0)	
+                		where (b.perg3 > 0 or b.perg4 >0 $sOR)	
                 	) qtde_pesq_geral,
                 	
                     /*Qtde Insatisfeito*/	
@@ -107,9 +126,9 @@
                 				where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
                 				and t.cod_fila = a.cod_fila
                 			) as b
-                		where (   b.perg3 = 3 and b.perg4 =3  )	
+                		where (   b.perg3 = 3 and b.perg4 =3 $sANDi )	
                 	) qtde_insatisfeito,
-                	/*Qtde Insatisfeito*/	
+                	/*Qtde satisfeito*/	
                 	(
                 		select count(distinct callid) 
                 		from 
@@ -118,7 +137,7 @@
                 				where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
                 				and t.cod_fila = a.cod_fila
                 			) as b
-                		where (b.perg3 = 1 and b.perg4 =1)	
+                		where (b.perg3 = 1 and b.perg4 =1 $sANDs)	
                 	) qtde_satisfeito,
 	
                 	/*Qtde Indiferente*/	
@@ -130,7 +149,7 @@
                 				where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
                 				and t.cod_fila = a.cod_fila
                 			) as b
-                		where (b.perg3 = 2 and b.perg4 =2)	
+                		where (b.perg3 = 2 and b.perg4 = 2 $sANDind)	
                 	) qtde_indiferente
                 	
                 from 

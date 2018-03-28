@@ -28,6 +28,7 @@ ini_set('max_execution_time', 9999);
 
 $data = $_GET['data'];
 $qual_rechamadas_tipo = $_GET['qual_rechamadas_tipo'];
+$pGrupo = $_GET['pGrupo'];
  
  if ($qual_rechamadas_tipo=='2')
     $tipo_rechamada = 'CPF/CNPJ';
@@ -43,7 +44,7 @@ $data_inicial_texto = date('d/m/Y',$t_inicial);
 
 echo '<div class="w3-margin w3-tiny w3-center">';
 echo '<div id="divtitulo">';
-echo "<b>Detalhamento (Incidência de Rechamados)</b>";
+echo "<b>Detalhamento (Incidência de Rechamados) - $pGrupo</b>";
 echo "<br><br><b><i>Data da Consulta:</i></b> $data_inicial_texto";
 echo "<br>";
 echo '</div>';
@@ -54,33 +55,48 @@ echo '<thead><tr class="w3-indigo w3-tiny">';
 echo "<td><b>$tipo_rechamada</b></td>";
 echo '<td><b>QTDE RECHAMADOS</b></td>';
 echo '</tr></thead><tbody>';
-$sql = "select 
-        	valor_dado , count(distinct callid) - 1 total
-        from tb_dados_cadastrais 
-        where cod_dado = '$qual_rechamadas_tipo'  
-        and data_hora between '$data' and '$data 23:59:59.999'
-        and VALOR_dado <> '' 
-        and callid in (
-        				select callid from tb_eventos_dac 
-        				where data_hora between '$data' and '$data 23:59:59.999'
-        			) 
-        group by  valor_dado 
-        having count(distinct callid) >= 2 
-        order by count(distinct callid) - 1 desc";
+    
+    //Caso o enfoque do relatório for URA (URA + ATC) ou seja, carga, demanda de ligações, desconsideraremos os atendimentos humanos nas metricas 
+    $sAND = '';
+    if ($pGrupo <> 'URA')
+    {
+        $sAND = " and callid in (
+                                   select callid from tb_eventos_dac
+                                   where data_hora between '$data' and '$data 23:59:59.999'
+                    )"; 
+    }
+    
+    $sql = "select 
+            	valor_dado , count(distinct callid) - 1 total
+            from tb_dados_cadastrais 
+            where cod_dado = '$qual_rechamadas_tipo'  
+            and data_hora between '$data' and '$data 23:59:59.999'
+            and VALOR_dado <> '' 
+            and VALOR_dado <> 'NULL'
+            $sAND
+            group by  valor_dado 
+            having count(distinct callid) >= 2 
+            order by count(distinct callid) - 1 desc";
 
-echo($sql);
+
+//echo($sql);
 $query = $pdo->prepare($sql);
 $query->execute();
 $totalgeral = 0;
 for($i=0; $row = $query->fetch(); $i++){
-    $cpf = $row['valor_dado'];
+    $cpf_fone = $row['valor_dado'];
 	$total = $row['total'];
 	
 	$totalgeral = $totalgeral + $total;
 	
 	echo '<tr>';
-	    echo "<td>$cpf</td>";
-	    echo "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_atendimentos_rechamados.php?data=$data&cpf=$cpf\" target=\"_blank\">$total</a></td>";	    
+	    echo "<td>$cpf_fone</td>";
+	    
+        //caso for URA, não vou listar atendimento humanos, sim as ligasções (logs da URA)	    
+	    if ($pGrupo == 'URA')
+	        echo "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_ligacoes_rechamados.php?data=$data&qual_rechamadas_tipo=$qual_rechamadas_tipo&cpf_fone=$cpf_fone\" target=\"_blank\">$total</a></td>";
+        else //senão, listarei os atendimentos humanos, tudo depende do foco do relatorio	    
+            echo "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_atendimentos_rechamados.php?data=$data&qual_rechamadas_tipo=$qual_rechamadas_tipo&cpf_fone=$cpf_fone\" target=\"_blank\">$total</a></td>"; 
 	echo '</tr>';
 }
 echo "</tbody>";

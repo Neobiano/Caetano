@@ -42,12 +42,14 @@ echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_te
 echo '</div>';
 
 // INFORMA A CONSULTA
-$query = $pdo->prepare("select callid, data_hora, cod_fila from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and callid is not null and callid in (		
-						select callid from tb_eventos_dac 
+$sql = "select callid, data_hora, cod_fila from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and callid is not null and callid in (
+						select callid from tb_eventos_dac
 						where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and callid is not null
 						group by callid
 						having count(*) >= 3)
-						order by callid, data_hora");
+						order by callid, data_hora";
+//echo $sql;
+$query = $pdo->prepare($sql);
 $query->execute(); // EXECUTA A CONSULTA
 
 $todos_callids = array();
@@ -118,7 +120,7 @@ echo "<thead><tr class='w3-indigo'>";
 	echo "<td><b>CALLID</b></td>";
 	echo "<td><b>DATA/HORA</b></td>";
 	echo "<td><b>FILA_ORIGEM</b></td>";
-	for($y=1; $y<$max_transf - 1; $y++){
+	for($y=1; $y<$max_transf ; $y++){
 		echo "<td><b>$y ª TRANSF.</b></td>";
 	}
 echo "</tr></thead><tbody>";
@@ -128,7 +130,7 @@ foreach($todos_callids as $callid){
 		echo "<td>$callid</td>";
 		$data_hora = $callid_x_transf[$callid]['data_hora'];
 		echo "<td>$data_hora</td>";
-		for($y=0; $y<$max_transf-1; $y++){
+		for($y=0; $y<$max_transf; $y++){
 			if(isset($callid_x_transf[$callid][$y])) {
 				$fila = $callid_x_transf[$callid][$y];
 				$imprimir = $cod_desc[$fila];

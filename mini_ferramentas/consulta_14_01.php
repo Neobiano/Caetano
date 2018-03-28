@@ -37,7 +37,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 	echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 	echo "<b>$titulo</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
-	// echo "<br><br><b>Dias da Semana Selecionados:</b> $txt_dias_semana";
+	 echo "<br><br><b>Foco Relatório:</b> Ligações URA";
 	echo '</div>';
 
 	include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
@@ -76,7 +76,9 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 							(
     							select convert(date,data_hora,11) DIA, datepart(dw,data_hora) DIA_SEMANA, valor_dado DADO, count(distinct callid) - 1 TOTAL
     							from tb_dados_cadastrais
-    							where cod_dado = '$qual_rechamadas_tipo' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' and VALOR_dado <> ''
+    							where cod_dado = '$qual_rechamadas_tipo' and data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+                                and VALOR_dado <> ''
+                                and VALOR_dado <> 'NULL'
     							group by convert(date,data_hora,11), datepart(dw,data_hora), valor_dado
     							having count(distinct callid) >= 2
 							) as a
@@ -90,7 +92,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
     							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as h on g.DIA = h.DIA";
 	
-	echo $sql;
+	//echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
@@ -132,7 +134,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
 			echo incrementa_tabela($texto);
 			
 			$TOTAL_RECHAMADAS = number_format($TOTAL_RECHAMADAS, 0, ',', '.');
-			$texto = "<td><a class='w3-text-indigo' title='Rastrear Atendimentos' href= \"lista_detalhe_rechamados.php?data=$pDATA&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
+			$texto = "<td><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_detalhe_rechamados.php?data=$pDATA&pGrupo=URA&qual_rechamadas_tipo=$qual_rechamadas_tipo\" target=\"_blank\">$TOTAL_RECHAMADAS</a></td>";
 			//$texto = "<td>$TOTAL_RECHAMADAS</td>";
 			echo incrementa_tabela($texto);
 			
