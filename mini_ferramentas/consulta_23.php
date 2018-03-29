@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="iso-8859-1">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
 
@@ -25,9 +25,9 @@ $(document).ready( function () {
 <body>
 
 <?php
-$nome_relatorio = "reicindencia_insatisfacao"; // NOME DO RELATÃ“RIO (UTILIZAR UNDERLINE, POIS Ã‰ PARTE DO NOME DO ARQUIVO EXCEL)
-$titulo = "Relatório - Reinciência de Insatisfação "; // MESMO NOME DO INDEX
-$nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
+$nome_relatorio = "reicindencia_insatisfacao"; // NOME DO RELATÃƒâ€œRIO (UTILIZAR UNDERLINE, POIS Ãƒâ€° PARTE DO NOME DO ARQUIVO EXCEL)
+$titulo = "RelatÃ³rio - ReinciÃªncia de InsatisfaÃ§Ã£o "; // MESMO NOME DO INDEX
+$nao_gerar_excel = 1; // DEFINIR 1 PARA NÃƒO IMPRIMIR BOTÃƒO EXCEL
 switch ($select_origem_reicidencia) 
 {			
 	case '03':
@@ -41,7 +41,7 @@ switch ($select_origem_reicidencia)
 		break;
 		
 	case '01':
-		$s_select_origem_reicidencia = 'Cartão Demandante';
+		$s_select_origem_reicidencia = 'CartÃ£o Demandante';
 		$sql_tipo_dado = " and t2.cod_dado = '1' ";
 		break;	
 }
@@ -121,18 +121,18 @@ switch ($select_origem_reicidencia)
                         $criterios .= "  <b>Perg. 4:</b> Parcialmente";
                         break;
                     case 3:
-                        $criterios .= "  <b>Perg. 4:</b> Não";
+                        $criterios .= "  <b>Perg. 4:</b> NÃ£o";
                         break;
                 }
             }
             else
                 $criterios .= "  <b>Perg. 4:</b> Todas";
 	
-//IMPRIME TÍTULO DA CONSULTA
+//IMPRIME TÃ�TULO DA CONSULTA
 echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
 echo "<b>$titulo por $s_select_origem_reicidencia</b>";
-echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
-echo "<br><br><b><i>Critérios de Filtro:</i></b> $criterios";
+echo "<br><br><b>PerÃ­odo de Consulta:</b> $data_inicial_texto Ã  $data_final_texto";
+echo "<br><br><b><i>CritÃ©rios de Filtro:</i></b> $criterios";
 echo '</div>';
 
 
@@ -143,7 +143,7 @@ echo "<table id='tabela' name='tabela' class='w3-table w3-striped w3-hoverable w
 echo "<thead><tr class='w3-indigo'>";
 
 	echo "<td><b>".$s_select_origem_reicidencia."</b></td>";
-	echo "<td><b>Qtde de Ligações</b></td>";
+	echo "<td><b>Qtde de LigaÃ§Ãµes</b></td>";
 	
 	echo "</tr></thead><tdoby>";
 	

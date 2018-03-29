@@ -1,5 +1,6 @@
 ﻿<?php
 	include "conecta.php";
+	ini_set("default_charset", 'utf-8');
 	//preenchendo o select de filas
 	$iniciou = 0;
 	$in_filas = "108,109,";
@@ -31,7 +32,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="iso-8859-1">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
 <link rel="stylesheet" href="css/radar.css">

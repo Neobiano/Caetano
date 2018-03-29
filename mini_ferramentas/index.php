@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>RADAR CARTÕES - Painel de Monitoramento - Cartão de Crédito</title>
 </head>
 <frameset id="frame_230" rows="100%,*" border="no" frameborder="no" framespacing="no">

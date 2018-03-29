@@ -1,4 +1,34 @@
 ﻿<?php
+        function traduzNovaura($log)
+        {
+            include "def_var_ura_nova.php";
+            $fluxo_ura_array = explode(";", $log);
+            $count = count($fluxo_ura_array);
+            
+            $texto = "";
+            
+            for($i=0; $i<$count; $i++){
+                
+                $cod = $fluxo_ura_array[$i];
+                if($cod != ""){
+                    $palavra = "evento_$cod";
+                    
+                    if (isset($$palavra))
+                        $txt_inc = $$palavra;
+                        else
+                            $txt_inc = "EVENTO SEM DESCRIÇÃO NA TABELA TB_EVENTOS";
+                            
+                            if ($i == 0)
+                                $texto = $texto."<b>$cod</b> ($txt_inc)";
+                                if ($i > 0)
+                                    $texto = $texto."; <b>$cod</b> ($txt_inc)";
+                }
+            }
+            
+            
+            return $texto;
+        }
+        
         //função retornará o dia da semana
         function diaSemana($dia)
         {

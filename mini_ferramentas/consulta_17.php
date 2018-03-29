@@ -292,8 +292,9 @@ echo incrementa_tabela($texto);
 include "finaliza_tabela.php"; // FINALIZA A TABELA
 //include"imprime_grafico.php"; // IMPRIME O GRÁFICO
 
-for($j=1;$j<=4;$j++){
-//for((($data_inicial >='03/01/2018') ? 3 : 1);$j<=4;$j++){
+//for($j=1;$j<=4;$j++){
+for($j=(($data_inicial >='03/01/2018') ? 3 : 1);$j<=4;$j++)
+{
 	$perg = "perg$j";
 	echo "<div class='w3-container w3-tiny w3-margin w3-padding w3-card-4 w3-border'>";
 	
