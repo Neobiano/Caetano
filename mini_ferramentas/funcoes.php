@@ -1,7 +1,19 @@
 ﻿<?php
-        function traduzNovaura($log)
+
+        function traduzNovaura($log,$conn,$bold=true)
         {
-            include "def_var_ura_nova.php";
+           
+            $query = $conn->prepare("select cod_evento, desc_evento from tb_eventos_novaura");
+            $query->execute();
+            for($i=0; $row = $query->fetch(); $i++){
+                
+                $cod_evento = utf8_encode($row['cod_evento']);
+                $desc_evento = utf8_encode($row['desc_evento']);
+                
+                $palavra_evento = "evento_$cod_evento";
+                $$palavra_evento = $desc_evento;
+            }
+            
             $fluxo_ura_array = explode(";", $log);
             $count = count($fluxo_ura_array);
             
@@ -19,9 +31,10 @@
                             $txt_inc = "EVENTO SEM DESCRIÇÃO NA TABELA TB_EVENTOS";
                             
                             if ($i == 0)
-                                $texto = $texto."<b>$cod</b> ($txt_inc)";
-                                if ($i > 0)
-                                    $texto = $texto."; <b>$cod</b> ($txt_inc)";
+                                $texto = ($bold?$texto."<b>$cod</b> ($txt_inc)":$texto."$cod ($txt_inc)");                                
+                            if ($i > 0)
+                                $texto = ($bold?$texto."; <b>$cod</b> ($txt_inc)":$texto."; $cod ($txt_inc)");
+                               
                 }
             }
             

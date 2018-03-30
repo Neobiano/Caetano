@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="iso-8859-1">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/w3.css">
 
@@ -25,6 +25,8 @@ $(document).ready( function () {
 <body>
 
 <?php
+//include_once "funcoes.php";
+$inicio = defineTime();
 
 $sqlnotlike = " and (cod_evento not like '%020%')
                   and (cod_evento not like '%031%')
@@ -73,9 +75,9 @@ $titulo = "Relatório - URA - Análise de Retenção/Desconexão "; // MESMO NOM
 $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
 
 //IMPRIME TÍTULO DA CONSULTA
-echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
-echo "<b>$titulo por $s_select_origem_reicidencia</b>";
-echo "<br><br><b>Período de Consulta:</b> $data_inicial1_texto1 à $data_final1_texto1";
+echo '<div id="divtitulo" class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
+echo "<b>$titulo</b>";// por $s_select_origem_reicidencia
+echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 echo '</div>';
 echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center w3-border w3-padding w3-card-4" style="padding-bottom:16px !important; ">';
 
@@ -97,15 +99,15 @@ echo "<thead><tr class='w3-indigo'>";
 						(
 							select count(distinct callid) qtde, cast(data_hora as date) dia, 'TOTAL_CHAMADAS' tipo_reg ,  '0' indice
 							from tb_eventos_ura
-							where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999'   
+							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'   
 							group by cast(data_hora as date)  
 						)  
 						UNION ALL
 						
 						(
 							select count(distinct callid) qtde, cast(data_hora as date) dia, 'COM_DERIV_SEM_SERV' tipo_reg , '1' indice from tb_eventos_ura 
-							where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' 
-							and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' )
+							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+							and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' )
 							".$sqlnotlike."	
 							group by cast(data_hora as date) 
 						) 
@@ -113,8 +115,8 @@ echo "<thead><tr class='w3-indigo'>";
 						
 						(
 							 select count(distinct callid) qtde, cast(data_hora as date) dia, 'C_DERIV_C_SERV' tipo_reg , '2' indice   from tb_eventos_ura
-							 where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' 
-							 and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' )
+							 where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+							 and callid in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' )
 							 ".$sqllike."
 							 group by cast(data_hora as date) 
 						) 
@@ -122,8 +124,8 @@ echo "<thead><tr class='w3-indigo'>";
 						
 						(
 							 select count(distinct callid) qtde, cast(data_hora as date) dia, 'S_DERIV_C_SERV' tipo_reg , '3' indice   from tb_eventos_ura
-							 where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' 
-							 and callid not in (select callid from tb_eventos_dac where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' )
+							 where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+							 and callid not in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' )
 							 ".$sqllike."
 							 group by cast(data_hora as date) 
 						) 
@@ -131,8 +133,8 @@ echo "<thead><tr class='w3-indigo'>";
 						
 						(
 							 select count(distinct callid) qtde, cast(data_hora as date) dia, 'S_DERIV_S_SERV' tipo_reg , '4' indice   from tb_eventos_ura
-							 where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' 
-							 and callid not in (select callid from tb_eventos_dac where data_hora between '$data_inicial1' and '$data_final1 23:59:59.999' )
+							 where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+							 and callid not in (select callid from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' )
 							  ".$sqlnotlike."
 							 group by cast(data_hora as date) 
 						) 
@@ -205,9 +207,13 @@ echo "<thead><tr class='w3-indigo'>";
     }
 	
 	echo "</tbody></table></div>";
+	$fim = defineTime();
+	echo tempoDecorrido($inicio,$fim);
 ?>
-
-
 </body>
 </html>
+
+<script>  
+document.getElementById("divtitulo").appendChild(document.getElementById("tmp")); 
+</script>
 

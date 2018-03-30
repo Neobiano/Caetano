@@ -21,6 +21,7 @@ $(document).ready( function () {
 <body>
 <?php 
 include "conecta.php";
+include "funcoes.php";
 set_time_limit(9999);
 ini_set('max_execution_time', 9999);
 
@@ -78,7 +79,11 @@ for($i=0; $row = $query->fetch(); $i++)
 	$qtde = $row['qtde'];	
 	$pctevento = number_format(($row['qtde']/$qtde_total * 100), 2, ',', '.');
 	echo '<tr>';
-	echo "<td><a class='w3-text-indigo' title='Lista telefones relacionados' href= \"lista_telefones_desconexao_c24.php?valor_dado=$valor_dado&cod_evento=$cod_evento&qtde_total=$qtde\" target=\"_blank\">$cod_evento</a></td>";	
+	//class='tooltip'w3-text-indigo
+	$traducao = traduzNovaura($cod_evento,$pdo,false);
+	echo "<td><a class='w3-text-indigo' title='$traducao' href= \"lista_telefones_desconexao_c24.php?valor_dado=$valor_dado&cod_evento=$cod_evento&qtde_total=$qtde\" target=\"_blank\">$cod_evento</a>
+    
+    </td>";	
 	   echo "<td>$qtde</td>";
 	   echo "<td>$pctevento</td>";
 	echo '</tr>';

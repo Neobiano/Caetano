@@ -649,8 +649,7 @@ $(document).ready(function(){
 					case '24': //URA - Análise de Retenção/Desconexão
 						hideAll();
 						$("#txt_detalhes").text("Exibe a análise de retenção da URA");						
-						$("#div_datas1").show();
-						$("#div_datas2").show();
+						$("#div_datas").show();					
 						$("#data_final").show();
 						$("#div_button").show();
 						$("#div_tex_detalhes").show();
@@ -1081,9 +1080,9 @@ function diminuiFrame(){
     		<div id="div_fonte" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
     			<b>Fonte:</b>
     			<select id="select_fonte" name="select_fonte">
-    				<option value="00">URA - Produção</option>
-    				<option value="01">URA - Nova</option>
-    				<option value="02">FRONTEND</option>
+    				<option value="01">URA - Produção</option>
+    				<option value="02">FrontEnd</option>
+    				<option value="00">URA - Antiga</option>
     			</select>		
     		</div>
 		
@@ -1278,11 +1277,11 @@ function diminuiFrame(){
         <!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
     	<div  id="div_parametros_retencao_ura_c24" class="w3-container">
     		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Parâmetros de Análise:</b> </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_1" name="uchk_1" value = "1" checked>Total de Ligações &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_2" name="uchk_2" value = "2" checked>Com Derivação / Sem Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_3" name="uchk_3" value = "3" checked>Com Derivação / Com Serviço </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_4" name="uchk_4" value = "4" checked>Sem Derivação / Com Serviço &nbsp &nbsp </div>
-    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_5" name="uchk_5" value = "5" checked>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_1" name="uchk_1" value = "1" checked disabled>Total de Ligações &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_2" name="uchk_2" value = "2" checked disabled>Com Derivação / Sem Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_3" name="uchk_3" value = "3" checked disabled>Com Derivação / Com Serviço </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_4" name="uchk_4" value = "4" checked disabled>Sem Derivação / Com Serviço &nbsp &nbsp </div>
+    		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="uchk_5" name="uchk_5" value = "5" checked disabled>Sem Derivação / Sem Serviço &nbsp &nbsp </div>		
     	</div>
     	
     	<!-- DIV CONSULTA 24 - Dados de comparação de retenção -->		
