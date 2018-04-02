@@ -33,3 +33,8 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+tr.group,
+tr.group:hover {
+    background-color: yellow !important;
+}

@@ -697,7 +697,17 @@ $(document).ready(function(){
 						$("#txt_detalhes").text("Exibe a quantidade de operadores atuantes de forma detalhada.");
 						$("#txt_data_inicial").html("Data Inicial:");
 						$("#btn_pesquisar").html("Consultar");						
-	    				break;																																	
+	    				break;		
+
+					case '28': //Painel de Verificação
+						hideAll();
+						$("#div_button").show();
+						$("#div_tex_detalhes").show();
+						$("#btn_pesquisar").html("Consultar");
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
+						$("#txt_detalhes").text("Painel de Verificação de sincronia de dados.");
+						
+						break;																															
 						
 		}
 	});
@@ -941,7 +951,8 @@ function diminuiFrame(){
         				<option value="19">URA - Monitora Erros de Webservice</option>
         				<option value="20">URA - Monitora Desbl. Cartão via URA</option>
         				<option value="09">URA / FRONTEND - Tradutor de Evento</option>
-        				<option value="22">BD - Verifica Alimentação BD</option>
+        				<option value="28">BD - Painel de Verificação de Sincronia</option>
+        				<option value="22">BD - Verifica Alimentação BD - Período</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
         			</optgroup>
     				

@@ -198,6 +198,17 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
 	    
     case '27':
         include "consulta_27.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+        break;
+    case '28':
+        
+        echo '<script>
+                function myFunction() {
+                    window.open("PainelSincronia.php");
+                }
+                myFunction();
+                </script>';
+        //include "consulta_28.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+        
         break;	
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
