@@ -128,7 +128,7 @@ for($pos=0;$pos < $qtd_ilas;$pos++){
 								inner join tb_filas as d
 								on a.cod_fila = d.cod_fila
 								order by cod_fila";
-	   // echo $sql;
+	    //echo $sql;
 		$query = $pdo->prepare($sql);
 		
 		$query->execute(); // EXECUTA A CONSULTA

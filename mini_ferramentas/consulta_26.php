@@ -34,14 +34,19 @@
        {           
           $criterios = 'Motivo(s): ';
           $swhere .= " and tl.cd_motivo in ($cb_motivos)";
-          
-          $query = $pdo->prepare("select distinct  ds_motivo from tb_log_categorizacao
+          $sql = "select distinct  ds_motivo from tb_log_categorizacao
                         where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
-                        and cd_motivo in ($cb_motivos)");
+                        and cd_motivo in ($cb_motivos) --C1";
+          //echo $sql;
+          $query = $pdo->prepare($sql);
           $query->execute();
+          
           for($i=0; $row = $query->fetch(); $i++)
           {
-              $criterios .= $i==0 ? $criterios .= $row['ds_motivo'] : $criterios .= " , ".$row['ds_motivo'];                         
+              if ($i==0)
+                $criterios .= $row['ds_motivo'];
+              else
+                $criterios .= " , ".$row['ds_motivo'];                         
           }          
           
        }
@@ -50,20 +55,32 @@
        
        if ($cb_submotivos <> '')
        {
-           $criterios .= trim($criterios)<>'' ? $criterios .= " -  SubMotivo(s): " : $criterios .= "SubMotivo(s): "; 
+           if (trim($criterios)<>'')
+              $criterios .= " -  SubMotivo(s): " ;
+           else 
+              $criterios .= "SubMotivo(s): "; 
           
           $swhere .= " and tl.cd_submotivo in ($cb_submotivos)";
-          $query = $pdo->prepare("select distinct  ds_submotivo from tb_log_categorizacao
+          $sql = "select distinct  ds_submotivo from tb_log_categorizacao
                         where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
-                        and cd_submotivo in ($cb_submotivos)");
+                        and cd_submotivo in ($cb_submotivos) --C2";
+          
+          //echo $sql;
+          $query = $pdo->prepare($sql);
+               
           $query->execute();
           for($i=0; $row = $query->fetch(); $i++)
           {
-              $criterios .= $i==0 ? $criterios .= $row['ds_submotivo'] : $criterios .= " , ".$row['ds_submotivo'];  
+              if ($i==0)
+                $criterios .= $row['ds_submotivo']; 
+              else 
+                $criterios .= " , ".$row['ds_submotivo'];  
           }          
         }
+        else if (trim($criterios)<>'')
+           $criterios .= " -  SubMotivo(s): "; 
         else 
-            $criterios .= trim($criterios)<>'' ? $criterios .= " -  SubMotivo(s): " : $criterios .= "SubMotivo(s): "; 
+           $criterios .= "SubMotivo(s): "; 
                       
         
         $nome_relatorio = "Pesquisa de Satisfação - Monitoramento de Respostas"; // NOME DO RELATÃ“RIO (UTILIZAR UNDERLINE, POIS Ã‰ PARTE DO NOME DO ARQUIVO EXCEL)
@@ -113,7 +130,7 @@
                                             and t.perg1 = '$i'
                                             $swhere
                                            ";
-                                    echo($sql);                                            
+                                    //echo($sql);                                            
                                     $query = $pdo->prepare($sql);
                                     $query->execute();
                                     for($x=0; $row = $query->fetch(); $x++){

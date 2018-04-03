@@ -6,7 +6,7 @@ include "inicia_variaveis_grafico.php";
 
 //IMPRIME TÍTULO DA CONSULTA
 echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center">';
-	echo "<b>$titulo</b>";
+	echo "<b>$titulo - Ligação com evento 057</b>";
 	echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 echo "</div>";
 
@@ -14,10 +14,10 @@ echo "</div>";
 	include "inicia_tabela_organizada.php"; // INICIA A TABELA
 	
 	// IMPRIME COLUNAS DA TABELA - INÍCIO
-	$texto = "<td><b>CÓDIGO</b></td>";
+	$texto = "<td><b>CÓD. EVENTO ANTERIOR</b></td>";
 	echo incrementa_tabela($texto);
 
-	$texto = "<td><b>EVENTO</b></td>";
+	$texto = "<td><b>EVENTO ANTERIOR</b></td>";
 	echo incrementa_tabela($texto);	
 	
 	$texto = "<td><b>QUANTIDADE</b></td>";

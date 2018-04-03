@@ -33,6 +33,7 @@ $pesq_satisf_perg1 = $_POST['perg1'];
 $pesq_satisf_perg2 = $_POST['perg2'];
 $pesq_satisf_perg3 = $_POST['perg3'];
 $pesq_satisf_perg4 = $_POST['perg4'];
+$tempo_de_corte = $_POST['tempo_de_corte'];
 
 $cd_motivo = $_POST['cd_motivo'];
 if ($cd_motivo  > 0)

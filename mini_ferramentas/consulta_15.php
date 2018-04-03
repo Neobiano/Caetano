@@ -85,7 +85,7 @@ include "inicia_variaveis_grafico.php";
 
 			$desc = $vet_desc_eventos["$value"];
 			$texto = "<td>$desc</td>";
-			echo incrementa_tabela($texto);
+			echo incrementa_tabela(utf8_encode($texto));
 			
 			$cod = $array_eventos_desc_cod["$desc"];
 			$texto = "<td>$cod</td>";

@@ -69,12 +69,23 @@ echo "</div>";
 	$sAND = '';
 	if ($ruchk_1 <> '1') 
 	{
-       $sAND =   "   and cod_evento <> '001;004;084'
-                     and cod_evento <> '001;004;084;010;086;057'
-                     and cod_evento <> '001;004;083'
-                     and cod_evento <> '001;004;084;005'
-                     and cod_evento <> '001;004;003'
-                     and cod_evento <> '001;004;003'
+	   /*
+	     '%001' - 'Morreu' a ligação logo na entrada da ura 
+         '%004' - 'Morreu' a ligação logo na entrada na 'porta'        
+         '%082' - Canal amazonia
+         '%083' - Canal Premium                      
+         '%084' - Canal NIG
+         '%086' - Solicitação de CPF
+         '%086;057' - Solicitação de CPF e não preencheu nada
+                     
+	    */ 
+       $sAND =   "   and cod_evento not like '%001' 
+                     and cod_evento not like '%004'                  
+                     and cod_evento not like '%082'
+                     and cod_evento not like '%083'                       
+                     and cod_evento not like '%084'
+                     and cod_evento not like '%086'
+                     and cod_evento not like '%086;057'                   
                 ";	
 	}    
 	//totalização
