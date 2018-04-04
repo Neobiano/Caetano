@@ -92,7 +92,7 @@
 	           if ($linha <>'')
 	               $linha.=',';
 	           
-	           $tooltip = 'id: '.$id.' - Tabela: '.$tabela.' - Dif. Minutos: '.$dif_minutos;
+	           $tooltip = '<div><b>id:</b> '.$id.'<br><b>Tabela:</b> '.$tabela.' <br><b>Delay:</b> '.$dif_minutos.' Minutos</div>';
 	           
 	           $linha .= "[[$hora, $minuto, $segundo],$dif_minutos, 'point {size: 6; fill-color: $cor','$tooltip']";
 	           
@@ -125,12 +125,13 @@
     	    data.addColumn('timeofday', 'Hora');
     	    data.addColumn('number', 'Delay de Sincronia');
     	    data.addColumn( {'type': 'string', 'role': 'style'} );
-    	    data.addColumn( {'type':'string', 'role':'tooltip'} );
+    	    data.addColumn( {'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
     	    data.addRows([
     	                   <?php echo $linha?>
     	                 ]);
     	    
     	    var options = {
+    	    		tooltip: { isHtml: true },
     	    		vAxes: {
     	                0: {title: 'Minutos'},    	                
     	              }
