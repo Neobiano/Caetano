@@ -154,14 +154,14 @@
 
 
     //define vetores das ilhas 
-    $vet_retencao = array('73','77','81','85','116');
+    $vet_retencao = array('73','77','81','116');
     $vet_aviso_viagem = array('125');
     $vet_triagem = array('150');
-    $vet_parcelamento = array('72','76','80','84','111');//tirei
-    $vet_contestacao = array('60','88','90','93','96');//tirei
-    $vet_pontos = array('87','91','94','97','120'); //tirei
+    $vet_parcelamento = array('72','76','80','111');
+    $vet_contestacao = array('60','88','90','93');//tirei
+    $vet_pontos = array('87','91','94','120'); //tirei
     $vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
-    $vet_geral_premium = array('82','83','98'); //tirei, pois já esta na vet_todas_premium
+    $vet_geral_premium = array('82','83','98','107','85','84','96','97'); //Reagregando as filas premium 
 
     $vet_pj = array('99','101','110');/*,'100' ,'100','130'*/
     $vet_130 = array('130');
@@ -170,7 +170,7 @@
     $vet_deficiente_auditivo = array('61');
     $vet_mala_direta = array('64');
     $vet_perda_roubo = array('57');
-    $vet_bloqueio_cobranca = array('117','106','107','108','109');//tirei
+    $vet_bloqueio_cobranca = array('117','106','108','109');//tirei A 107 pois categorizei como geral premium por conta do ACP
 
     $vet_app = array('102');
     $vet_todas_premium = array('82','83','98','84','96','97','85','107');
@@ -207,7 +207,7 @@
     $ilha_app = "'102'";
 
     //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130',
-    $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126'";
+    $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126','100','130'";
     
     $in_filas_premium = "'82','83','84','85','96','97','98','107'";
 
@@ -274,360 +274,8 @@
     else 
     	$iqm = 1;
 
-    //todo o bloco abaixo, é para calcular o DNS Automático, no caso utilizamos o fixo 1.0, FECHAR 
-    if ($dns_automatico == 'sim')
-    { // verifica se valor de dns automático ou manual
-    
-    	// calcula dns
-    	$a_mes = 0;
-    	$b_mes = 0;
-    	$c_mes = 0;
-    	$soma_nsa = 0;
-    
-    	//rotina executada para efetuar o calculo do nivel de servico, considerando o intervalo de 30 minutos, vide linha 264
-    	for ($contador=1; $contador<49; $contador++)
-    	{
-    			//'{' adicionada apenas para agrupar e 'esconder' no IDE, código redundante 	
-    			if(1==1)
-    			{
-    				if ($contador == 1){
-    					$periodo_inicial = '00:00:00.000';
-    					$periodo_final = '00:29:59.999';
-    				}
-    				
-    				if ($contador == 2){
-    					$periodo_inicial = '00:30:00.000';
-    					$periodo_final = '00:59:59.999';
-    				}
-    				
-    				if ($contador == 3){
-    					$periodo_inicial = '01:00:00.000';
-    					$periodo_final = '01:29:59.999';
-    				}
-    				
-    				if ($contador == 4){
-    					$periodo_inicial = '01:30:00.000';
-    					$periodo_final = '01:59:59.999';
-    				}
-    				
-    				if ($contador == 5){
-    					$periodo_inicial = '02:00:00.000';
-    					$periodo_final = '02:29:59.999';
-    				}
-    				
-    				if ($contador == 6){
-    					$periodo_inicial = '02:30:00.000';
-    					$periodo_final = '02:59:59.999';
-    				}
-    				
-    				if ($contador == 7){
-    					$periodo_inicial = '03:00:00.000';
-    					$periodo_final = '03:29:59.999';
-    				}
-    				
-    				if ($contador == 8){
-    					$periodo_inicial = '03:30:00.000';
-    					$periodo_final = '03:59:59.999';
-    				}
-    				
-    				if ($contador == 9){
-    					$periodo_inicial = '04:00:00.000';
-    					$periodo_final = '04:29:59.999';
-    				}
-    				
-    				if ($contador == 10){
-    					$periodo_inicial = '04:30:00.000';
-    					$periodo_final = '04:59:59.999';
-    				}
-    				
-    				if ($contador == 11){
-    					$periodo_inicial = '05:00:00.000';
-    					$periodo_final = '05:29:59.999';
-    				}
-    				
-    				if ($contador == 12){
-    					$periodo_inicial = '05:30:00.000';
-    					$periodo_final = '05:59:59.999';
-    				}
-    				
-    				if ($contador == 13){
-    					$periodo_inicial = '06:00:00.000';
-    					$periodo_final = '06:29:59.999';
-    				}
-    				
-    				if ($contador == 14){
-    					$periodo_inicial = '06:30:00.000';
-    					$periodo_final = '06:59:59.999';
-    				}
-    				
-    				if ($contador == 15){
-    					$periodo_inicial = '07:00:00.000';
-    					$periodo_final = '07:29:59.999';
-    				}
-    				
-    				if ($contador == 16){
-    					$periodo_inicial = '07:30:00.000';
-    					$periodo_final = '07:59:59.999';
-    				}
-    				
-    				if ($contador == 17){
-    					$periodo_inicial = '08:00:00.000';
-    					$periodo_final = '08:29:59.999';
-    				}
-    				
-    				if ($contador == 18){
-    					$periodo_inicial = '08:30:00.000';
-    					$periodo_final = '08:59:59.999';
-    				}
-    				
-    				if ($contador == 19){
-    					$periodo_inicial = '09:00:00.000';
-    					$periodo_final = '09:29:59.999';
-    				}
-    				
-    				if ($contador == 20){
-    					$periodo_inicial = '09:30:00.000';
-    					$periodo_final = '09:59:59.999';
-    				}
-    				
-    				if ($contador == 21){
-    					$periodo_inicial = '10:00:00.000';
-    					$periodo_final = '10:29:59.999';
-    				}
-    				
-    				if ($contador == 22){
-    					$periodo_inicial = '10:30:00.000';
-    					$periodo_final = '10:59:59.999';
-    				}
-    				
-    				if ($contador == 23){
-    					$periodo_inicial = '11:00:00.000';
-    					$periodo_final = '11:29:59.999';
-    				}
-    				
-    				if ($contador == 24){
-    					$periodo_inicial = '11:30:00.000';
-    					$periodo_final = '11:59:59.999';
-    				}
-    				
-    				if ($contador == 25){
-    					$periodo_inicial = '12:00:00.000';
-    					$periodo_final = '12:29:59.999';
-    				}
-    				
-    				if ($contador == 26){
-    					$periodo_inicial = '12:30:00.000';
-    					$periodo_final = '12:59:59.999';
-    				}
-    				
-    				if ($contador == 27){
-    					$periodo_inicial = '13:00:00.000';
-    					$periodo_final = '13:29:59.999';
-    				}
-    				
-    				if ($contador == 28){
-    					$periodo_inicial = '13:30:00.000';
-    					$periodo_final = '13:59:59.999';
-    				}
-    				
-    				if ($contador == 29){
-    					$periodo_inicial = '14:00:00.000';
-    					$periodo_final = '14:29:59.999';
-    				}
-    				
-    				if ($contador == 30){
-    					$periodo_inicial = '14:30:00.000';
-    					$periodo_final = '14:59:59.999';
-    				}
-    				
-    				if ($contador == 31){
-    					$periodo_inicial = '15:00:00.000';
-    					$periodo_final = '15:29:59.999';
-    				}
-    				
-    				if ($contador == 32){
-    					$periodo_inicial = '15:30:00.000';
-    					$periodo_final = '15:59:59.999';
-    				}
-    				
-    				if ($contador == 33){
-    					$periodo_inicial = '16:00:00.000';
-    					$periodo_final = '16:29:59.999';
-    				}
-    				
-    				if ($contador == 34){
-    					$periodo_inicial = '16:30:00.000';
-    					$periodo_final = '16:59:59.999';
-    				}
-    				
-    				if ($contador == 35){
-    					$periodo_inicial = '17:00:00.000';
-    					$periodo_final = '17:29:59.999';
-    				}
-    				
-    				if ($contador == 36){
-    					$periodo_inicial = '17:30:00.000';
-    					$periodo_final = '17:59:59.999';
-    				}
-    				
-    				if ($contador == 37){
-    					$periodo_inicial = '18:00:00.000';
-    					$periodo_final = '18:29:59.999';
-    				}
-    				
-    				if ($contador == 38){
-    					$periodo_inicial = '18:30:00.000';
-    					$periodo_final = '18:59:59.999';
-    				}
-    				
-    				if ($contador == 39){
-    					$periodo_inicial = '19:00:00.000';
-    					$periodo_final = '19:29:59.999';
-    				}
-    				
-    				if ($contador == 40){
-    					$periodo_inicial = '19:30:00.000';
-    					$periodo_final = '19:59:59.999';
-    				}
-    				
-    				if ($contador == 41){
-    					$periodo_inicial = '20:00:00.000';
-    					$periodo_final = '20:29:59.999';
-    				}
-    				
-    				if ($contador == 42){
-    					$periodo_inicial = '20:30:00.000';
-    					$periodo_final = '20:59:59.999';
-    				}
-    				
-    				if ($contador == 43){
-    					$periodo_inicial = '21:00:00.000';
-    					$periodo_final = '21:29:59.999';
-    				}
-    				
-    				if ($contador == 44){
-    					$periodo_inicial = '21:30:00.000';
-    					$periodo_final = '21:59:59.999';
-    				}
-    				
-    				if ($contador == 45){
-    					$periodo_inicial = '22:00:00.000';
-    					$periodo_final = '22:29:59.999';
-    				}
-    				
-    				if ($contador == 46){
-    					$periodo_inicial = '22:30:00.000';
-    					$periodo_final = '22:59:59.999';
-    				}
-    				
-    				if ($contador == 47){
-    					$periodo_inicial = '23:00:00.000';
-    					$periodo_final = '23:29:59.999';
-    				}
-    				
-    				if ($contador == 48){
-    					$periodo_inicial = '23:30:00.000';
-    					$periodo_final = '23:59:59.999';
-    				}
-    			}
-    		
-    			$a_per = 0;
-    			$b_per = 0;
-    			$c_per = 0;
-    		
-    			//percorrendo todo o intervalo de dadas a cada subintervalo de 30 minutos, ou seja, sumarizando a cada subintervalo
-    			for($pos_dia=01; ( $pos_dia<($qtd_dias+1) ); $pos_dia++) //aqui
-    		  	//for($pos_dia=01; ( $pos_dia<(01+1) ); $pos_dia++)
-    		  	{			    			
-    				// verifica ns (tempo de espera) 45s ou 90s - DMM
-    				if(isset($_POST["chk_$pos_dia"]))
-    				{
-    				    $nsr_premium_valor = $dmm_nsr_premium;
-    				    $nsr_valor = $dmm_nsr;
-    				    
-    				    $nsr_premium = $nsr_valor;
-    				    
-    				    //Tempo de Espera Diferenciado(segundos):
-    					$ns = $ns_diferenciado;    					
-    				}
-    				else
-    				{
-    				    $nsr_premium_valor = $nsr_premium;
-    				    $nsr_valor = $nsr;
-    				  
-    				    $nsr_premium = $nsr_premium_valor;
-    				    
-    				    //Tempo de Espera Padrão(segundos):
-    				    $ns = $ns_normal;    					
-    				}			
-    				
-    				// A - Quantidade de atendimentos em que tiveram tempo de espera MENOR do que o determinado para o dia (45 ou 90) 
-    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-    										FROM TB_EVENTOS_DAC
-    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-    										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND TEMPO_ESPERA <= '$ns'");
-    				$query->execute();
-    				for($i=0; $row = $query->fetch(); $i++)
-    				{
-    					$a_per = $a_per + $row['TOTAL'];
-    				}
-    			
-    				// B - Totais de atendimento no dia
-    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-    										FROM TB_EVENTOS_DAC
-    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-    										AND CALLID IS NOT NULL AND TEMPO_ATEND > '0'");
-    				$query->execute();
-    				for($i=0; $row = $query->fetch(); $i++)
-    				{
-    					$b_per = $b_per + $row['TOTAL'];
-    				}
-    			
-    				// C - Quantidade de atendimentos em que tiveram tempo de espera MAIOR do que o determinado para o dia (45 ou 90)
-    				$query = $pdo->prepare("SELECT COUNT (*) TOTAL
-    										FROM TB_EVENTOS_DAC
-    										WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano $periodo_inicial' AND '$qual_mes/$pos_dia/$qual_ano $periodo_final' 
-    										AND CALLID IS NOT NULL AND TEMPO_ATEND = '0' AND TEMPO_ESPERA > '$ns'");
-    				$query->execute();
-    				for($i=0; $row = $query->fetch(); $i++)
-    				{
-    					$c_per = $c_per + $row['TOTAL'];
-    				}	
-    			}//final FOR - Intervalo de datas
-    	
-    			$a_mes = $a_mes + $a_per;
-    			$b_mes = $b_mes + $b_per;
-    			$c_mes = $c_mes + $c_per;
-    			
-    			//NSA - Nivel de Servico apurado no período
-    			$nsa_periodo = ($a_per/($b_per+$c_per));
-    			
-    			$soma_nsa = $soma_nsa + $nsa_periodo;
-    			
-    	}//final FOR - Subintervalo de 30 minutos
-    
-    	/*NSA - Nivel de Servico apurado no Mês	
-    	 * Divide-se a quantidade de chamados que atingiram o NS (Valor de A) 
-    	 * pela soma do Total de Chamados(Total de B) + Total de Chamados que Estouraram o NS (Total de C)	
-    	*/
-    	$nsa_mes = ($a_mes/($b_mes+$c_mes));
-    	
-    	//somatório das NSA dos periodos, dividido pelo total de periodos (média aritimetica simples)
-    	$nsh_mes = $soma_nsa/48;
-    
-    	//Calculo DNS - Dispersão de Nível de Serviço por Faixa de Horário
-    	$dif_nsa_nsh = $nsa_mes - $nsh_mes;
-    
-    	if ($dif_nsa_nsh < 0) 
-    		$dif_nsa_nsh = $dif_nsa_nsh * (-1);
-    
-    	if ($dif_nsa_nsh > 0.05) 
-    		$dns = 1 - ( $dif_nsa_nsh - 0.05 );
-    	else 
-    		$dns = 1;
-    }// FINAL if ($dns_automatico == 'sim')
-    else 
-    	$dns = $qual_dns; 
+     
+ $dns = $qual_dns; 
 
 // imprime parâmetros - início
 echo "<div class = 'w3-leftbar w3-border-black w3-margin-left'><div class='w3-margin-left w3-tiny'><b>Parâmetros Utilizados:</b></div>";
@@ -736,8 +384,9 @@ echo "<br>";
 echo "<hr>";
 
 // imprime dia a dia - início
-for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
+for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 {
+    //$pos_dia= 10;
 	//utilizado para avaliar a concessão de ACP de filas com NS < 90%
 	$ns_todas_filas_2 = 1; //regra mensal
 	
@@ -794,246 +443,171 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	
 	
 	$menor_ns_faixa_horario = 1;
+	$menor_ns_faixa_horario_premium = 1;
 	
-    if ($ns == '45')
+	
+	$sql = "select min(A.n_nsa) menor_n_nsa from  (
+        	select datepart(hh,data_hora) as hora,
+            			datepart(minute,data_hora)/30 as minuto,
+        				(
+        					select count(*) from 
+        										(
+        											select distinct * from tb_eventos_dac t1
+        											where t1.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+        											and t1.cod_fila in (sql_filas_ns) 
+        											and t1.id_operador <> 'NULL'  
+        											and t1.tempo_atend > 0  
+        											and t1.tempo_espera <= $ns
+        									   ) a
+        				  where datepart(hh,a.data_hora) = datepart(hh,t.data_hora)
+        				  and (datepart(minute,a.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+        				) at_ns,
+        				(
+        					select count(*) from 
+        										(
+        											select distinct * from tb_eventos_dac t2
+        											where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+        											and t2.cod_fila in (sql_filas_ns) 
+        											and t2.id_operador <> 'NULL'  
+        											and t2.tempo_atend > 0  
+        									   ) b
+        				  where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
+        				  and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+        				)  atendidas,
+        				(
+        					select count(*) from 
+        										(
+        											select distinct * from tb_eventos_dac t3
+        											where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+        											and t3.cod_fila in (sql_filas_ns)         											
+            										and t3.tempo_atend <= 0
+            										and t3.tempo_espera > $ns  
+        									   ) c
+        				  where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
+        				  and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+        				)  abandonadas,
+        				
+        				(
+        						/*atendimentas ate NS do dia*/
+        					(
+        						select count(*) from 
+        											(
+        												select distinct * from tb_eventos_dac t1
+        												where t1.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+        												and t1.cod_fila in (sql_filas_ns) 
+        												and t1.id_operador <> 'NULL'  
+        												and t1.tempo_atend > 0  
+        												and t1.tempo_espera <= $ns
+        											) a
+        						where datepart(hh,a.data_hora) = datepart(hh,t.data_hora)
+        						and (datepart(minute,a.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+        					) 
+        					/
+        					
+                        	case 
+                            	cast (
+                							(
+                								/*Total de Atendimentos*/
+                								(
+                									select count(*) from 
+                														(
+                															select distinct * from tb_eventos_dac t2
+                															where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+                															and t2.cod_fila in (sql_filas_ns) 
+                															and t2.id_operador <> 'NULL'  
+                															and t2.tempo_atend > 0  
+                														) b
+                									where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
+                									and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+                								) 
+                								+
+                								    /*Total de Abandonadas*/
+                								(
+                									select count(*) from 
+                														(
+                															select distinct * from tb_eventos_dac t3
+                															where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+                															and t3.cod_fila in (sql_filas_ns)         															
+                    														and t3.tempo_atend <= 0
+                    														and t3.tempo_espera > $ns  
+                														) c
+                									where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
+                									and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+                								)  
+                							)
+        								as float)
+                             when 0 then 1
+                             else 
+                                cast (
+                							(
+                								/*Total de Atendimentos*/
+                								(
+                									select count(*) from 
+                														(
+                															select distinct * from tb_eventos_dac t2
+                															where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+                															and t2.cod_fila in (sql_filas_ns) 
+                															and t2.id_operador <> 'NULL'  
+                															and t2.tempo_atend > 0  
+                														) b
+                									where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
+                									and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+                								) 
+                								+
+                								    /*Total de Abandonadas*/
+                								(
+                									select count(*) from 
+                														(
+                															select distinct * from tb_eventos_dac t3
+                															where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+                															and t3.cod_fila in (sql_filas_ns)         															
+                    														and t3.tempo_atend <= 0
+                    														and t3.tempo_espera > $ns  
+                														) c
+                									where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
+                									and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
+                								)  
+                							)
+        								as float)
+                                end /*final case*/
+
+        						
+        			) n_nsa
+        
+        	from tb_eventos_dac t
+        	 where t.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
+        	and t.cod_fila  in (sql_filas_ns)          
+        	group by datepart(hh,t.data_hora), datepart(minute,t.data_hora)/30
+        ) A";
+	
+	//------------TODAS AS FILAS----------------//	
+	$sqltodas = str_replace('sql_filas_ns', $in_todas_filas,$sql);  
+	//echo $sqltodas;	
+	$query = $pdo->prepare($sqltodas);
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
 	{
-		/*--------- Calculando o Nivel de Serviço Apurado - DIA
-		 *  Atendidas_1 = Atendidas até 10 segundos
-		 *  Atendidas_2 = Atendidas até 10,01 à 45 segundos
-		 *  Atendidas_3 = Atendidas até 45,01 à 90 segundos
-		 *  Atendidas = Total de Atendidas 
-		 * 
-		 * 	Abandonadas_1 = Abandonadas até 10 segundos
-		 *  Abandonadas_2 = Abandonadas até 10,01 à 45 segundos
-		 *  Abandonadas_3 = Atendidas até 45,01 à 90 segundos 
-		 *  Abandonadas = Total de Abandonadas
-		 
-		 *  */
-		 	
-		
-		// faixa horario NÃO PREMIUM
-		$query = $pdo->prepare("select top 1 
-											(
-												cast(ATENDIDAS_1 as float) + cast(ATENDIDAS_2 as float)
-											) 
-											/ 
-											(
-												cast(ATENDIDAS as float) + 
-																			(
-																				cast(ABANDONADAS as float) - cast(abandonadas_1 as float) - cast(ABANDONADAS_2 as float) 
-																			) 
-											) as n_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_todas_filas) and cod_fila not in ($in_filas_premium)
-								order by n_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$n_nsa = $row['n_nsa'];
-			$n_ns = $n_nsa / $nsr_valor; 
-		}
-		
-		
-		// faixa horario PREMIUM
-		$query = $pdo->prepare("select top 1 
-											(
-												cast(ATENDIDAS_1 as float) + cast(ATENDIDAS_2 as float)
-											) 
-											/ 
-											(
-												cast(ATENDIDAS as float) + 
-																			(
-																				cast(ABANDONADAS as float) - cast(abandonadas_1 as float) - cast(ABANDONADAS_2 as float) 
-																			) 
-											) as n_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_filas_premium)
-								order by n_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$n_nsa = $row['n_nsa'];			
-			
-			$xx = $n_nsa / $nsr_premium_valor;
-			
-			// (se ns premium menor que ns geral, entao geral recebe premium, pega o menor?)
-			if ($xx < $n_ns) 
-				$n_ns = $n_nsa / $nsr_premium_valor;
-		}
-		
-		if ($n_ns >= '0.90') 
-			$ns_faixa_horario = 1;
-		else 
-			$ns_faixa_horario = 0;
-		
-		if ($n_ns < $menor_ns_faixa_horario)
-		    $menor_ns_faixa_horario = $n_ns;
-		
-		//Não entendi, porque duas vezes verificiação premium e nao premium, agora por fila, se a primeira ja der inferior a 1, então já era.. pra tudo
-		// diário não premium - por fila
-		$query = $pdo->prepare("select top 1 cod_fila, 
-									( 
-										sum(cast(ATENDIDAS_1 as float))	+ sum(cast(ATENDIDAS_2 as float)) 
-									) 
-									/ 
-									( 
-										sum(cast(ATENDIDAS as float)) + (sum(cast(ABANDONADAS as float))-sum(cast(abandonadas_1 as float))-sum(cast(ABANDONADAS_2 as float))) 
-									) as nd_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and 
-								cod_fila in ($in_todas_filas) and cod_fila not in ($in_filas_premium)
-								group by cod_fila
-								order by nd_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$nd_nsa = $row['nd_nsa'];
-			$nd_ns = $nd_nsa / $nsr_valor;
-		}
-		
-		
-		// diário premium - por fila
-		$query = $pdo->prepare("select top 1 cod_fila, 
-								( 
-									sum(cast(ATENDIDAS_1 as float)) + sum(cast(ATENDIDAS_2 as float)) 
-								) 
-								/ 
-								( 
-									sum(cast(ATENDIDAS as float)) + ( sum(cast(ABANDONADAS as float)) - sum(cast(abandonadas_1 as float)) - sum(cast(ABANDONADAS_2 as float)) ) 
-								) as nd_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_filas_premium)
-								group by cod_fila
-								order by nd_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$nd_nsa = $row['nd_nsa'];
-			$xx = $nd_nsa / $nsr_premium_valor;
-			if ($xx < $nd_ns) 
-			   $nd_ns = $nd_nsa / $nsr_premium_valor; 
-		}
-		
-		//utilizado para avaliar a concessão de ACP de filas com NS < 95% - Primeiro Grupo
-		if ($nd_ns >= '0.95') 
-			$ns_todas_filas = 1;
-		else 
-			$ns_todas_filas = 0;		
-		
-	}//FINAL if ($ns == '45')
-	else
-	{
-		// faixa horario não premium
-		$query = $pdo->prepare("select top 1 
-											(
-												cast(ATENDIDAS_1 as float) + cast(ATENDIDAS_2 as float) + cast(ATENDIDAS_3 as float)
-											) 
-											/ 
-											(
-												cast(ATENDIDAS as float) + 
-																	     (
-																	    	cast(ABANDONADAS as float) - cast(abandonadas_1 as float) - cast(ABANDONADAS_2 as float) - cast(ABANDONADAS_3 as float) 
-																		 ) 
-											) as n_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_todas_filas) and cod_fila not in ($in_filas_premium)
-								order by n_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$n_nsa = $row['n_nsa'];
-			$n_ns = $n_nsa / $nsr_valor; 
-		}
-		
-		
-		// faixa horario premium
-		$query = $pdo->prepare("select top 1 
-											(
-												cast(ATENDIDAS_1 as float) + cast(ATENDIDAS_2 as float) + cast(ATENDIDAS_3 as float)
-											) 
-											/ 
-											(
-												cast(ATENDIDAS as float) + 
-																		 (
-																		 	cast(ABANDONADAS as float) - cast(abandonadas_1 as float) - cast(ABANDONADAS_2 as float) - cast(ABANDONADAS_3 as float) 
-																		 ) 
-											) as n_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_filas_premium)
-								order by n_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$n_nsa = $row['n_nsa'];			
-			$xx = $n_nsa / $nsr_premium_valor;
-			if ($xx < $n_ns) $n_ns = $n_nsa / $nsr_premium_valor;
-		}
-				
-		if ($n_ns >= '0.90') 
-			$ns_faixa_horario = 1;
-		else 
-			$ns_faixa_horario = 0;
-		
-		if ($n_ns < $menor_ns_faixa_horario)
-		    $menor_ns_faixa_horario = $n_ns;
-		
-		// diário não premium
-		$query = $pdo->prepare("select top 1 cod_fila, 
-													( 
-														sum(cast(ATENDIDAS_1 as float)) + sum(cast(ATENDIDAS_2 as float)) + sum(cast(ATENDIDAS_3 as float)) 
-													) 
-													/ 
-													( 
-														sum(cast(ATENDIDAS as float)) + ( 
-																							sum(cast(ABANDONADAS as float)) - sum(cast(abandonadas_1 as float)) - sum(cast(ABANDONADAS_2 as float)) - sum(cast(ABANDONADAS_3 as float)) 
-																						) 
-													) as nd_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_todas_filas) and cod_fila not in ($in_filas_premium)
-								group by cod_fila
-								order by nd_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$nd_nsa = $row['nd_nsa'];
-			$nd_ns = $nd_nsa / $nsr_valor;
-		}
-		
-		
-		// diário premium
-		$query = $pdo->prepare("select top 1 cod_fila, 
-													( 
-														sum(cast(ATENDIDAS_1 as float)) + sum(cast(ATENDIDAS_2 as float)) + sum(cast(ATENDIDAS_3 as float)) 
-													) 
-													/ 
-													( 
-														sum(cast(ATENDIDAS as float)) + 
-																						( 
-																							sum(cast(ABANDONADAS as float)) - sum(cast(abandonadas_1 as float)) - sum(cast(ABANDONADAS_2 as float)) - sum(cast(ABANDONADAS_3 as float)) 
-																						) 
-													) as nd_nsa
-								from tb_fila_acumulado
-								where data = '$qual_ano-$qual_mes-$pos_dia' and atendidas > 0 and cod_fila in ($in_filas_premium)
-								group by cod_fila
-								order by nd_nsa");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$nd_nsa = $row['nd_nsa'];
-			$xx = $nd_nsa / $nsr_premium_valor;
-			
-			if ($xx < $nd_ns) 
-				$nd_ns = $nd_nsa / $nsr_premium_valor;
-		}
-		
-		//utilizado para avaliar a concessão de ACP de filas com NS < 95% - Primeiro Grupo
-		if ($nd_ns >= '0.95') 
-			$ns_todas_filas = 1;
-		else 
-			$ns_todas_filas = 0;
-	   
-		
-	}//FINAL ELSE if ($ns == '45')
+	    $nd_nsa = $row['menor_n_nsa'];
+	    $nd_ns = $nd_nsa / $nsr_valor;
+	}
+	
+	if ($nd_ns < $menor_ns_faixa_horario)
+	    $menor_ns_faixa_horario = $nd_ns;
+	
+	    
+    //------------SOMENTE FILAS PREMIUM----------------//
+	$sqlpremium = str_replace('sql_filas_ns', $in_filas_premium,$sql);
+    //echo $sqlpremium;
+	$query = $pdo->prepare($sqlpremium);	
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {
+        $nd_nsa = $row['menor_n_nsa'];
+        $nd_ns = $nd_nsa / $nsr_premium_valor;
+    }    
+    
+    $menor_ns_faixa_horario_premium = $nd_ns;  
+	       
 	
 	//consulta sql (a) - [a_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL
@@ -1597,7 +1171,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 		
 		$var_ns = "ns_$cont";
 		$valor_ns = $$var_ns;
-		$qtde_acp = 0; //aqui
+		$qtde_acp = 0; 
 		$fator = 1;
 		//$acp_aut = false;
 		
@@ -1663,7 +1237,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
     				$query->execute();
     				for($tt=0; $row = $query->fetch(); $tt++)
     				{
-    					$qtde_acp = $row['cont']; //aqui
+    					$qtde_acp = $row['cont']; 
     					//$fator = 1.25; RETIRADO NOVO FORMATO ACP
     				} */
     				
@@ -1706,30 +1280,30 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			{
 			    			   
 			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.95')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 95% - !SEM ACP!
-			        $imp_acp_aplicado = '00';
-			        else if ($menor_ns_faixa_horario >= '0.90') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
-			        {
-			            $imp_acp_aplicado = '25';
-			            $fator = 1.25;
-			        }
-			        else if ($menor_ns_faixa_horario >= '0.85') //Validando a 2º Condição (levemente dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 85%
-			        {
-			            $imp_acp_aplicado = '20';
-			            $fator = 1.20;
-			        }
-			        else //Validando a 1º Condição (a mais fácil), FILA com NS >= 98% e as demais filas com NS >= 95%
-			        {
-			            if (in_array($cont, $vet_pj)) //demais PJ
-			            {//Nesta condição se for atendimento PJ recebe 10%
-			                $imp_acp_aplicado = '10';
-			                $fator = 1.10;
-			            }
-			            else  //demais recebem 15%
-			            {
-			                $imp_acp_aplicado = '15';
-			                $fator = 1.15;
-			            }
-			        }
+			         $imp_acp_aplicado = '00';
+			    else if ($menor_ns_faixa_horario >= '0.90') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
+			    {
+		            $imp_acp_aplicado = '25';
+		            $fator = 1.25;
+			    }
+			    else if ($menor_ns_faixa_horario >= '0.85') //Validando a 2º Condição (levemente dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 85%
+			    {
+			        $imp_acp_aplicado = '20';
+			        $fator = 1.20;
+			    }
+		        else //Validando a 1º Condição (a mais fácil), FILA com NS >= 98% e as demais filas com NS >= 95%
+		        {
+		            if (in_array($cont, $vet_pj)) //demais PJ
+		            {//Nesta condição se for atendimento PJ recebe 10%
+		                $imp_acp_aplicado = '10';
+		                $fator = 1.10;
+		            }
+		            else  //demais recebem 15%
+		            {
+		                $imp_acp_aplicado = '15';
+		                $fator = 1.15;
+		            }
+		        }
 			}
 			else if (in_array($cont, $vet_parcelamento_com_130)  or  in_array($cont, $vet_aviso_viagem)) //2º Grupo
 			{
@@ -1741,17 +1315,24 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			        $fator = 1.25;
 			     }
 			}
-			else if (in_array($cont, $vet_geral_premium)) //3º Grupo
+			else if (in_array($cont, $vet_geral_premium)) //3º Grupo aqui
 			{
 			    if (($valor_ns < '0.95') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP!
 			        $imp_acp_aplicado = '00';
-			    else
+			    else if ($menor_ns_faixa_horario_premium >= '0.90')
 			    {    
-			       $imp_acp_aplicado = '05';
-			       $fator = 1.05;
+			       $imp_acp_aplicado = '25';
+			       $fator = 1.25;
+			    }
+			    else 
+			    {
+			        $imp_acp_aplicado = '20';
+			        $fator = 1.20;
 			    }
 			}
-							
+			
+			/*$imp_acp_aplicado = 0.00;//retirando o ACP
+			$fator = 1;*/
 			echo "<tr>";
 			
 			$dia_ansm = "ansm$pos_dia";
@@ -1788,7 +1369,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			
 			$total_ansm = $total_ansm + $aplicacao_ansm; // $total_ansm do dia
 			
-			//--------------calculando adicional ACP-----------aqui mano
+			//--------------calculando adicional ACP-----------------
 			//$qtde_acp = 0; //código para anular a implementação de adição de retidos
 			//$fator = 1;
 			 
@@ -1796,90 +1377,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			$p_acp =  (($aplicacao_ansm/$valor_ca)*$qtde_acp); //parte de retidos em R$
 			$ad_acp = (($p_acp*$fator) - $p_acp); 
 			$imp_ad_acp = number_format($ad_acp, 2, ',', '.');
-			
-			
-			
-			/* Retirando por conta do novo formato de REMUNERAÇÃO ACP					
-			if (in_array($cont, $vet_retencao )) 
-				$imp_acp_aplicado = $acp_retencao;
-			
-			if (in_array($cont, $vet_triagem )) 
-				$imp_acp_aplicado = $acp_triagem;
-			
-			if (in_array($cont, $vet_aviso_viagem )) 
-				$imp_acp_aplicado = $acp_aviso_viagem;
-			
-			if (in_array($cont, $vet_parcelamento_com_130 )) 
-				$imp_acp_aplicado = $acp_parcelamento;
-			
-			if (in_array($cont, $vet_perda_roubo ))
-				$imp_acp_aplicado = $acp_perda_roubo;
-			
-			if (in_array($cont, $vet_contestacao_com_100 )) 
-				$imp_acp_aplicado = $acp_contestacao;
-			
-			if (in_array($cont, $vet_pontos )) 
-				$imp_acp_aplicado = $acp_pontos;
-			
-			if (in_array($cont, $vet_geral_normal )) 
-				$imp_acp_aplicado = $acp_geral_normal;
-			
-			if (in_array($cont, $vet_todas_premium )) 
-				$imp_acp_aplicado = $acp_todas_premium;
-			
-			if (in_array($cont, $vet_pj )) 
-				$imp_acp_aplicado = $acp_pj;
-            
-            //if (in_array($cont, $vet_130 )) 
-             //   $imp_acp_aplicado = $acp_130;
-            
-            //if (in_array($cont, $vet_100 )) 
-             //   $imp_acp_aplicado = $acp_100;
-			
-			if (in_array($cont, $vet_caixa_empregado)) 
-				$imp_acp_aplicado = $acp_caixa_empregado;
-			
-			if (in_array($cont, $vet_deficiente_auditivo )) 
-				$imp_acp_aplicado = $acp_deficiente_auditivo;
-			
-			if (in_array($cont, $vet_mala_direta )) 
-				$imp_acp_aplicado = $acp_mala_direta;
-			*/		  
-		    
-			
-			
-			
-			
-			/*	
-			$vet_filas_com_acp = array('73','77','81','116','150','72','76','80','111','60','88','90','93','87','91','94','120','99','101','110','57','117','106','108','109','102','125');
-			if (!in_array($cont, $vet_filas_com_acp))
-			{
-				if (in_array($cont, $vet_todas_premium))
-				{
-					if ($valor_ns < '0.90')
-					{
-						$imp_acp_aplicado = '00';
-					}
-					else
-					{
-						if ($ns_todas_filas_2 == 1) 
-							$imp_acp_aplicado = '05';
-						else 
-							$imp_acp_aplicado = '00';
-					}
-				}						
-			}
-			else {
-					if ($valor_ns < '0.90')
-					{
-						$imp_acp_aplicado = '00';
-					}
-					else
-					{
-						if ( ($ns_todas_filas_2 == 1) && ($ns_faixa_horario == 1) ) $imp_acp_aplicado = '15';
-						if ( ($ns_todas_filas_2 == 1) && ($ns_faixa_horario == 0) ) $imp_acp_aplicado = '10';
-					}						
-			}*/
+												
 			
 			if (!isset($imp_acp_aplicado)) 
 			{
@@ -1888,7 +1386,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			echo "<td>$imp_acp_aplicado%</td>";
 			
 			echo "<td>$qtde_acp</td>";
-			echo "<td>R$ $imp_ad_acp</td>"; //aqui
+			echo "<td>R$ $imp_ad_acp</td>"; 
 			
 			/**codigo antigo, retirado
 			// "aplicação acp", mas retirando a parte de retidos que serão remunerados somente com adicional de retenção, no restante 
@@ -1931,6 +1429,11 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	echo '<tr>';
 	echo "<td>MENOR NÍVEL DE SERVIÇO IDENTIFICADO - FAIXA DE HORÁRIO</td>";
 	echo "<td>$menor_ns_faixa_horario</td>";
+	echo '</tr>';
+	
+	echo '<tr>';
+	echo "<td>MENOR NÍVEL DE SERVIÇO PREMIUM IDENTIFICADO - FAIXA DE HORÁRIO</td>";
+	echo "<td>$menor_ns_faixa_horario_premium</td>";
 	echo '</tr>';
 	
 	echo '<tr>';

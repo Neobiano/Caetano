@@ -207,7 +207,7 @@ if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
 		}
 	
 		//NSH
-		$query = $pdo->prepare("select avg(NSA) NSH from
+		$sql = "select avg(NSA) NSH from
 				(
 				select x.HORA, x.MINUTO, ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA from
 				(
@@ -236,7 +236,10 @@ if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
 				and tempo_atend = 0 and tempo_espera > $ns
 				group by datepart(hh,data_hora), datepart(minute,data_hora)/30
 				) as c on (x.HORA = c.HORA and x.MINUTO = c.MINUTO)
-				) as NSH");
+				) as NSH";
+		
+		echo $sql;		
+		$query = $pdo->prepare($sql);
 		$query->execute();
 		for($i=0; $row = $query->fetch(); $i++){
 			$NSH = utf8_encode($row['NSH']);

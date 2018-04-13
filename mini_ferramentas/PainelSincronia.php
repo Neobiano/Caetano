@@ -44,12 +44,12 @@
        //---------------------FIM RELOAD-------------------
       <?php
     	   include_once "conecta.php";    
-	       $sql = "select datepart(hh,t.data_hora_verif) hora, 
+    	   $sql = "select datepart(hh,t.data_hora_verif) hora,
                 	datepart(mi,t.data_hora_verif) minuto,
                 	datepart(ss,t.data_hora_verif) segundo,
                 	t.dif_minutos,
                 	t.tabela,
-                	case 
+                	case
                 	  when dif_minutos > 40 then 'red'
                 	  else 'green'
                 	end cor,
@@ -58,10 +58,10 @@
                 	t.data_hora_verif,
                 	t2.data_hora_verif data_hora_verif_grupo,
                 	t2.id id_grupo,
-                    t.callid_ult_sinc 
+                    t.callid_ult_sinc
                 	from tb_verif_sincronia_item t
                 	inner join tb_verif_sincronia t2 on (t2.id = t.id_tb_verif_sincronia)
-                    where t.dif_minutos > 40 
+                    where cast(t.data_hora_verif as date) = cast (CURRENT_TIMESTAMP as date)
                 	order by id";
 	       //echo $sql;
 	       $query = $pdo->prepare($sql);
@@ -131,6 +131,7 @@
     	                 ]);
     	    
     	    var options = {
+    	    		pointSize: 2,    	    	    	
     	    		vAxes: {
     	                0: {title: 'Minutos'},    	                
     	              }
