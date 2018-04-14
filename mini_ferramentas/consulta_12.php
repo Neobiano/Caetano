@@ -152,7 +152,15 @@ if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
 		else $ns = 45;
 	
 		//NSA
-		$query = $pdo->prepare("select A, B, C, ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA, ISNULL(B, 0) TOTAL_ATEND, ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) * ISNULL(B, 0) MULT from
+		$query = $pdo->prepare("select A, B, C, ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA, ISNULL(B, 0) TOTAL_ATEND, 
+                              ISNULL(
+                                        cast(ISNULL(A, 0) as float) 
+                                        / 
+                                        nullif(
+                                                cast(ISNULL(B, 0) as float) 
+                                                + 
+                                                cast(ISNULL(C, 0) as float),0)
+                                      ,1) * ISNULL(B, 0) MULT from
 				(
 				select
 				(
@@ -177,25 +185,34 @@ if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
 			$NSA = utf8_encode($row['NSA']);
 			
 			$TOTAL_ATEND = utf8_encode($row['TOTAL_ATEND']);
-			if(!in_array($pos_dia, $dias_excluir)) $SOMA_TOTAL_ATEND = $SOMA_TOTAL_ATEND + $TOTAL_ATEND;
+			if(!in_array($pos_dia, $dias_excluir)) 
+			    $SOMA_TOTAL_ATEND = $SOMA_TOTAL_ATEND + $TOTAL_ATEND;
 			
-			if(in_array($pos_dia, $dias_excluir)) $qtd_dias_div = $qtd_dias_div - 1;
+			if(in_array($pos_dia, $dias_excluir)) 
+			    $qtd_dias_div = $qtd_dias_div - 1;
 			
 			$MULT = utf8_encode($row['MULT']);
 
-			if(!in_array($pos_dia, $dias_excluir)) $SOMA_MULT = $SOMA_MULT + $MULT;
+			if(!in_array($pos_dia, $dias_excluir)) 
+			    $SOMA_MULT = $SOMA_MULT + $MULT;
 	
 				
 			$A = utf8_encode($row['A']);
-			if($A == NULL) $A = 0;
+			if($A == NULL) 
+			  $A = 0;
+			
 			$SOMA_A = $SOMA_A + $A;
 	
 			$B = utf8_encode($row['B']);
-			if($B == NULL) $B = 0;
+			if($B == NULL) 
+			   $B = 0;
+			
 			$SOMA_B = $SOMA_B + $B;
 	
 			$C = utf8_encode($row['C']);
-			if($C == NULL) $C = 0;
+			if($C == NULL) 
+			   $C = 0;
+			
 			$SOMA_C = $SOMA_C + $C;
 				
 			echo "<td>$TOTAL_ATEND</td>";
@@ -238,31 +255,39 @@ if ($qual_mes == $mes_atual) $qtd_dias = $dia_atual - 1;
 				) as c on (x.HORA = c.HORA and x.MINUTO = c.MINUTO)
 				) as NSH";
 		
-		echo $sql;		
+		//echo $sql;		
 		$query = $pdo->prepare($sql);
 		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++){
+		for($i=0; $row = $query->fetch(); $i++)
+		{
 			$NSH = utf8_encode($row['NSH']);
-			if(!in_array($pos_dia, $dias_excluir)) $SOMA_NSH = $SOMA_NSH + $NSH;
+			if(!in_array($pos_dia, $dias_excluir)) 
+			   $SOMA_NSH = $SOMA_NSH + $NSH;
 	
 			echo "<td><a class='w3-text-indigo' title='Listar Faixas de Horário' href= \"lista_nsh.php?NSH=$NSH&pos_dia=$pos_dia&qual_ano=$qual_ano&qual_mes=$qual_mes&mes=$mes&ns=$ns&in_filas=$in_filas\" target=\"_blank\">$NSH</a></td>";
 		}
 		
 		$diferenca = $NSH - $NSA;
-		if($diferenca < 0) $diferenca = $diferenca * (-1);
+		
+		if($diferenca < 0) 
+		  $diferenca = $diferenca * (-1);
 		
 		$diferenca_imprime = number_format($diferenca, 2, ',', '.');
 		
-		if($diferenca <= 0.05) echo "<td>$diferenca_imprime</td>";
-		else echo "<td><b class='w3-text-red'>$diferenca_imprime</b></td>";
+		if($diferenca <= 0.05) 
+		  echo "<td>$diferenca_imprime</td>";
+		else 
+		  echo "<td><b class='w3-text-red'>$diferenca_imprime</b></td>";
 	
 		echo "</tr>";
 	}
 	
 	echo "</tbody><tr class='w3-indigo'>";
 	
-	if($SOMA_TOTAL_ATEND > 0) $NSA_MENSAL = $SOMA_MULT / $SOMA_TOTAL_ATEND;
-	else $NSA_MENSAL = 1;
+	if ($SOMA_TOTAL_ATEND > 0) 
+	    $NSA_MENSAL = $SOMA_MULT / $SOMA_TOTAL_ATEND;
+	else 
+	    $NSA_MENSAL = 1;
 	
 	$NSH_MENSAL = $SOMA_NSH / $qtd_dias_div;
 	

@@ -119,7 +119,7 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         break;
 		
 	case '12':
-        include "consulta_12.php"; // DNS - Dispersão do Nível de Serviço
+        include "consulta_12b.php"; // DNS - Dispersão do Nível de Serviço
         break;
 		
 	case '13':
