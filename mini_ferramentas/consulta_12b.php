@@ -98,6 +98,7 @@
 		echo "<br><b class='w3-text-black'>A:</b> Número de atendimentos onde o cliente esperou menos do que o tempo em segundos definido e/ou dentro dos prazos estipulados pela CAIXA;";
 		echo "<br><b class='w3-text-black'>B:</b> Soma de todos os atendimentos;";
 		echo "<br><b class='w3-text-black'>C:</b> Chamadas abandonadas com espera superior ao tempo em segundos definido e/ou superior aos prazos estipulados pela CAIXA, ou não atendidos.";
+		echo "<br><b class='w3-text-black'>Fórmula DNS:</b> DNS = 1 – (│NSA – NSH│– 5%)";
 	echo '</div>';
 
 	include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
@@ -138,10 +139,10 @@
 	$qtd_dias_div = $qtd_dias;
 	
 	//----------limpando tabela de consolidação do NSH------------------- 
-	$query = $pdo->prepare("   IF (OBJECT_ID('tempdb..#temp_consolidado') IS NOT NULL) 			 						
-			                     drop table #temp_consolidado
+	$query = $pdo->prepare("   IF (OBJECT_ID('tempdb..##temp_consolidado') IS NOT NULL) 			 						
+			                     drop table ##temp_consolidado
 		
-		                      CREATE TABLE #temp_consolidado (dia INT, hora INT, minuto INT, A INT, B INT, C INT, NSA FLOAT ) 
+		                      CREATE TABLE ##temp_consolidado (dia INT, hora INT, minuto INT, A INT, B INT, C INT, NSA FLOAT ) 
                            ");
 	$query->execute();
 	
@@ -297,7 +298,7 @@
         		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30                
                 
             	/*-------------tabela de consolidação dos NSA por faixa de horario---------------------*/
-                insert into #temp_consolidado
+                insert into ##temp_consolidado
         			select t.dia, t.hora, t.minuto, coalesce(A,0) A, coalesce(B,0) B, coalesce(C,0) C,
         			ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA 					 
         			from #temp_plano_horas t
@@ -344,42 +345,133 @@
 	echo "</table>";
 	echo "</div>";
 	
-    include "finaliza_tabela.php"; // FINALIZA A TABELA
-    //include"imprime_grafico.php";// IMPRIME O GRÁFICO
+    include "finaliza_tabela.php"; 
+    
 
-    //segunda tabela
-    include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
-    include "inicia_tabela_organizada.php"; // INICIA A TABELA
-   
-       
-    $texto = "<td><b>DIA &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    //--------------------------------SEGUNDA TABELA------------------------------//
+    echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-margin-top w3-tiny w3-left w3-padding">';
+    echo "<br><b class='w3-text-black'>Apuração do NSH (Média simples do NSA por faixa de horário no mês) e Cálculo Final do DNS</b>";
+    echo "<br><br>";    
+    echo '</div>';
     
-    $texto = "<td><b>HORA &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center w3-border w3-padding w3-card-4" style="padding-bottom:16px !important;">';
+    echo "<table id='tabela2' name='tabela2' class='w3-table w3-striped w3-hoverable w3-tiny'>";
+    echo "<thead>
+                <tr class='w3-indigo'>";    
+    echo "<td><b>HORA &nbsp</b></td>";
+    echo "<td><b>INTERVALO &nbsp</b></td>";
+    echo "<td><b>A &nbsp</b></td>";
+    echo "<td><b>B &nbsp</b></td>";
+    echo "<td><b>C &nbsp</b></td>";
+    echo "<td><b>NSA = A / (B + C) &nbsp</b></td>";
+    echo "  </tr>
+              </thead>
+              <tbody>";
     
-    $texto = "<td><b>INTERVALO &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    //geral
+    $qtde = 0;
+    $soma_nsa = 0;
+    $query = $pdo->prepare("select hora, minuto, sum(A) A, sum(B) B, sum(C) C,
+                             (
+                            	  coalesce(sum(A),0)
+                            	  /
+                            	     cast (
+                            				(
+                            				  case (coalesce(sum(B),0) + coalesce(sum(C),0))
+                            					when  0 then 1
+                            					else (coalesce(sum(B),0) + coalesce(sum(C),0))
+                            				  end 
+                            				  )
+                            			 as float)
+                              ) NSA
+                              from ##temp_consolidado
+                             group by hora, minuto 
+                             order by hora, minuto ");
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {                        
+        $hora = utf8_encode($row['hora']);
+        $intervalo = utf8_encode($row['minuto']);
+        $NSA = utf8_encode($row['NSA']);
+                
+        $A = utf8_encode($row['A']);
+        if($A == NULL)
+            $A = 0;
+            
+        $B = utf8_encode($row['B']);
+        if($B == NULL)
+            $B = 0;
+            
+        $C = utf8_encode($row['C']);
+        if($C == NULL)
+            $C = 0;
+                    
+        echo "<tr>";
+            echo "<td>$hora</td>";
+            echo "<td>$intervalo</td>";
+            echo "<td>$A</td>";
+            echo "<td>$B</td>";
+            echo "<td>$C</td>";
+            echo "<td>$NSA</td>";
+        echo "</tr>";
+        $qtde++;
+        $soma_nsa = ($soma_nsa + $NSA); 
+    }
+    $nsh = $soma_nsa / $qtde;
     
-    $texto = "<td><b>A &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    $dif = $NSA_MENSAL - $nsh;
+    $redutor = 0;
+    if ($dif < 0)
+      $dif = $dif * - 1;
     
-    $texto = "<td><b>B &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    if ($dif <= 0.05)
+    {    
+      $dns = 1;
+      $cor =' bgcolor="green"';
+    }
+    else
+    {
+        $redutor = ($dif - 0.05);
+        $dns = 1 - $redutor;
+        $cor =' bgcolor="red"';
+    }  
+     
+    $dif = number_format(($dif * 100), 4,',', '.');
+    $redutor = number_format(($redutor * 100),4,',', '.');    
+     
+    echo "</tbody>
+            <tr class='w3-indigo'>";    
+            echo "<td $cor><b>DNS: $dns</b></td>";
+            echo "<td $cor><b>Dif:</b> $dif% <b> Redutor:</b> $redutor%</td>";
+            echo "<td><b></b></td>";    
+            echo "<td><b>NSA (Média Ponderada): $NSA_MENSAL</b></td>";            
+            echo "<td><b></b></td>";
+            echo "<td><b>NSH: $nsh</b></td>";
+    echo "</tr>";
+    echo "</table>";
+    echo "</div>";    
     
-    $texto = "<td><b>C &nbsp</b></td>";
-    echo incrementa_tabela($texto);      
+    //--------------------------------TERCEIRA TABELA------------------------------//
+    echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-margin-top w3-tiny w3-left w3-padding">';
+    echo "<br><b class='w3-text-black'>Distribuição de atendimentos por Dia/Faixa de Horário</b>";
+    echo "<br><br>";
+    echo '</div>';
+    echo '<div class="w3-margin-left w3-margin-right w3-margin-bottom w3-tiny w3-center w3-border w3-padding w3-card-4" style="padding-bottom:16px !important;">';
+    echo "<table id='tabela3' name='tabela3' class='w3-table w3-striped w3-hoverable w3-tiny'>";
+        echo "<thead>
+                <tr class='w3-indigo'>";            
+                    echo "<td><b>DIA &nbsp</b></td>";        
+                    echo "<td><b>HORA &nbsp</b></td>";       
+                    echo "<td><b>INTERVALO &nbsp</b></td>";        
+                    echo "<td><b>A &nbsp</b></td>";        
+                    echo "<td><b>B &nbsp</b></td>";        
+                    echo "<td><b>C &nbsp</b></td>";                                      
+        echo "  </tr>
+              </thead>
+              <tbody>";
     
-    $texto = "<td><b>NSA = A / (B + C) &nbsp</b></td>";
-    echo incrementa_tabela($texto);
-    
-    $texto = "</tr></thead><tbody>";
-    echo incrementa_tabela($texto);
-    // IMPRIME COLUNAS DA TABELA - FIM    
-    
-    
-    //----------------------CONSOLIDADO-----------------------//
-    $query = $pdo->prepare("select * from #temp_consolidado");
+    //geral
+    $query = $pdo->prepare("select * from ##temp_consolidado");
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)
     {
@@ -389,6 +481,7 @@
         $intervalo = utf8_encode($row['minuto']);
         $NSA = utf8_encode($row['NSA']);
                         
+        
         $A = utf8_encode($row['A']);
         if($A == NULL)
             $A = 0;
@@ -400,15 +493,23 @@
         $C = utf8_encode($row['C']);
         if($C == NULL)
             $C = 0;
-                                
-        echo "<td>$dia</td>";
-        echo "<td>$hora</td>";
-        echo "<td>$intervalo</td>";
-        echo "<td>$A</td>";
-        echo "<td>$B</td>";
-        echo "<td>$C</td>";        
-        echo "<td>$NSA</td>";
+        
+        echo "<tr>";
+            if ($dia < 10)
+                $dia_imprime = "0$dia";
+            else
+                $dia_imprime = "$dia";
+            
+            echo "<td>$dia_imprime</td>";
+            echo "<td>$hora</td>";
+            echo "<td>$intervalo</td>";
+            echo "<td>$A</td>";
+            echo "<td>$B</td>";
+            echo "<td>$C</td>";        
+          
+        echo "</tr>";
     }
+    
     echo "</tbody>
             <tr class='w3-indigo'>";
             echo "<td><b></b></td>";
@@ -417,16 +518,23 @@
             echo "<td><b></b></td>";
             echo "<td><b></b></td>";
             echo "<td><b></b></td>";
-            echo "<td><b></b></td>";           
+                    
     echo "</tr>";
     echo "</table>";
-    echo "</div>";
+    echo "</div>";    
     
-    include "finaliza_tabela.php"; // FINALIZA A TABELA
 ?>
 
     <script>  
     $('#tabela').DataTable( {
+    	"order": [[ 0, "asc" ]]
+    } );
+    
+    $('#tabela2').DataTable( {
+    	"order": [[ 0, "asc" ]]
+    } );
+
+    $('#tabela3').DataTable( {
     	"order": [[ 0, "asc" ]]
     } );
     </script>
