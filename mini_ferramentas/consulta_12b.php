@@ -16,9 +16,7 @@
 
 <?php
     //$data_atual = date("d-m-Y");
-
-    //if(strtotime($data_final)<strtotime($data_inserida))
-
+   
     $nome_relatorio = "dns"; // NOME DO RELATÓRIO (UTILIZAR UNDERLINE, POIS É PARTE DO NOME DO ARQUIVO EXCEL)
     $titulo = "Dispersão do Nível de Serviço por Faixa de Horário"; // MESMO NOME DO INDEX
     $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
@@ -132,6 +130,7 @@
 	
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
+		
 	$soma_nsh_dia = 0;
 	$soma_atendimentos_dia = 0;
 	$soma_mult_dia = 0;
@@ -148,12 +147,9 @@
 	
 	for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
 	{
-		if(in_array($pos_dia, $dias_excluir))
-		{
-			$qtd_dias_div = $qtd_dias_div - 1;
-		    continue;
-		}
 		
+	    $revisao_NS = false;
+	    
 		$qtd_linhas_consulta++;
 		
 		echo "<tr>";
@@ -169,144 +165,397 @@
 		else 
 		  $ns = 45;
 	
-		//apuando o NSA
-		$query = $pdo->prepare("select A, B, C, 
+	    //validando revisão de nivel
+	    $sql = "select t.*,
+                    datepart(dd,data_1) d_1,
+                    datepart(mm,data_1) m_1,
+                    datepart(yyyy,data_1) a_1,
+                    datepart(dd,data_2) d_2,
+                    datepart(mm,data_2) m_2,
+                    datepart(yyyy,data_2) a_2,
+                    datepart(dd,data_3) d_3,
+                    datepart(mm,data_3) m_3,
+                    datepart(yyyy,data_3) a_3
+                from tb_fat_revisao_nivel_DNS t
+                where t.data_revista = '$qual_ano-$qual_mes-$pos_dia'";
+	    
+	    $query = $pdo->prepare($sql);
+	    $query->execute();
+	    for($x=0; $row = $query->fetch(); $x++)
+	    {
+	        $a_1 =  $row['a_1'];
+	        $a_2 =  $row['a_2'];
+	        $a_3 =  $row['a_3'];
+	        
+	        $d_1 =  $row['d_1'];
+	        if ($d_1 <= 9) 
+	           $d_1 = '0'.$d_1;
+	        
+	        $m_1 =  $row['m_1'];
+	        if ($m_1 <= 9)
+	           $m_1 = '0'.$m_1;	                
+	        
+	        $d_2 =  $row['d_2'];
+	        if ($d_2 <= 9)
+	           $d_2 = '0'.$d_2;
+	        
+	        $m_2 =  $row['m_2'];
+	        if ($m_2 <= 9)
+	          $m_2 = '0'.$m_2;	                
+	        
+	        $d_3 =  $row['d_3'];
+	        if ($d_3 <= 9)
+	           $d_3 = '0'.$d_3;
+	        
+	        $m_3 =  $row['m_3'];
+	        if ($m_3 <= 9)
+	         $m_3 = '0'.$m_3;	        	        
+	        
+	        $revisao_NS = true;	        	        
+	    } 
+	    
+	    //totalizando data1
+	    $sql = "select A, B, C,
                                         ISNULL(
-                                                cast(ISNULL(A, 0) as float) 
-                                                / 
+                                                cast(ISNULL(A, 0) as float)
+                                                /
                                                 nullif(
-                                                        cast(ISNULL(B, 0) as float) 
-                                                        + 
+                                                        cast(ISNULL(B, 0) as float)
+                                                        +
                                                         cast(ISNULL(C, 0) as float)
                                                       ,0)
-                                               ,1) NSA, 
-                                         ISNULL(B, 0) TOTAL_ATEND, 
+                                               ,1) NSA,
+                                         ISNULL(B, 0) TOTAL_ATEND,
                                          ISNULL(
-                                                  cast(ISNULL(A, 0) as float) 
-                                                  / 
+                                                  cast(ISNULL(A, 0) as float)
+                                                  /
                                                   nullif(
-                                                          cast(ISNULL(B, 0) as float) 
-                                                          + 
+                                                          cast(ISNULL(B, 0) as float)
+                                                          +
                                                           cast(ISNULL(C, 0) as float)
                                                          ,0)
-                                                ,1) * ISNULL(B, 0) MULT 
+                                                ,1) * ISNULL(B, 0) MULT
                                 from
             				    (
             				        select
                             				(
-                                				select count(*) A from tb_eventos_dac
-                                				where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59' and cod_fila in ($in_filas)
+                                				select coalesce(count(*),0) A from tb_eventos_dac
+                                				where data_hora between 'ano-mes-dia' and 'ano-mes-dia 23:59:59' and cod_fila in ($in_filas)
                                 				and tempo_espera <= $ns and tempo_atend > 0
                             				) as A,
                             				(
-                                				select count(*) B from tb_eventos_dac
-                                				where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59' and cod_fila in ($in_filas)
+                                				select coalesce(count(*),0) B from tb_eventos_dac
+                                				where data_hora between 'ano-mes-dia' and 'ano-mes-dia 23:59:59' and cod_fila in ($in_filas)
                                 				and tempo_atend > 0
                             				) as B,
                             				(
-                                				select count(*) C from tb_eventos_dac
-                                				where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59' and cod_fila in ($in_filas)
+                                				select coalesce(count(*),0) C from tb_eventos_dac
+                                				where data_hora between 'ano-mes-dia' and 'ano-mes-dia 23:59:59' and cod_fila in ($in_filas)
                                 				and tempo_espera > $ns and tempo_atend = 0
                             				) as C
-            				    ) as NSA");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			
-			$NSA = utf8_encode($row['NSA']);			
-			$TOTAL_ATEND = utf8_encode($row['TOTAL_ATEND']);		 
-			$MULT = utf8_encode($row['MULT']);
-			
-			$A = utf8_encode($row['A']);
-			if($A == NULL) 
-			 $A = 0;
-			
-			$B = utf8_encode($row['B']);
-			if($B == NULL) 
-			 $B = 0;
-			
-			$C = utf8_encode($row['C']);
-			if($C == NULL) 
-			 $C = 0;
-			
-			$SOMA_TOTAL_ATEND = $SOMA_TOTAL_ATEND + $TOTAL_ATEND;		    
-			$SOMA_MULT = $SOMA_MULT + $MULT;	
-			$SOMA_A = $SOMA_A + $A;
-	        $SOMA_B = $SOMA_B + $B;
-            $SOMA_C = $SOMA_C + $C;
-				
-			echo "<td>$TOTAL_ATEND</td>";
-			echo "<td>$A</td>";
-			echo "<td>$B</td>";
-			echo "<td>$C</td>";
-			echo "<td>$ns</td>";
-			echo "<td>$NSA</td>";
-		}
+            				    ) as NSA";
+	    
+	    //com revisão de nivel de serviço para a data
+	    if ($revisao_NS)
+	    {	        		    	        	        
+	        $A = 0;
+	        $B = 0;
+	        $C = 0;
+	        $TOTAL_ATEND = 0;
+	        $MULT = 0;
+	        
+	        /*-------data 1-------------*/ 
+	        $sqlaux = str_replace('ano-mes-dia', $a_1.'-'.$m_1.'-'.$d_1,$sql);  
+	        $query = $pdo->prepare($sqlaux);
+	        for($i=0; $row = $query->fetch(); $i++)
+	        {	            	            
+	            $TOTAL_ATEND = $TOTAL_ATEND + $row['TOTAL_ATEND'];
+	            $MULT = $MULT + $row['MULT'];	    
+	            $A = $A + $row['A'];
+	            $B = $B + $row['B'];
+	            $C = $C + $row['C'];
+	        }
+	        
+	        /*-------data 2-------------*/
+	        $sqlaux = str_replace('ano-mes-dia', $a_2.'-'.$m_2.'-'.$d_2,$sql);
+	        $query = $pdo->prepare($sqlaux);
+	        for($i=0; $row = $query->fetch(); $i++)
+	        {
+	            $TOTAL_ATEND = $TOTAL_ATEND + $row['TOTAL_ATEND'];
+	            $MULT = $MULT + $row['MULT'];
+	            $A = $A + $row['A'];
+	            $B = $B + $row['B'];
+	            $C = $C + $row['C'];
+	        }
+	        
+	        /*-------data 3-------------*/
+	        $sqlaux = str_replace('ano-mes-dia', $a_3.'-'.$m_3.'-'.$d_3,$sql);
+	        $query = $pdo->prepare($sqlaux);
+	        for($i=0; $row = $query->fetch(); $i++)
+	        {
+	            $TOTAL_ATEND = $TOTAL_ATEND + $row['TOTAL_ATEND'];
+	            $MULT = $MULT + $row['MULT'];
+	            $A = $A + $row['A'];
+	            $B = $B + $row['B'];
+	            $C = $C + $row['C'];
+	        }
+	        
+	        $TOTAL_ATEND = $TOTAL_ATEND / 3;
+	        $MULT = $MULT/3;
+	        $A = $A/3;
+	        $B = $B/3;
+	        $C = $C/3;	        	        
+	    }  
+	    else //sem revisão de nivel de serviço para a data
+	    {     
+	        $sdata = ($qual_ano.'-'.$qual_mes.'-'.$pos_dia);
+	        $sqlaux = str_replace('ano-mes-dia',$sdata,$sql);
+	        //echo $sqlaux;
+	        $query = $pdo->prepare($sqlaux);
+	        $query->execute();
+	        for($i=0; $row = $query->fetch(); $i++)
+	        {
+	            $NSA = utf8_encode($row['NSA']);
+	            $TOTAL_ATEND = utf8_encode($row['TOTAL_ATEND']);
+	            $MULT = utf8_encode($row['MULT']);
+	            
+	            $A = utf8_encode($row['A']);	           	                
+                $B = utf8_encode($row['B']);	           	                    
+                $C = utf8_encode($row['C']);	           	
+	        }
+	        
+	    }
+       	
+	    //totalizando e imprimindo
+		$SOMA_TOTAL_ATEND = $SOMA_TOTAL_ATEND + $TOTAL_ATEND;
+		$SOMA_MULT = $SOMA_MULT + $MULT;
+		$SOMA_A = $SOMA_A + $A;
+		$SOMA_B = $SOMA_B + $B;
+		$SOMA_C = $SOMA_C + $C;
+		
+		echo "<td>$TOTAL_ATEND</td>";
+		echo "<td>$A</td>";
+		echo "<td>$B</td>";
+		echo "<td>$C</td>";
+		echo "<td>$ns</td>";
+		echo "<td>$NSA</td>";
 	
-		//NSH
-		$sql = "
-        		drop table #temp_plano_horas;
-        		drop table #tabela_a;
-        		drop table #tabela_b;
-        		drop table #tabela_c;        		
-                
-                /*retorna somente o agrupamento de horas de um dia de 24 horas */                    
-                select   datepart(dd,data_hora) DIA, 
-        				 datepart(hh,data_hora) HORA, 
-        				 datepart(minute,data_hora)/30 MINUTO 
-        		into #temp_plano_horas
-        		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
-                group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 
-		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30                 
-                
-                /*-------------tabela A - quantidade de atendidas dentro do tempo estipulado (45 ou 90) por intervalo---------*/              
-                select  
-        		        datepart(dd,data_hora) DIA, 
-        				datepart(hh,data_hora) HORA, 
-        				datepart(minute,data_hora)/30 MINUTO, 
-        				count (*) A 
-        	    into #tabela_a
-        		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
-                and cod_fila in ($in_filas)
-                and tempo_atend > 0 
-                and tempo_espera <= $ns
-                group by datepart(dd,data_hora),datepart(hh,data_hora), datepart(minute,data_hora)/30 
-		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+		//-----------------------------------------------------NSH------------------------------------------------------------
+		if ($revisao_NS)
+		{		    
+		    $sql = "
+            		drop table #temp_plano_horas;
+            		drop table #tabela_a;
+            		drop table #tabela_b;
+            		drop table #tabela_c;
+            		
+                    /*retorna somente o agrupamento de horas de um dia de 24 horas */
+                    select   datepart(dd,data_hora) DIA,
+            				 datepart(hh,data_hora) HORA,
+            				 datepart(minute,data_hora)/30 MINUTO
+            		into #temp_plano_horas
+            		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
+                    group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        
+                    /*-------------tabela A - quantidade de atendidas dentro do tempo estipulado (45 ou 90) por intervalo---------*/
+                    
+                    /*Data 1- Revisao NS*/
+                    select
+            		        datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) A
+            	    into #tabela_a
+            		from tb_eventos_dac where data_hora between '$a_1-$m_1-$d_1' and '$a_1-$m_1-$d_1 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0
+                    and tempo_espera <= $ns
+                    group by datepart(dd,data_hora),datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
 
-                /*------------tabela B - quantidade de atendidas geral por intervalo------------------------------------------*/
-        		select	datepart(dd,data_hora) DIA,
-        				datepart(hh,data_hora) HORA, 
-        				datepart(minute,data_hora)/30 MINUTO, 
-        				count (*) B 
-        	    into #tabela_b
-        		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
-                and cod_fila in ($in_filas)
-                and tempo_atend > 0 and id_operador <> 'NULL' 
-        		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 	
-        		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 	
+                    /*Data 2- Revisao NS*/
+                    insert into #tabela_a
+                    select
+            		        datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) A            	    
+            		from tb_eventos_dac where data_hora between '$a_2-$m_2-$d_2' and '$a_2-$m_2-$d_2 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0
+                    and tempo_espera <= $ns
+                    group by datepart(dd,data_hora),datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        
+                    /*Data 3- Revisao NS*/
+                    insert into #tabela_a
+                    select
+            		        datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) A            	    
+            		from tb_eventos_dac where data_hora between '$a_3-$m_3-$d_3' and '$a_3-$m_3-$d_3 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0
+                    and tempo_espera <= $ns
+                    group by datepart(dd,data_hora),datepart(hh,data_hora), datepart(minute,data_hora)/30
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
 
-                /*-------------tabela C - Quantidade de abandonadas acima do tempo estipulado (45 ou 90)---------------------*/
-        		select	datepart(dd,data_hora) DIA,
-        				datepart(hh,data_hora) HORA, 
-        				datepart(minute,data_hora)/30 MINUTO,
-        				count (*) C 
-        		into #tabela_c
-        		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
-                and cod_fila in ($in_filas)
-                and tempo_atend = 0 and tempo_espera > 45 
-        		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 
-        		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30                
-                
-            	/*-------------tabela de consolidação dos NSA por faixa de horario---------------------*/
-                insert into ##temp_consolidado
-        			select t.dia, t.hora, t.minuto, coalesce(A,0) A, coalesce(B,0) B, coalesce(C,0) C,
-        			ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA 					 
-        			from #temp_plano_horas t
-        			left join #tabela_a a on ( a.DIA = t.DIA and a.HORA = t.HORA and a.MINUTO = t.MINUTO)
-        			left join #tabela_b b on ( b.DIA = t.DIA and b.HORA = t.HORA and b.MINUTO = t.MINUTO)
-        			left join #tabela_c c on ( c.DIA = t.DIA and c.HORA = t.HORA and c.MINUTO = t.MINUTO)        			                
-                ";
-			
+
+                    /*------------tabela B - quantidade de atendidas geral por intervalo------------------------------------------*/
+
+                    /*Data 1- Revisao NS*/
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) B
+            	    into #tabela_b
+            		from tb_eventos_dac where data_hora between '$a_1-$m_1-$d_1' and '$a_1-$m_1-$d_1 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0 and id_operador <> 'NULL'
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+
+                    /*Data 2- Revisao NS*/
+                    insert into #tabela_b
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) B            	    
+            		from tb_eventos_dac where data_hora between '$a_2-$m_2-$d_2' and '$a_2-$m_2-$d_2 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0 and id_operador <> 'NULL'
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+
+                    /*Data 3- Revisao NS*/
+                    insert into #tabela_b
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) B            	    
+            		from tb_eventos_dac where data_hora between '$a_3-$m_3-$d_3' and '$a_3-$m_3-$d_3 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0 and id_operador <> 'NULL'
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		
+                    /*-------------tabela C - Quantidade de abandonadas acima do tempo estipulado (45 ou 90)---------------------*/
+                    /*Data 1- Revisao NS*/
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) C
+            		into #tabela_c
+            		from tb_eventos_dac where data_hora between '$a_1-$m_1-$d_1' and '$a_1-$m_1-$d_1 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend = 0 and tempo_espera > $ns
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+
+                    /*Data 2- Revisao NS*/
+                    insert into #tabela_c
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) C            		
+            		from tb_eventos_dac where data_hora between '$a_2-$m_2-$d_2' and '$a_2-$m_2-$d_2 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend = 0 and tempo_espera > $ns
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+
+                    /*Data 3- Revisao NS*/
+                    insert into #tabela_c
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA,
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) C            		
+            		from tb_eventos_dac where data_hora between '$a_3-$m_3-$d_3' and '$a_3-$m_3-$d_3 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend = 0 and tempo_espera > $ns
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+                    
+            		
+                	/*-------------tabela de consolidação dos NSA por faixa de horario---------------------*/
+                    insert into ##temp_consolidado
+            			select $pos_dia dia, t.hora, t.minuto, (sum(coalesce(A,0))/3) A, (sum(coalesce(B,0))/3) B, (sum(coalesce(C,0))/3) C
+        				from #temp_plano_horas t
+        				left join #tabela_a a on ( a.HORA = t.HORA and a.MINUTO = t.MINUTO)
+        				left join #tabela_b b on ( b.HORA = t.HORA and b.MINUTO = t.MINUTO)
+        				left join #tabela_c c on ( c.HORA = t.HORA and c.MINUTO = t.MINUTO)
+        				group by t.hora, t.minuto       	
+        				order by t.hora, t.minuto
+                    ";
+		    
+		}
+		else
+		{		    
+    		$sql = "
+            		drop table #temp_plano_horas;
+            		drop table #tabela_a;
+            		drop table #tabela_b;
+            		drop table #tabela_c;        		
+                    
+                    /*retorna somente o agrupamento de horas de um dia de 24 horas */                    
+                    select   datepart(dd,data_hora) DIA, 
+            				 datepart(hh,data_hora) HORA, 
+            				 datepart(minute,data_hora)/30 MINUTO 
+            		into #temp_plano_horas
+            		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
+                    group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30                 
+                    
+                    /*-------------tabela A - quantidade de atendidas dentro do tempo estipulado (45 ou 90) por intervalo---------*/              
+                    select  
+            		        datepart(dd,data_hora) DIA, 
+            				datepart(hh,data_hora) HORA, 
+            				datepart(minute,data_hora)/30 MINUTO, 
+            				count (*) A 
+            	    into #tabela_a
+            		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0 
+                    and tempo_espera <= $ns
+                    group by datepart(dd,data_hora),datepart(hh,data_hora), datepart(minute,data_hora)/30 
+    		        order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30
+    
+                    /*------------tabela B - quantidade de atendidas geral por intervalo------------------------------------------*/
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA, 
+            				datepart(minute,data_hora)/30 MINUTO, 
+            				count (*) B 
+            	    into #tabela_b
+            		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend > 0 and id_operador <> 'NULL' 
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 	
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 	
+    
+                    /*-------------tabela C - Quantidade de abandonadas acima do tempo estipulado (45 ou 90)---------------------*/
+            		select	datepart(dd,data_hora) DIA,
+            				datepart(hh,data_hora) HORA, 
+            				datepart(minute,data_hora)/30 MINUTO,
+            				count (*) C 
+            		into #tabela_c
+            		from tb_eventos_dac where data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59'
+                    and cod_fila in ($in_filas)
+                    and tempo_atend = 0 and tempo_espera > $ns 
+            		group by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30 
+            		order by datepart(dd,data_hora), datepart(hh,data_hora), datepart(minute,data_hora)/30                
+                    
+                	/*-------------tabela de consolidação dos NSA por faixa de horario---------------------*/
+                    insert into ##temp_consolidado
+            			select t.dia, t.hora, t.minuto, coalesce(A,0) A, coalesce(B,0) B, coalesce(C,0) C,
+            			ISNULL(cast(ISNULL(A, 0) as float) / nullif(cast(ISNULL(B, 0) as float) + cast(ISNULL(C, 0) as float),0),1) NSA 					 
+            			from #temp_plano_horas t
+            			left join #tabela_a a on ( a.DIA = t.DIA and a.HORA = t.HORA and a.MINUTO = t.MINUTO)
+            			left join #tabela_b b on ( b.DIA = t.DIA and b.HORA = t.HORA and b.MINUTO = t.MINUTO)
+            			left join #tabela_c c on ( c.DIA = t.DIA and c.HORA = t.HORA and c.MINUTO = t.MINUTO)        			                
+                    ";
+		}	
 		
 		//echo $sql;		
 		$query = $pdo->prepare($sql);
@@ -317,23 +566,11 @@
 	
 	echo "</tbody><tr class='w3-indigo'>";
 	
-	if($SOMA_TOTAL_ATEND > 0) $NSA_MENSAL = $SOMA_MULT / $SOMA_TOTAL_ATEND;
-	else $NSA_MENSAL = 1;
-	
-	$NSH_MENSAL = $SOMA_NSH / $qtd_dias_div;
-	
-	$DIF = $NSA_MENSAL - $NSH_MENSAL;
-	
-	if($DIF < 0) $DIF = $DIF * (-1);
-	
-	if($DIF <= 0.05) $DNS = 1;
-	else{
-		$DIF = $DIF - 0.05;
-		$DNS = 1 - $DIF;
-	}
-	
-	
-	
+	if($SOMA_TOTAL_ATEND > 0) 
+	    $NSA_MENSAL = $SOMA_MULT / $SOMA_TOTAL_ATEND;
+	else 
+	    $NSA_MENSAL = 1;		
+		
 	echo "<td><b></b></td>";
 	echo "<td><b></b></td>";
 	echo "<td><b></b></td>";	
@@ -442,7 +679,7 @@
     echo "</tbody>
             <tr class='w3-indigo'>";    
             echo "<td $cor><b>DNS: $dns</b></td>";
-            echo "<td $cor><b>Dif:</b> $dif% <b> Redutor:</b> $redutor%</td>";
+            echo "<td $cor><b>Dif:</b> $dif%   -  <b>Redutor:</b> $redutor%</td>";
             echo "<td><b></b></td>";    
             echo "<td><b>NSA (Média Ponderada): $NSA_MENSAL</b></td>";            
             echo "<td><b></b></td>";
