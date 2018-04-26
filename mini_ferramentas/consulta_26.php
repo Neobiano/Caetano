@@ -161,6 +161,7 @@
                                             and t.perg3 = '$i'
                                             $swhere
                                            ";
+                                    echo('pergunta 3 - '.$sql);
                                     $query = $pdo->prepare($sql);
                                     $query->execute();
                                     for($x=0; $row = $query->fetch(); $x++){
@@ -176,6 +177,7 @@
                                             and t.perg4 = '$i'
                                             $swhere
                                            ";
+                                     echo('pergunta 3 - '.$sql);
                                     $query = $pdo->prepare($sql);
                                     $query->execute();
                                     for($x=0; $row = $query->fetch(); $x++){

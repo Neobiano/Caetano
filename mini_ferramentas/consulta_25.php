@@ -180,7 +180,7 @@
                                 		order by ted.callid, ted.data_hora
                                 		";
                         		
-                        		        //echo $sql;
+                        		        echo $sql;
                                 		$query = $pdo->prepare($sql);
                                 		$query->execute();
                                 		for($i=0; $row = $query->fetch(); $i++){

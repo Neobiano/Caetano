@@ -578,7 +578,10 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
         	 where t.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
         	and t.cod_fila  in (sql_filas_ns)          
         	group by datepart(hh,t.data_hora), datepart(minute,t.data_hora)/30
-        ) A";
+        ) A
+
+        where (abandonadas + atendidas) > 0     
+        ";
 	
 	//------------TODAS AS FILAS----------------//	
 	$sqltodas = str_replace('sql_filas_ns', $in_todas_filas,$sql);  
@@ -597,7 +600,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	    
     //------------SOMENTE FILAS PREMIUM----------------//
 	$sqlpremium = str_replace('sql_filas_ns', $in_filas_premium,$sql);
-    //echo $sqlpremium;
+    echo $sqlpremium;
 	$query = $pdo->prepare($sqlpremium);	
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)

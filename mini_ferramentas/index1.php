@@ -3,8 +3,10 @@
 	ini_set("default_charset", 'utf-8');
 	//preenchendo o select de filas
 	$iniciou = 0;
-	$in_filas = "108,109,";
-	$query = $pdo->prepare("select cod_fila from tb_filas where desc_fila liKe '%CXA%'");
+	$in_filas = "106,108,109,";
+	$query = $pdo->prepare("select cod_fila from tb_filas 
+                            where desc_fila liKe '%CXA%'
+                            and cod_fila <> 131"); //retirando bloqueio cobrança PJ
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++){
 		$cod_fila = utf8_encode($row['cod_fila']);
@@ -467,8 +469,7 @@ $(document).ready(function(){
 				
 				case '12': //DNS - Dispersão de Nível de Serviço
 					hideAll();
-					$("#div_dmm").show();
-    				$("#div_dias_excluir").show();
+					$("#div_dmm").show();    			
     				$("#div_filas").show();    				
     				$("#div_qual_mes").show();
     				$("#div_qual_ano").show();
