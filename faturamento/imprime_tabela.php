@@ -600,7 +600,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	    
     //------------SOMENTE FILAS PREMIUM----------------//
 	$sqlpremium = str_replace('sql_filas_ns', $in_filas_premium,$sql);
-    echo $sqlpremium;
+    //echo $sqlpremium;
 	$query = $pdo->prepare($sqlpremium);	
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)

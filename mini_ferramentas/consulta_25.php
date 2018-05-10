@@ -25,13 +25,10 @@
 
 <body>
 
-       <?php
-       $swhere = '';
+       <?php       
        $criterios = '';
        if ($cd_motivo > 0)
-       {           
-          $swhere .= " and tl.cd_motivo = '$cd_motivo'";
-          
+       {                              
           $query = $pdo->prepare("select distinct  ds_motivo from tb_log_categorizacao
                         where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
                         and cd_motivo = $cd_motivo");
@@ -43,11 +40,13 @@
           
        }
        else
+       {           
            $criterios .= " Motivo: Todos ";
+           $cd_motivo = 0; 
+       }
        
        if ($cd_submotivo > 0)
-       {
-          $swhere .= " and tl.cd_submotivo = '$cd_submotivo'";
+       {          
           $query = $pdo->prepare("select distinct  ds_submotivo from tb_log_categorizacao
                         where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
                         and cd_submotivo = $cd_submotivo");
@@ -58,11 +57,13 @@
           }          
         }
         else 
+        {
             $criterios .= " -  SubMotivo: Todos";
+            $cd_submotivo = 0;
+        }
         
        if ($pesq_satisf_perg1 > 0)
-       {    
-         $swhere .= " and tps.perg1 = '$pesq_satisf_perg1'";
+       {             
          switch ($pesq_satisf_perg1)
          {                             
              case 1:
@@ -82,8 +83,7 @@
            $criterios .= " </br>  <b>Perg. 1:</b> Todas";
        
        if ($pesq_satisf_perg2 > 0)
-       {            
-         $swhere .= " and tps.perg2 = '$pesq_satisf_perg2'";
+       {                     
          switch ($pesq_satisf_perg2)
          {
              case 1:
@@ -103,8 +103,6 @@
        
        if ($pesq_satisf_perg3 > 0)
        {    
-         $swhere .= " and tps.perg3 = '$pesq_satisf_perg3'";
-         
          switch ($pesq_satisf_perg3)
          {
              case 1:
@@ -123,8 +121,7 @@
            $criterios .= "  <b>Perg. 3:</b> Todas";
        
        if ($pesq_satisf_perg4 > 0)
-       {
-         $swhere .= " and tps.perg4 = '$pesq_satisf_perg4'";
+       {         
          switch ($pesq_satisf_perg4)
          {
              case 1:
@@ -141,8 +138,7 @@
        }  
        else
            $criterios .= "  <b>Perg. 4:</b> Todas";
-       
-        
+               
         $nome_relatorio = "Pesquisa_de_Satisfação_Motivo_SubMotivo"; // NOME DO RELATÃ“RIO (UTILIZAR UNDERLINE, POIS Ã‰ PARTE DO NOME DO ARQUIVO EXCEL)
         $titulo = "Relatório - Pesquisa de Satisfação - Motivo/SubMotivo "; // MESMO NOME DO INDEX
         $nao_gerar_excel = 1; // DEFINIR 1 PARA NÃO IMPRIMIR BOTÃO EXCEL
@@ -167,22 +163,27 @@
                                 echo '<td><b>NOME OPERADOR</b></td>';
                         echo '</tr>
                           </thead>
-                            <tbody>';                   
-                                $sql ="	select distinct ted.*, f.desc_fila from tb_eventos_dac ted
-                                		left join tb_filas f on (ted.cod_fila = f.cod_fila)
-                                		inner join tb_log_categorizacao tl on (tl.callid = ted.callid)
-                                		inner join tb_pesq_satisfacao tps on (ted.callid = tps.callid)
-                                		where  ted.data_hora between '$data_inicial1' and '$data_final1 23:59:59.999'
-                                		and tps.data_hora between '$data_inicial1' and '$data_final1 23:59:59.999'
-                                		and tl.data_hora between '$data_inicial1' and '$data_final1 23:59:59.999'   
-                                        $swhere
-                                		and ted.id_operador is not null
-                                		order by ted.callid, ted.data_hora
-                                		";
-                        		
-                        		        echo $sql;
+                            <tbody>';                                                                                 		
+                                		$sql = " set nocount on; 
+
+                                                 declare @T TABLE(callid varchar(50),
+                                                				 data_hora datetime, 
+                                                				 cod_fila int, 
+                                                				 tempo_espera int, 
+                                                				 tempo_consulta_mudo int, 
+                                                				 tempo_atend int, 
+                                                				 id_operador int, 
+                                                				 desc_operador varchar(50),
+                                                				 desc_fila varchar(50)
+                                                				 ); 
+                                                insert @T EXEC radar_cartoes_query25 @ini = '$data_inicial1 00:00:00', @fim = '$data_final1 23:59:59.999', @motivo = $cd_motivo, @submotivo= $cd_submotivo, @perg1 = $pesq_satisf_perg1, @perg2=$pesq_satisf_perg2, @perg3=$pesq_satisf_perg3, @perg4=$pesq_satisf_perg4
+                                                
+                                                select * from @T
+                                                 ";
+                                		//echo $sql;
                                 		$query = $pdo->prepare($sql);
                                 		$query->execute();
+                                		
                                 		for($i=0; $row = $query->fetch(); $i++){
                                 		    $callid = $row['callid'];
                                 		    $data_hora = $row['data_hora'];

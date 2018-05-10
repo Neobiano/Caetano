@@ -210,16 +210,16 @@ $(document).ready(function(){
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_19" name="chk_19" value = "19">19 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_20" name="chk_20" value = "20" >20 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_21" name="chk_21" value = "21">21 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_22" name="chk_22" value = "22">22 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_23" name="chk_23" value = "23">23 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_22" name="chk_22" value = "22" checked>22 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_23" name="chk_23" value = "23" checked>23 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_24" name="chk_24" value = "24">24 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_25" name="chk_25" value = "25" >25 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_26" name="chk_26" value = "26" checked>26 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_26" name="chk_26" value = "26">26 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_27" name="chk_27" value = "27" >27 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_28" name="chk_28" value = "28">28 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_29" name="chk_29" value = "29">29 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_30" name="chk_30" value = "30">30 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_31" name="chk_31" value = "31" checked>31 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_30" name="chk_30" value = "30" checked>30 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_31" name="chk_31" value = "31">31 &nbsp &nbsp</div>
 	
 	</div>
 </div>	
@@ -302,8 +302,8 @@ DIV 3 - FIM -->
 		<div class="div_dia w3-margin-8">04:<input size='12' id="ansm4" type='text' name="ansm4" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">05:<input size='12' id="ansm5" type='text' name="ansm5" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">06:<input size='12' id="ansm6" type='text' name="ansm6" value='0.9982' onkeypress='return SomenteValor(event, this, 12)'></div>
-		<div class="div_dia w3-margin-8">07:<input size='12' id="ansm7" type='text' name="ansm7" value='0.9952' onkeypress='return SomenteValor(event, this, 12)'></div>
-		<div class="div_dia w3-margin-8">08:<input size='12' id="ansm8" type='text' name="ansm8" value='0.9747' onkeypress='return SomenteValor(event, this, 12)'></div>
+		<div class="div_dia w3-margin-8">07:<input size='12' id="ansm7" type='text' name="ansm7" value='0.995215' onkeypress='return SomenteValor(event, this, 12)'></div>
+		<div class="div_dia w3-margin-8">08:<input size='12' id="ansm8" type='text' name="ansm8" value='0.974743' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">09:<input size='12' id="ansm9" type='text' name="ansm9" value='1.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">10:<input size='12' id="ansm10" type='text' name="ansm10" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">11:<input size='12' id="ansm11" type='text' name="ansm11" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
@@ -336,8 +336,8 @@ DIV 3 - FIM -->
 		<div class="w3-left w3-padding">
 		
 			<p id="txt_glosa" class="w3-margin-8"><b>Glosas (Quantidade) / IQF / Acertos:</b></p>
-			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='0' onkeypress='return SomenteValor(event, this, 3)'></div>		
-			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='100.00' onkeypress='return SomenteValor(event, this, 13)'></div>
+			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='16' onkeypress='return SomenteValor(event, this, 3)'></div>		
+			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='89.0580' onkeypress='return SomenteValor(event, this, 13)'></div>
 			
 	
 			<div class="div_dia w3-margin-8">

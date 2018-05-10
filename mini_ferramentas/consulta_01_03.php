@@ -237,7 +237,7 @@ for($i=0; $row = $query->fetch(); $i++){
                             (select * from tb_filas where desc_fila like 'CXA%') as fi
                             on E.cod_fila = fi.cod_fila";
 	
-	echo $sql;
+	//echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	

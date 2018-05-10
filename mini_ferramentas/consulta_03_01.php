@@ -40,21 +40,23 @@ $TOTAL_DIAS = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	if($select_ilhas == 0) $query = $pdo->prepare("select a.DIA_SEMANA, a.DATA, a.HORA, a.MINUTO, a.TOTAL_OPERADORES_FAIXA_HORARIO, b.TOTAL_OPERADORES_DIA
-							from 
+	$sql = "select a.DIA_SEMANA, a.DATA, a.HORA, a.MINUTO, a.TOTAL_OPERADORES_FAIXA_HORARIO, b.TOTAL_OPERADORES_DIA
+							from
 							(
 							select datepart(dw,data_hora) DIA_SEMANA, convert(date,data_hora,11) DATA, datepart(hh,data_hora) HORA, datepart(minute,data_hora)/30 MINUTO, count(distinct id_operador) TOTAL_OPERADORES_FAIXA_HORARIO from tb_eventos_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and id_operador is not NULL and datepart(dw,data_hora) in $in_semana
 							group by convert(date,data_hora,11), datepart(hh,data_hora), datepart(dw,data_hora), datepart(minute,data_hora)/30
 							) as a
-							inner join 
+							inner join
 							(
 							select datepart(dw,data_hora) DIA_SEMANA, convert(date,data_hora,11) DATA, count(distinct id_operador) TOTAL_OPERADORES_DIA from tb_eventos_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and id_operador is not NULL and datepart(dw,data_hora) in $in_semana
 							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as b
 							on a.DATA = b.DATA
-							order by a.DATA, a.HORA, a.MINUTO");
+							order by a.DATA, a.HORA, a.MINUTO";
+	
+	if($select_ilhas == 0) $query = $pdo->prepare($sql);
 	
 	else $query = $pdo->prepare("select a.DIA_SEMANA, a.DATA, a.HORA, a.MINUTO, a.TOTAL_OPERADORES_FAIXA_HORARIO, b.TOTAL_OPERADORES_DIA
 							from 
