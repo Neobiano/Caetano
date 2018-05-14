@@ -94,7 +94,11 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         break;
 		
 	case '06':
-        include "consulta_06.php"; // Total de Ligações / TMA / NSA 45 / NSA 90
+	    if ($ckniveldia == '1')
+            include "consulta_06b.php"; // Total de Ligações / TMA / NSA 45 / NSA 90
+        else
+            include "consulta_06.php"; // Total de Ligações / TMA / NSA 45 / NSA 90
+            
         break;
 		
 	case '07': // TMA - Operador / Supervisor

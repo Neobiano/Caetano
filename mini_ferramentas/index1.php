@@ -3,7 +3,7 @@
 	ini_set("default_charset", 'utf-8');
 	//preenchendo o select de filas
 	$iniciou = 0;
-	$in_filas = "106,108,109,";
+	$in_filas = "";
 	$query = $pdo->prepare("select cod_fila from tb_filas 
                             where desc_fila liKe '%CXA%'
                             and cod_fila <> 131"); //retirando bloqueio cobrança PJ
@@ -228,6 +228,7 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_select_ilhas").hide();
     	$("#div_ilhas").hide();
     	$("#div_tempo_de_corte").hide();
+    	$("#div_exibe_por_dia").hide();
     	$("#div_perg_satisfacao").hide();
     	$("#div_parametros_retencao_ura_c24").hide();
     	$("#div_parametros_retencao_ura_c2").hide();
@@ -368,6 +369,7 @@ $(document).ready(function(){
 					$("#txt_data_final").show();
 					$("#data_final").show();
 					$("#div_tempo_de_corte").show();
+					$("#div_exibe_por_dia").show();
 					$("#txt_detalhes").text("Exibe o total de ligações / TMA / NSA 45 e NSA 90 referente ao período informado.");
 					$("#txt_data_inicial").html("Data Inicial:");
 					$("#btn_pesquisar").html("Consultar");															
@@ -1175,11 +1177,20 @@ function diminuiFrame(){
             		
         		</fieldset>			
     		</div>
-		
-    		<div id="div_tempo_de_corte" class="w3-left w3-margin-top w3-margin-bottom">		
-    			<b>Ligações a partir de (segundos):</b>
+		    		 	
+    		    		
+    		
+        	
+        	<div id="div_tempo_de_corte" class="w3-left  w3-margin-top w3-margin-bottom">		
+    			<b> Ligações a partir de (segundos):</b>
     			<input id="tempo_de_corte" type='text' size='1' name="tempo_de_corte" value='20' onkeypress='return SomenteNumero(event, this, 2)' maxlength="2">
     		</div>
+    		
+    		<!-- DIV CONSULTA 6b - nivel de servico por dia -->
+    		<div id="div_exibe_por_dia" class="w3-left w3-margin-left w3-margin-top w3-margin-bottom">		  
+    			<b>Exibir por Dia: </b>      	        	
+        		<input type="checkbox" id="ckniveldia" name="ckniveldia" value = "1" >    				
+        	</div>
 		
     		<!-- CAIXA DE SELEÇÃO "OPCAO_DIA_SEMANA" -->
     		<div id="div_select_dias_semana" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">

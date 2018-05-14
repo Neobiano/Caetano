@@ -176,7 +176,7 @@
                                                 				 desc_operador varchar(50),
                                                 				 desc_fila varchar(50)
                                                 				 ); 
-                                                insert @T EXEC radar_cartoes_query25 @ini = '$data_inicial1 00:00:00', @fim = '$data_final1 23:59:59.999', @motivo = $cd_motivo, @submotivo= $cd_submotivo, @perg1 = $pesq_satisf_perg1, @perg2=$pesq_satisf_perg2, @perg3=$pesq_satisf_perg3, @perg4=$pesq_satisf_perg4
+                                                insert @T EXEC sp_CERATFO_radar_cartoes_query25 @ini = '$data_inicial1 00:00:00', @fim = '$data_final1 23:59:59.999', @motivo = $cd_motivo, @submotivo= $cd_submotivo, @perg1 = $pesq_satisf_perg1, @perg2=$pesq_satisf_perg2, @perg3=$pesq_satisf_perg3, @perg4=$pesq_satisf_perg4
                                                 
                                                 select * from @T
                                                  ";

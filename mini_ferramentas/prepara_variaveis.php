@@ -67,9 +67,14 @@ $parametros_adicionais = "";
 //Recebe Variáveis do Formulário - Início
 
 //Consulta 2 (percentual de retenção da URA) - Incluir chamadas desconectadas (sem interação) na URA
+if(isset($_POST["ckniveldia"]))
+    $ckniveldia = $_POST["ckniveldia"];
+else 
+    $ckniveldia = '0';
+
 if(isset($_POST["ruchk_1"]))
     $ruchk_1 = $_POST["ruchk_1"];
-else 
+else
     $ruchk_1 = '0';
     
 
