@@ -4,7 +4,7 @@
 
     include "inicia_variaveis_grafico.php";
     //$dados_grafico = "['Data', 'NSA', 'Operadores', 'TMA']";       
-    $dados_grafico = "['Data', 'NSA', 'TMA']";
+    $dados_grafico = "['Data', 'NSA', 'Operadores']";
     $inicio = defineTime();
 
 	
@@ -26,25 +26,27 @@
             	echo "<td class='tooltip'><b>A*</b>
             	         <span class='tooltiptext'>Atendidas até 45s (Normal) ou 90s (DMM)</span>
             	      </td>";
-            	//echo "<td><b>A (Atendidas até 45s/90s)</b></td>";
-            	
+                        	
             	echo "<td class='tooltip'><b>B*</b>
             	         <span class='tooltiptext'>Todas as Atendidas</span>
             	      </td>";
-            	//echo '<td><b>B (Atendidas)</b></td>';
+            
             	echo "<td class='tooltip'><b>C*</b>
             	         <span class='tooltiptext'>Abandonadas após 45s (Normal) ou 90s (DMM)</span>
             	      </td>";
-            	//echo '<td><b>C (Abandonadas após 45s/90s)</b></td>';
+            
             	echo "<td class='tooltip'><b>NSA* = A/(B+C)</b>
             	         <span class='tooltiptext'>Nível de Serviço Alcançado</span>
             	      </td>";
-            	//echo '<td><b>NSA* = A/(B+C ) </b></td>';
+            
             	echo '<td><b>OPERADORES</b></td>';
             	echo '<td><b>TMA</b></td>';        	
         echo '</tr>
           </thead>
           <tbody>'; 
+                
+                $tempo_de_corte = intval($tempo_de_corte);
+                
                 $sql = " 
                             set nocount on; 
     
@@ -59,11 +61,11 @@
                             				 qtde_operador int,
                             				 tma int
                             				); 
-                            insert @T EXEC sp_CERATFO_radar_cartoes_query6b '$data_inicial 00:00:00', '$data_final 23:59:59', $tempo_de_corte
+                            insert @T EXEC sp_CERATFO_radar_cartoes_query6b '$data_inicial_u 00:00:00', '$data_final_u 23:59:59', $tempo_de_corte
                             
                             select * from @T                        
                          ";
-        //echo $sql;
+       // echo $sql;
         $query = $pdo->prepare($sql);
         $query->execute();
         
@@ -83,13 +85,14 @@
             $qtde_operador = $row['qtde_operador'];
             $tma = $row['tma'];
             
-            echo '<tr>';
+            echo '<tr>';            
             echo "<td>$dia ( $sdia_semana )</td>";            
             echo "<td align='center'>$tempo_referencia</td>";
             echo "<td>$a</td>";
             echo "<td>$b</td>";
             echo "<td>$c</td>";
-            echo "<td>$nsa</td>";
+            echo "<td><a class='w3-text-indigo' title='Detalhar Nível de Serviço' href= \"lista_detalhe_nivel_servico.php?&data_inicial=$dia&tempo_corte=$tempo_de_corte\" target=\"_blank\">$nsa</a></td>";
+            //echo "<td>$nsa</td>";
             echo "<td>$qtde_operador</td>";
             echo "<td>$tma</td>";
             echo '</tr>';     
@@ -98,7 +101,7 @@
             $incrementa_grafico = $incrementa_grafico.",['$dia ($sdia_semana)'"; // INCREMENTA OS DADOS DO GRÁFICO          
             $nsa = str_replace(",",".",$nsa);
             //$incrementa_grafico = $incrementa_grafico.",$nsa,$qtde_operador,$tma]";
-            $incrementa_grafico = $incrementa_grafico.",$nsa,$tma]";
+            $incrementa_grafico = $incrementa_grafico.",$nsa,$qtde_operador]";
         }
         echo "</tbody>
                     </table>";
@@ -106,7 +109,17 @@
         echo "</div>";
         echo "<br><br>";
         
-        $parametros_adicionais = " pointSize: 2,";
+        $parametros_adicionais = " pointSize: 2, 
+         series: {
+                    0: {targetAxisIndex: 0},
+                    1: {targetAxisIndex: 1}
+                  },
+                  vAxes: {
+                    // Adds titles to each axis.
+                    0: {title: 'NSA'},
+                    1: {title: 'Operadores'}
+                  },
+        ";
         include "imprime_grafico.php"; // IMPRIME O GRÁFICO
         $fim = defineTime();
         echo tempoDecorrido($inicio,$fim);

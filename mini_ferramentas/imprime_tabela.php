@@ -214,6 +214,24 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         //include "consulta_28.php"; // Pesquisa de Satisfação - Motivo/Submotivo
         
         break;	
+    case '29':
+        switch ($select_retencao) {            
+            case '00':
+                include "consulta_29.php"; // Retenção por bandeira
+                break;               
+            case '01':
+                include "consulta_29b.php"; // Operador
+                break;
+            case '02':
+                include "consulta_29c.php"; // Supervisor
+                break;
+        }		
+        
+        break;
+        
+    case '30':
+        include "consulta_30.php"; // Retenção
+        break;
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

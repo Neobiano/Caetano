@@ -215,6 +215,10 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_fonte").hide();
     	$("#div_localiza_atendimentos").hide();
     	$("#div_select_filas").hide();
+    	$("#div_select_retencao").hide();
+    	$("#div_corte_retencao").hide();
+    	$("#div_base_comp_retencao").hide();
+    	
     	$("#div_qual_mes").hide();
     	$("#div_qual_ano").hide();
     	$("#div_qual_rechamadas").hide();
@@ -227,6 +231,10 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_dias_excluir").hide();
     	$("#div_select_ilhas").hide();
     	$("#div_ilhas").hide();
+    	$("#div_bandeiras").hide();
+    	$("#div_rd_bandeiras").hide();
+    	    	
+    	
     	$("#div_tempo_de_corte").hide();
     	$("#div_exibe_por_dia").hide();
     	$("#div_perg_satisfacao").hide();
@@ -710,6 +718,62 @@ $(document).ready(function(){
 						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
 						$("#txt_detalhes").text("Painel de Verificação de sincronia de dados.");
 						
+						break;
+						
+					case '29':
+					    hideAll();	
+					    $("#div_datas").show();					    	
+					    $("#div_button").show();
+						$("#div_tex_detalhes").show();												
+						$("#data_final").show();
+						$("#div_select_retencao").show();
+												
+						$("#txt_data_inicial").html("Data Inicial:");
+						$("#txt_data_final").show();
+					    $("#txt_detalhes").text("O enfoque do relatório listar os percentuais de retenção por Bandeira/Operador/Supervisor");
+					    $("#btn_pesquisar").html("Consultar");
+					    $('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+					    switch($("#select_retencao").val())
+					    {				
+    					    case '00':
+    							$("#div_corte_retencao").hide();
+    							$("#div_base_comp_retencao").hide();
+    							
+    							$("#div_rd_bandeiras").hide();    
+    							$("#div_bandeiras").show();
+    	    					$("#chk_master").prop("checked", true);
+    	    					$("#chk_visa").prop("checked", true);
+    	    					$("#chk_elo").prop("checked", true);
+    	    					$("#chk_jcb").prop("checked", true);
+    	    					$("#chk_ndefinida").prop("checked", true);
+    						break;
+    						case '01':
+    							$("#div_bandeiras").hide();
+    							$("#div_corte_retencao").show();
+    							$("#div_base_comp_retencao").show();    							
+    							$("#div_rd_bandeiras").show();    	    					
+    						break;
+    						case '02':
+    							$("#div_bandeiras").hide();
+    							$("#div_corte_retencao").show(); 
+    							$("#div_base_comp_retencao").show();   							    							
+    							$("#div_rd_bandeiras").show();    	    					
+    						break;
+	    				}
+					    
+						//habilitando o filtro por bandeira	    											
+    	    			
+					    break;
+					case '30':
+					    hideAll();	
+					    $("#div_datas").show();					    	
+					    $("#div_button").show();
+						$("#div_tex_detalhes").show();												
+						$("#data_final").show();						
+						$("#txt_data_inicial").html("Data Inicial:");
+						$("#txt_data_final").show();
+					    $("#txt_detalhes").text("O enfoque do relatório os indices de adesão da campanha Upgrade/Mastercard");
+					    $("#btn_pesquisar").html("Consultar");					    	    									    																
 						break;																															
 						
 		}
@@ -745,6 +809,34 @@ $(document).ready(function(){
 		}
 	});
 });
+
+$(document).ready(function(){
+	$("#select_retencao").change(function(){
+			switch($("#select_retencao").val()){
+			case '00':
+				$("#div_corte_retencao").hide();
+				$("#div_base_comp_retencao").hide();				
+				$("#div_rd_bandeiras").hide();
+				$("#div_bandeiras").show();
+			break;
+			case '01':
+				$("#div_bandeiras").hide();
+				$("#div_corte_retencao").show();
+				$("#div_base_comp_retencao").show();
+				$("#div_rd_bandeiras").show();
+				
+			break;
+			case '02':
+				$("#div_bandeiras").hide();
+				$("#div_corte_retencao").show();
+				$("#div_base_comp_retencao").show();
+				$("#div_rd_bandeiras").show();				
+			break;
+		}
+	});
+		
+});
+
 
 $(document).ready(function(){
 	$("#select_fonte").change(function(){
@@ -932,6 +1024,8 @@ function diminuiFrame(){
         				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
         				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
         				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
+        				<option value="29">Retenção ATC - Análise de Dados</option>
+        				<option value="30">Campanha - MASTERCARD - Análise de Dados</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
     				</optgroup>
     				<optgroup label="PRODUÇÃO">         				
@@ -1062,6 +1156,26 @@ function diminuiFrame(){
     				<option value="00">Por Período / Dia a Dia</option>
     			</select>		
     		</div>
+    		
+    		<!-- CAIXA DE SELEÇÃO DADOS DE RETENÇÃO-->
+    		<div id="div_select_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Modelo:</b>
+    			<select id="select_retencao" name="select_retencao">    				
+    				<option value="00">Por Bandeira</option>    	
+    				<option value="01">Por Operador</option>
+    				<option value="02">Por Supervisor</option>			    				
+    			</select>		
+    		</div>
+    		
+    		<div id="div_corte_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Min. Atendimentos:</b>
+    			<input size='3' id="corte_retencao" type='text' name="corte_retencao" value='30' onkeypress='return SomenteNumero(event, this,4)'>		
+    		</div>
+    		
+    		<div id="div_base_comp_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Dias Comparação:</b>
+    			<input size='3' id="base_comp_retencao" type='text' name="base_comp_retencao" value='7' onkeypress='return SomenteNumero(event, this,2)'>		
+    		</div>
 		
     		<!-- CAIXA DE SELEÇÃO "OPERADOR / SUPERVISOR" -->
     		<div id="div_select_operador_supervisor" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
@@ -1089,7 +1203,7 @@ function diminuiFrame(){
     				<option value="01">Selecionar</option>
     			</select>
     		</div>
-		
+    		    		   				
     		<!-- CAIXA DE SELEÇÃO "OPERADOR / SUPERVISOR" -->
     		<div id="div_fonte" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
     			<b>Fonte:</b>
@@ -1171,15 +1285,9 @@ function diminuiFrame(){
            			 <div class="w3-left w3-margin-bottom w3-margin-left">
 	           			 <b><label for="data_final1" style="display:block !important;">Data Final:</label></b>
             			 <input disabled id="data_final2" type='text' size='14' name="data_final1" value='' onkeypress="mascaraData_final(this, event, 1);" maxlength="10">
-					 </div>
-    			 	
-    			 	
-            		
+					 </div>    			 	    			 	           
         		</fieldset>			
-    		</div>
-		    		 	
-    		    		
-    		
+    		</div>		    		 	    		    		    	
         	
         	<div id="div_tempo_de_corte" class="w3-left  w3-margin-top w3-margin-bottom">		
     			<b> Ligações a partir de (segundos):</b>
@@ -1209,8 +1317,7 @@ function diminuiFrame(){
     		<!-- DIV BOTÃO CONSULTAR - div_button -->		
     		<div id="div_button" class="w3-left w3-margin">
     			<button id="btn_pesquisar" class="w3-btn w3-deep-orange w3-round w3-tiny" type="submit" name="btn_pesquisar" value="Gerar">Consultar</button>
-    		</div>
-		
+    		</div>		
 		</div><!-- final"w3-container"-->
 	
     	<!-- DIV DIAS DA SEMANA - div_dia_semana -->		
@@ -1239,6 +1346,66 @@ function diminuiFrame(){
     		}
     		?>
     	</div>
+    	
+    	<!-- DIV Ilhas - div_bandeiras -->		
+    	<div id="div_bandeiras" class="w3-container">
+    		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Bandeiras:</b> </div>   			
+    		
+    		<div class='w3-left'> 
+    			<input class='w3-margin-8' type='checkbox' id='chk_elo' name='chk_elo' value = 'ELO' checked>ELO &nbsp &nbsp
+    		</div>
+    		
+    		<div class='w3-left'>
+    			<input class='w3-margin-8' type='checkbox' id='chk_visa' name='chk_visa' value = 'VISA' checked>VISA &nbsp &nbsp 
+    		</div>
+    		
+    		<div class='w3-left'>
+    			<input class='w3-margin-8' type='checkbox' id='chk_master' name='chk_master' value = 'MASTERCARD' checked>MASTERCARD &nbsp &nbsp 
+    		</div>			
+    		
+    		<div class='w3-left'>
+    			<input class='w3-margin-8' type='checkbox' id='chk_jcb' name='chk_jcb' value = 'JCB' checked>JCB &nbsp &nbsp 
+    		</div>    		    				
+    	</div>
+    	
+    	<div id="div_rd_bandeiras" class="w3-container">
+        	<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Bandeiras:</b> </div>   			    		
+          	<div class='w3-left'>     			                
+            	<label class="container"> 
+              		<input class='w3-margin-8' type="radio"  id='rd_bandeira' name='rd_bandeira' value = 'ELO'>
+              		ELO &nbsp &nbsp            
+            	</label>           
+            </div>
+            
+            <div class='w3-left'>     			                
+            	<label class="container">
+              		<input class='w3-margin-8' type="radio"  id='rd_bandeira' name='rd_bandeira' value = 'VISA'>
+              		VISA &nbsp &nbsp            
+            	</label>
+            </div>    
+            
+            <div class='w3-left'>     			                
+                <label class="container"> 
+              		<input class='w3-margin-8' type="radio" id='rd_bandeira' name='rd_bandeira' value = 'MASTERCARD'>
+              		MASTERCARD &nbsp &nbsp             
+            	</label>
+            </div>    
+            
+            <div class='w3-left'>     			                
+                <label class="container">
+              		<input class='w3-margin-8' type="radio"  id='rd_bandeira' name='rd_bandeira' value = 'JCB'>
+              		JCB &nbsp &nbsp             
+            	</label>
+            </div>    
+                                 
+            <div class='w3-left'>     			                
+                <label class="container"> 
+              	<input class='w3-margin-8' type="radio" checked="checked" id='rd_bandeira' name='rd_bandeira' value = ''>  
+              	Todas &nbsp &nbsp           
+            	</label>
+        	</div>        
+            
+        </div>
 	
     	<div id="div_perg_satisfacao" class="w3-container">  
     		<div>

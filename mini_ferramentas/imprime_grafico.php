@@ -4,6 +4,6 @@ $dados_grafico = $dados_grafico."$incrementa_grafico";
 $max = $max * 1.2;
 $min = $min * 0.8;
     if(!isset($tipo)) $tipo = 'LineChart';
-        echo imprimeGraficoLinha($dados_grafico,$titulo,$largura,$altura,$max,$min,$tipo,$parametros_adicionais);
+    echo imprimeGraficoLinha($dados_grafico,$titulo,$largura,$altura,$max,$min,$tipo,$parametros_adicionais,$dadoscolunas);
 ?>
 </div>

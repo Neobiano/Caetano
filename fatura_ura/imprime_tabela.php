@@ -125,6 +125,7 @@ echo "</div>";
 
 
 //$qtd_dias = 1;
+//for($pos_dia=9;$pos_dia<=9;$pos_dia++)
 for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
 {
 	$total_faturados = 0;
@@ -145,7 +146,7 @@ for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
 		foreach($array_cod_linha as $cod_evento)
 		{	
 			$nao_fatura = 0; 
-			if($cod_evento == '031')
+			/*if($cod_evento == '031')
 			{    
     			//se passou pelo evento 014 a 'uma' ou 'duas' posições atraz..
     			if (($passou_pelo_014 == 2) and ($passou_pelo_022 != 1))						        
@@ -165,7 +166,7 @@ for($pos_dia=1;$pos_dia<=$qtd_dias;$pos_dia++)
 			    $passou_pelo_014 = 1;
 			
 			if($cod_evento == '022')
-			   $passou_pelo_022 = 1;
+			   $passou_pelo_022 = 1;*/
 			
 			if($nao_fatura == 0)
 			{

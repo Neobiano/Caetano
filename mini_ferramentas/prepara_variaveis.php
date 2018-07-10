@@ -160,6 +160,24 @@ for($i=0; $row = $query->fetch(); $i++){
 }
 // DEFINE IN ILHAS - FIM
 
+//dados de retenção
+$chk_master = $_POST['chk_master'];
+$chk_visa = $_POST['chk_visa'];
+$chk_elo = $_POST['chk_elo'];
+$chk_jcb = $_POST['chk_jcb'];
+$chk_ndefinida = $_POST['chk_ndefinida'];
+$corte_retencao = $_POST['corte_retencao'];
+$base_comp_retencao = $_POST['base_comp_retencao'];
+$rd_bandeira = $_POST['rd_bandeira']; //radiobutton
+$select_retencao = $_POST['select_retencao'];
+
+
+//conversão de data no formato 'universal' yyy-mm-dd
+$t_inicial = strtotime($data_inicial);
+$data_inicial_u = date('Y-m-d',$t_inicial);
+
+$t_final = strtotime($data_final);
+$data_final_u = date('Y-m-d',$t_final);
 
 //Conversão Data Texto - Início
 $t_inicial = strtotime($data_inicial);
@@ -279,6 +297,21 @@ for($i=0; $row = $query->fetch(); $i++){
 // VETOR COD_FILA / DESC_FILA - FIM
 
 // VDN's - INÍCIO
+$vdn_92057	 = 'CXA_BLQ_COBR';
+$vdn_92051	= 'CXA_BLQ_COBR_AMZ';
+$vdn_92012	= 'CXA_CONTESTACAO';
+$vdn_92018	= 'CXA_FATURA';
+$vdn_92063	= 'CXA_GERAL_URA';
+$vdn_92061	= 'CXA_MALA_DIRETA';
+$vdn_92541	= 'TRANSF_CONTESTAC_PJ';
+$vdn_92542	= 'TRANSF_PARCELAM_PJ';
+$vdn_92016	= 'CXA_PARCELAMENTO';
+$vdn_92062	= 'CXA_PROGPONTOS';
+$vdn_92014	= 'CXA_RETENCAO';
+$vdn_92056	= 'CXA_BLQ_COBR_PJ';
+$vdn_92530	= 'CXA_RETENCAO_PRE';
+$vdn_92060 = 'CXA_ATEND_EXTERIOR';
+
 $vdn_92001 = 'ATD_CAIXA_NIG';
 $vdn_92002 = 'ATD_CAIXA_PB';
 $vdn_92003 = 'ATD_CAIXA_ECCB';

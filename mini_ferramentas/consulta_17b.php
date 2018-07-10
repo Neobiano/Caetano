@@ -41,28 +41,39 @@
     $texto = "<td><b>FILA &nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>QTDE LIGAÇÕES &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>QTDE LIGAÇÕES* &nbsp</b>
+            	         <span class='tooltiptext'>Quantidade de ligações transferidas à pesquisa de satisfação</span>
+            	      </td>";
+    
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>PESQ. REALIZADAS &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>PESQ. REALIZADAS* &nbsp</b>
+            	         <span class='tooltiptext'>Quantidade de ligações em que houve resposta à pesquisa de satisfação</span>
+            	      </td>";    
     echo incrementa_tabela($texto);   
    
     $texto = "<td><b>REALIZ. (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>SATISFEITO &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>SATISFEITO*</b>
+            	         <span class='tooltiptext'>TOTALMENTE satisfeito</span>
+            	      </td>";      
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>SATISFEITO (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>INSATISFEITO &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>INSATISFEITO*</b>
+            	         <span class='tooltiptext'>TOTALMENTE insatisfeito</span>
+            	      </td>";    
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>INSATISFEITO (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>INDIFERENTE &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>INDIFERENTE*</b>
+            	         <span class='tooltiptext'>TOTALMENTE indiferente</span>
+            	      </td>";    
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>INDIFERENTE (%)&nbsp</b></td>";
@@ -326,17 +337,18 @@
     
     $ilhas = array
     (
-        array("CXA_APP_CARTAO","92522"),        
+        array("CXA_APP_CARTAO","92522"),
         array("AVISO DE VIAGEM","92532"),
-        array("COBRANÇA","92051,92052,92503,92057"),
+        array("COBRANÇA","92051,92052,92503,92057,92511"),
         array("CONTESTAÇÃO","92012,92037,92045,92504,92513"),
         array("GERAL","92018,92021,92033,92019,92020,92032,92063,92061"),
-        array("ILHA PJ","92049,92048,92541,92542"),
-        array("PARCELAMENTO","92016,92022,92034,92523,92008"),
+        array("ILHA PJ","92049,92048,92541,92542,92056"),
+        array("PARCELAMENTO","92016,92022,92034,92523,92528"),
         array("PROGRAMA DE PONTOS","92062,92529,92502"),
         array("RETENÇÃO","92014,92023,92035,92507,92530"),
-        array("TRIAGEM PREVENTIVA","92531,92508")       
-        
+        array("TRIAGEM PREVENTIVA","92531,92508"),
+        array("PERDA & ROUBO","92008")
+       
     );
     
     echo "<div class='w3-container w3-tiny w3-margin w3-padding w3-card-4 w3-border'>";    
@@ -348,28 +360,40 @@
     $texto = "<td><b>VDNs&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>QTDE LIGAÇÕES &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>QTDE LIGAÇÕES* &nbsp</b>
+            	         <span class='tooltiptext'>Quantidade de ligações transferidas à pesquisa de satisfação</span>
+            	      </td>";
+    
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>PESQ. REALIZADAS &nbsp</b></td>";
-    echo incrementa_tabela($texto);
+    $texto = "<td class='tooltip'><b>PESQ. REALIZADAS* &nbsp</b>
+            	         <span class='tooltiptext'>Quantidade de ligações em que houve resposta à pesquisa de satisfação</span>
+            	      </td>";
+    echo incrementa_tabela($texto);   
     
     $texto = "<td><b>REALIZ. (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>SATISFEITO &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>SATISFEITO*</b>
+            	         <span class='tooltiptext'>TOTALMENTE satisfeito</span>
+            	      </td>";    
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>SATISFEITO (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>INSATISFEITO &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>INSATISFEITO*</b>
+            	         <span class='tooltiptext'>TOTALMENTE insatisfeito</span>
+            	      </td>";    
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>INSATISFEITO (%)&nbsp</b></td>";
     echo incrementa_tabela($texto);
     
-    $texto = "<td><b>INDIFERENTE &nbsp</b></td>";
+    $texto = "<td class='tooltip'><b>INDIFERENTE*</b>
+            	         <span class='tooltiptext'>TOTALMENTE indiferente</span>
+            	      </td>";
+
     echo incrementa_tabela($texto);
     
     $texto = "<td><b>INDIFERENTE (%)&nbsp</b></td>";

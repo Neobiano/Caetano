@@ -143,42 +143,111 @@
 			return ($texto);
 		}
 		
-		function imprimeGraficoLinha($dados_grafico, $titulo,$largura, $altura, $max, $min, $tipo, $parametros_adicionais)
-		        {
-					if ($titulo == 'Dica: Utilize o scroll do mouse para modificar o zoom do gráfico. Clique, segure e arraste para percorrer.')
-					{
-						$dica = "titleTextStyle: {color:'red'},";
-						$titulo = "";
-					}
-					else $dica = "";												    
-					
-									
-		           $grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		                         <script type="text/javascript">'.
-		                             "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-		                              google.charts.setOnLoadCallback(drawChart);        
-		                              function drawChart() 
-		                              {
-		                                var data = google.visualization.arrayToDataTable([".$dados_grafico."]);                    
-		                                var options = 
-		                                {
-		                                  title: '".$titulo."',
-		                                  curveType: 'function',
-		                                  $parametros_adicionais
-                                                                                     	                                  
-                                            
-		                                  legend: { position: 'top' }
-		                                };
-		                        
-		                                var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));
-		                        
-		                                chart.draw(data, options);
-		                              }
-		                        </script> ".
-		                        '<div id="curve_chart" style="margin-top: 50px; width: auto; height: '.$altura.'px"></div>';                                                  
-		                                   
-		            return $grafico;
-		        }
+		
+		function imprimeGraficoLinha2($dados_grafico, $titulo,$largura, $altura, $max, $min, $tipo, $parametros_adicionais)
+		{
+		    if ($titulo == 'Dica: Utilize o scroll do mouse para modificar o zoom do gráfico. Clique, segure e arraste para percorrer.')
+		    {
+		        $dica = "titleTextStyle: {color:'red'},";
+		        $titulo = "";
+		    }
+		    else $dica = "";
+		    
+		    
+		    $grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                         <script type="text/javascript">'.
+                         "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+                              google.charts.setOnLoadCallback(drawChart);
+                              function drawChart()
+                              {
+                                var data = google.visualization.arrayToDataTable([".$dados_grafico."]);
+                                var options =
+                                {
+                                  title: '".$titulo."',
+                                  curveType: 'function',
+                                  $parametros_adicionais
+                                  
+                                  
+                                  legend: { position: 'top' }
+                                };
+                                
+                                var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));
+                                
+                                chart.draw(data, options);
+                              }
+                        </script> ".
+                        '<div id="curve_chart" style="margin-top: 50px; width: auto; height: '.$altura.'px"></div>';
+                                  
+                                  return $grafico;
+		}
+		
+		
+		function imprimeGraficoLinha($dados_grafico, $titulo,$largura, $altura, $max, $min, $tipo, $parametros_adicionais,$dadoscolunas='')
+        {
+			if ($titulo == 'Dica: Utilize o scroll do mouse para modificar o zoom do gráfico. Clique, segure e arraste para percorrer.')
+			{
+				$dica = "titleTextStyle: {color:'red'},";
+				$titulo = "";
+			}
+			else $dica = "";												    
+			
+			if ($dadoscolunas <> '') //para graficos de multiplas series
+		   {
+		       $grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                             <script type="text/javascript">'.
+                                 "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+                                  google.charts.setOnLoadCallback(drawChart);
+
+                                  function drawChart() 
+                                  {
+    		                         var data = new google.visualization.DataTable();  
+                                     $dadoscolunas
+                                     data.addRows([$dados_grafico]);
+                                     var options = 
+                                                    {
+                                                      title: '".$titulo."',                                                     
+                                                      curveType: 'function',
+                                                      $parametros_adicionais                                                                                            	                                                                                      
+                                                      legend: { position: 'top' },
+                                                                                                          
+                                                    };  
+                                     var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));                        
+                                     chart.draw(data, options);
+                                   }             
+                                 </script> ".
+                               '<div id="curve_chart" style="margin-top: 50px; width: auto; height: '.$altura.'px"></div>';                                                                                                                               
+		   }    			
+		   else
+		   {    
+             $grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                         <script type="text/javascript">'.
+                             "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
+                              google.charts.setOnLoadCallback(drawChart);        
+                              function drawChart() 
+                              {
+                                var data = google.visualization.arrayToDataTable([".$dados_grafico."]);                    
+                                var options = 
+                                {
+                                  title: '".$titulo."',
+                                  vAxis: {minValue: 0,maxValue: 100},  
+                                    
+                                  curveType: 'function',
+                                  $parametros_adicionais
+                                                                             	                                  
+                                    
+                                  legend: { position: 'top' }
+                                };
+                        
+                                var chart = new google.visualization.$tipo(document.getElementById('curve_chart'));
+                        
+                                chart.draw(data, options);
+                              }
+                        </script> ".
+                        '<div id="curve_chart" style="margin-top: 50px; width: auto; height: '.$altura.'px"></div>';                                                  
+		   }                       
+           
+		   return $grafico;
+        }
         
         function imprimeGraficoPizza($dados_pizza,$nome)
         {
@@ -205,4 +274,7 @@
         	 
         	return $nome_p;
         }
+        
+        
+        
 ?>

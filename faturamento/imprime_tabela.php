@@ -141,6 +141,7 @@
     //define variáveis final total geral - mensal
     $pg_total_mes; // pagamento total mês - sem adicionais (acp, etc)
     $mensal_total_ca = 0;
+    $mensal_saldocb = 0;
     $mensal_total_qtd_ura = 0;
     $mensal_total_bruto = 0;
     $mensal_total_desc_ansm = 0;
@@ -156,10 +157,10 @@
     //define vetores das ilhas 
     $vet_retencao = array('73','77','81','116');
     $vet_aviso_viagem = array('125');
-    $vet_triagem = array('150');
+    $vet_triagem = array('150','138');
     $vet_parcelamento = array('72','76','80','111');
     $vet_contestacao = array('60','88','90','93');//tirei
-    $vet_pontos = array('87','91','94','120'); //tirei
+    $vet_pontos = array('87','91','94','120','139'); //tirei
     $vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
     $vet_geral_premium = array('82','83','98','107','85','84','96','97'); //Reagregando as filas premium 
 
@@ -190,11 +191,11 @@
 
     //define 'in' das ilhas
     $ilha_retencao = "'73','77','81','85','116'";
-    $ilha_triagem = "'150'";
+    $ilha_triagem = "'150','138'";
     $ilha_aviso_viagem = "'125'";
     $ilha_parcelamento = "'72','76','80','84','111'";
     $ilha_contestacao = "'60','88','90','93','96'";
-    $ilha_pontos = "'87','91','94','97','120'";
+    $ilha_pontos = "'87','91','94','97','120','139'";
     $ilha_pj = "'99','101','110'";/*'100', ,'100','130'*/
     $ilha_100 = "'100'";
     $ilha_130 = "'130'";
@@ -253,6 +254,7 @@
     	$perc_sc = 0;
     
     	$total_ca = 0;
+    	$total_saldocb = 0;
     	
     	$valor_bruto_diario = 0;
     	
@@ -379,13 +381,13 @@ echo "<div class='w3-margin-left w3-tiny'><b>SHORTCALL(%):</b> Percentual de SHO
 echo "<div class='w3-margin-left w3-tiny'><b>CA:</b> Total de Chamadas Faturadas</div>";
 echo "<div class='w3-margin-left w3-tiny'><b>DNS:</b> Dispersão de Nível de Serviço por Faixa de Horário</div>";
 echo "<div class='w3-margin-left w3-tiny'><b>IQM:</b> Índice de Qualidade Mensal</div></div>";
-echo "<br>";
-// echo "<div class = 'w3-leftbar w3-border-black w3-margin-left'><div class='w3-margin-left w3-tiny'><b>Regra ACP:</b> Para a FILAS de ATENDIMENTO HUMANO de RETENÇÃO, será aplicado ACP de 25% unicamente para os atendimentos desta fila que resultarem  em retenção do contrato do cliente com a CAIXA, conforme definido no item 7.14.2.1 do Anexo do Contrato.<br>Para as FILAS de ATENDIMENTO HUMANO PJ e TRIAGEM PREVENTIVA, será concedido ACP conforme definido abaixo:<br>- Caso o NS seja superior a 95% será concedido ACP de 15%;<br>- Caso o NS seja superior a 98% será concedido ACP de 20%.</div></div>";
+echo "<br>"; 
 echo "<hr>";
 
 // imprime dia a dia - início
+//for($pos_dia=28; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
 for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
-{
+{ 
     //$pos_dia= 10;
 	//utilizado para avaliar a concessão de ACP de filas com NS < 90%
 	$ns_todas_filas_2 = 1; //regra mensal
@@ -434,8 +436,10 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	echo '<td><b>TMA</b></td>';
 	echo "<td><b>SHORTCALL</b></td>";
 	echo "<td><b>SHORTCALL(%)</b></td>";
-	echo "<td><b>CA</b></td>";
+	echo "<td><b>CA</b></td>";	
 	echo "<td><b>VALOR BRUTO</b></td>";
+	echo "<td><b>CB*</b></td>";
+	echo "<td><b>DCB*</b></td>";
 	echo '</tr>';
 	
 	//regra mensal * consultas
@@ -444,8 +448,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	
 	$menor_ns_faixa_horario = 1;
 	$menor_ns_faixa_horario_premium = 1;
-	
-	
+		
 	$sql = "select min(A.n_nsa) menor_n_nsa from  (
         	select datepart(hh,data_hora) as hora,
             			datepart(minute,data_hora)/30 as minuto,
@@ -699,6 +702,24 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
 	
+	
+	//APP - BRUTO
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_app)																	
+																) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
 	//verificando se a fila é de retenção
 	
 	//retencao
@@ -718,7 +739,25 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
-		
+	
+	
+	//retencao BRUTO
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
+																	SELECT CALLID,  (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_retencao)																	
+																) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++){
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// triagem preventiva
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -737,6 +776,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			continue; // verifica se é uma fila válida
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
+	}
+	
+	
+	// triagem preventiva - BRUTO
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_triagem)																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
 	}
 	
 	
@@ -760,6 +819,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
 	
+	
+	// aviso de viagem - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_aviso_viagem)																	
+																) AS A
+							GROUP BY COD_FILA");
+	
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// parcelamento
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -780,6 +859,27 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
+	
+	// parcelamento - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_parcelamento)																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 
 	// contestacao	
 	/*
@@ -814,6 +914,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
+	
+	// contestacao - BRUTO
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID,(COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_contestacao)																	
+																) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
 		
 	// programa de pontos
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
@@ -834,7 +954,28 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
-		
+	
+	
+	// programa de pontos - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pontos)
+																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// pj
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -853,6 +994,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
+	}
+	
+	// pj - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
+                                                                    AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pj)																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
 	}
 		
 	
@@ -876,6 +1037,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
         $$nome_variavel_ca = $row['TOTAL'];
     }
     
+    // 130 - bruto
+    $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
+                                                                    SELECT CALLID, (COD_FILA) COD_FILA
+                                                                    FROM TB_EVENTOS_DAC
+                                                                    WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_130)
+                                                                    
+                                                                 ) AS A
+                            GROUP BY COD_FILA");
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {
+        $cod_fila = $row['COD_FILA'];
+        
+        if (!in_array($cod_fila, $vet_todas_filas))
+            continue; // verifica se é uma fila válida
+            
+            $nome_variavel_ca = "cabruto_$cod_fila";
+            $$nome_variavel_ca = $row['TOTAL'];
+    }
+    
 	
 	// 100
     $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
@@ -895,6 +1076,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
         
         $nome_variavel_ca = "ca_$cod_fila";
         $$nome_variavel_ca = $row['TOTAL'];
+    }
+    
+    // 100 - bruto
+    $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
+                                                                    SELECT CALLID, (COD_FILA) COD_FILA
+                                                                    FROM TB_EVENTOS_DAC
+                                                                    WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_100)
+                                                                   
+                                                                 ) AS A
+                            GROUP BY COD_FILA");
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {
+        $cod_fila = $row['COD_FILA'];
+        
+        if (!in_array($cod_fila, $vet_todas_filas))
+            continue; // verifica se é uma fila válida
+            
+            $nome_variavel_ca = "cabruto_$cod_fila";
+            $$nome_variavel_ca = $row['TOTAL'];
     }
     
 	// caixa empregado
@@ -917,6 +1118,26 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
 		
+	// caixa empregado - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_caixa_empregado)
+																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// deficiente auditivo
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -937,7 +1158,28 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
-		
+	
+	// deficiente auditivo - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_deficiente_auditivo)
+																	
+																) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// mala direta
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -959,6 +1201,27 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$$nome_variavel_ca = $row['TOTAL'];
 	}
 		
+	// mala direta - bruto
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_mala_direta)
+																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}
+	
 	// bloqueio cobranca
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
@@ -978,6 +1241,27 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		
 		$nome_variavel_ca = "ca_$cod_fila";
 		$$nome_variavel_ca = $row['TOTAL'];
+	}
+	
+	// bloqueio cobranca
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_bloqueio_cobranca)
+																	
+																 ) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
 	}
 		
 	// geral (normal + premium)
@@ -1000,6 +1284,25 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$$nome_variavel_ca = $row['TOTAL'];
 	}	
 
+	// geral (normal + premium) - BRUTO
+	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
+																	SELECT CALLID, (COD_FILA) COD_FILA
+																	FROM TB_EVENTOS_DAC
+																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_geral_normal,$ilha_geral_premium)
+																	
+																) AS A
+							GROUP BY COD_FILA");
+	$query->execute();
+	for($i=0; $row = $query->fetch(); $i++)
+	{
+	    $cod_fila = $row['COD_FILA'];
+	    if (!in_array($cod_fila, $vet_todas_filas))
+	        continue; // verifica se é uma fila válida
+	        
+	        $nome_variavel_ca = "cabruto_$cod_fila";
+	        $$nome_variavel_ca = $row['TOTAL'];
+	}	
 	
 	$menor_ns_filas = 1;
 	// PRIMEIRA TABELA		
@@ -1023,6 +1326,10 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$var_ca = "ca_$cont";
 		$valor_ca = $$var_ca;
 		
+		$var_cabruto = "cabruto_$cont";
+		$valor_cabruto = $$var_cabruto;
+				
+		
 		$var_tma = "tma_$cont";
 		$valor_tma = $$var_tma;
 		
@@ -1040,7 +1347,10 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		
 		if( ($valor_b > 0) || ($valor_a > 0) || ($valor_tma > 0) || ($valor_c > 0) || ($valor_sc > 0) )
 		{		
-			echo "<tr>";
+		    $saldocb = $valor_cabruto - $valor_ca;
+		    $total_saldocb = $total_saldocb + $saldocb; // 
+		    
+		    echo "<tr>";
 			
 			$imprimir_fila_atual = "nome_fila_$cont"; //trocar cod_fila pelo nome
 			$imp_fila = $$imprimir_fila_atual;
@@ -1099,6 +1409,8 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			echo "<td>$valor_tma</td>";				
 			echo "<td>$valor_sc</td>";
 			
+			
+			
 			// percentual shortcall
 			if ($valor_sc == '0') 
 				$perc_sc = 0;
@@ -1129,14 +1441,19 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			$valor_ca = $va_novo;
 			//arredondamento - fim
 
-			echo "<td>$valor_ca</td>";
+			echo "<td>$valor_ca</td>";			
 			$$var_ca = $valor_ca;
 			$total_ca = $total_ca + $valor_ca; // $total_ca
+			
+			
+			
 			
 			// imprime pg e soma ao pg_diário
 			$valor_pg = $valor_ca * $valor_atendimento;
 			$imprime_valor_pg = number_format($valor_pg, 2, ',', '.');
-			echo "<td>R$ $imprime_valor_pg</td>";			
+			echo "<td>R$ $imprime_valor_pg</td>";	
+			echo "<td>$valor_cabruto</td>";
+			echo "<td>$saldocb</td>";
 			echo "</tr>";
 		}// final if( ($valor_b > 0) || ($valor_a > 0) || ($valor_tma > 0) || ($valor_c > 0) || ($valor_sc > 0) )			
 	}//final IMPRESSÃO - PRIMEIRA TABELA
@@ -1156,6 +1473,9 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	echo "<td><b>ACP APLICADO</b></td>";
 	echo "<td><b>Q. ACP</b></td>";
 	echo "<td><b>AD. ACP</b></td>";
+	echo "<td><b>ACP APLICADO(RET)</b></td>";
+	echo "<td><b>Q. ACP(RET)</b></td>";
+	echo "<td><b>AD. ACP(RET)</b></td>";
 	echo "<td><b>APLI. DE MULT. ACP</b></td>";
 	echo '</tr>';
 		
@@ -1182,7 +1502,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		$vet_contestacao_com_100 = array_merge($vet_contestacao,$vet_100);
 		
 		//se há qtde de ligações a serem remuneradas
-		if( ($valor_ca > 0) )
+		if(($valor_ca > 0))
 		{
 		   if (in_array("$cont", $vet_retencao) or in_array("$cont", $vet_triagem) 
 			           or in_array("$cont", $vet_parcelamento_com_130) or in_array("$cont", $vet_perda_roubo)
@@ -1207,73 +1527,10 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			}
 			else if (in_array("$cont", $vet_contestacao_com_100) or in_array("$cont", $vet_pontos) )
 			{
-			    
-    				//if (in_array("$cont", $vet_contestacao_com_100))				
-    				//  $ilha_filtro = $ilha_contestacao.",'100'";				
-    			//	else if (in_array("$cont", $vet_pontos))	
-    			//	  $ilha_filtro = $ilha_pontos;
-    								 
-    				/* $query = $pdo->prepare("select count(*) cont from (
-    																	select distinct  callid from tb_eventos_dac ted 
-    																	where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-    																	AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' 						
-    																	AND ted.COD_FILA IN ('$cont')
-    																	and ted.callid in ( --codigo seleciona todas as chamadas com o mesmo callid e iniciada 'antes' 
-    																						select ted2.callid from tb_eventos_dac ted2 
-    																						where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-    																						AND ted2.CALLID IS NOT NULL AND ted2.TEMPO_ATEND > '0'
-    																						and ted2.CALLID = ted.CALLID
-    																						and ted2.data_hora < ted.data_hora
-    																						)
-    																	and ted.callid not in ( --codigo seleciona as chamadas com o mesmo callid oriundas da mesma ilha iniciada 'antes' 
-    																						select ted3.callid from tb_eventos_dac ted3 
-    																						where ted3.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-    																						AND ted3.CALLID IS NOT NULL AND ted3.TEMPO_ATEND > '0'
-    																						and ted3.CALLID = ted.CALLID
-    																						and ted3.data_hora < ted.data_hora
-    																						and ted3.cod_fila in ($ilha_filtro)
-    																						)
-    																	
-    																						
-    																  ) as A
-    				  						");															 				
-    				$query->execute();
-    				for($tt=0; $row = $query->fetch(); $tt++)
-    				{
-    					$qtde_acp = $row['cont']; 
-    					//$fator = 1.25; RETIRADO NOVO FORMATO ACP
-    				} */
-    				
-    				//basicamente anulando o codigo acima
+			       				    				    			
     				$qtde_acp = $valor_ca;
     				
-    			} /*RETIRADO - AGORA TODAS AS PREMIUN RECEBEM 
-    			recebem 05% de ACP para atendimentos direto da ura, por isso a clausula NOT IN
-    			else if (in_array("$cont", $vet_todas_premium)) 
-    			{			  
-    					$query = $pdo->prepare(" select count(*) cont from (
-    																			select  distinct callid from tb_eventos_dac ted 
-    																			where ted.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-    														  					and ted.callid is not null and ted.tempo_atend > '0' 
-    														  					and ted.cod_fila in ('$cont')
-    														  					and ted.callid NOT in ( 
-    														  										select ted2.callid from tb_eventos_dac ted2 
-    																								where ted2.data_hora between '$qual_mes/$pos_dia/$qual_ano' and '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
-    																								and ted2.callid is not null and ted2.tempo_atend > '0'
-    																								and ted2.callid = ted.callid
-    																								and ted2.data_hora < ted.data_hora
-    																							  )
-    																		) as A
-    						  						 ");
-    												 
-    					
-    					$query->execute();
-    					for($tt=0; $row = $query->fetch(); $tt++)
-    					{
-    						$qtde_acp = $row['cont']; 
-    						//$fator = 1.25; RETIRADO NOVO FORMATO ACP
-    					}				
-    			}*/ 
+    		}
 			
 			$imp_acp_aplicado = 0.00;
 			//Agregando filas de acordo as particulares de remuneração de ACP
@@ -1375,10 +1632,51 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			//--------------calculando adicional ACP-----------------
 			//$qtde_acp = 0; //código para anular a implementação de adição de retidos
 			//$fator = 1;
-			 
-			$p_acp = 0;
-			$p_acp =  (($aplicacao_ansm/$valor_ca)*$qtde_acp); //parte de retidos em R$
-			$ad_acp = (($p_acp*$fator) - $p_acp); 
+			$ad_acp_ret = 0;
+			$qtde_retacp = 0;
+			$imp_ad_acp_ret = 0;
+			$imp_acp_aplicado_ret = 0;
+			
+			//Agregando a FILA RETENÇÃO PREMIUM '85' para permitir a aplicação da regra das ligações retidas
+			$vet_retencao_ret_premium = $vet_retencao;
+			array_push($vet_retencao_ret_premium,'85');
+			if (in_array($cont, $vet_retencao_ret_premium))
+			{			    
+			    $retquery = $pdo->prepare("
+                                           select count(distinct t.callid) qtde 
+                                           from tb_dados_retencao t 
+                                           inner join tb_eventos_dac t2 on (t2.callid = t.callid) 
+                                           where t.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+                                           and t2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
+                                           and t.tipo_retencao not like  '%CARTÃO NÃO RETIDO%' 
+                                            and t2.cod_fila = $cont                                                                           
+                                         ");
+			    $retquery->execute();
+			    for($b=0; $rowret = $retquery->fetch(); $b++)
+			    {
+			        $qtde_retacp = $rowret['qtde'];
+			    }
+			    
+			    			    
+			    //retirando a quantidade de chamadas retidas do calculo de acp 'normal' 
+			    $qtde_acp = $qtde_acp - $qtde_retacp;
+			    
+			    //calculando ACP de retenção
+			    $p_acp_ret =  (($aplicacao_ansm/$valor_ca) * $qtde_retacp);
+			    $ad_acp_ret = (($p_acp_ret * 1.25) - $p_acp_ret);
+			    
+			    if ($ad_acp_ret > 0) 		
+			    {    
+			      $imp_acp_aplicado_ret = 25;
+			      $imp_ad_acp_ret = number_format($ad_acp_ret, 2, ',', '.');
+			    }
+			    else
+			      $imp_acp_aplicado_ret = 0;
+			}			    
+			
+			
+			$p_acp =  (($aplicacao_ansm/$valor_ca) * $qtde_acp); 
+			$ad_acp = (($p_acp* $fator) - $p_acp); 
 			$imp_ad_acp = number_format($ad_acp, 2, ',', '.');
 												
 			
@@ -1386,10 +1684,15 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			{
 				$imp_acp_aplicado = 0;
 			}
-			echo "<td>$imp_acp_aplicado%</td>";
 			
+			echo "<td>$imp_acp_aplicado%</td>";			
 			echo "<td>$qtde_acp</td>";
 			echo "<td>R$ $imp_ad_acp</td>"; 
+			
+			/*ACP de Retenção apenas*/
+			echo "<td>$imp_acp_aplicado_ret%</td>";			
+			echo "<td>$qtde_retacp</td>";
+			echo "<td>R$ $imp_ad_acp_ret</td>"; 
 			
 			/**codigo antigo, retirado
 			// "aplicação acp", mas retirando a parte de retidos que serão remunerados somente com adicional de retenção, no restante 
@@ -1403,7 +1706,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 				$imp_aplicacao_acp = (($aplicacao_ansm - $p_acp)* (1+($imp_acp_aplicado)/100)) + ($p_acp + $ad_acp);
 			}*/
 			
-			$imp_aplicacao_acp =  $aplicacao_ansm + $ad_acp;
+			$imp_aplicacao_acp =  $aplicacao_ansm + $ad_acp + $ad_acp_ret;
 			$imprime_imp_aplicacao_acp = number_format($imp_aplicacao_acp, 2, ',', '.');
 			echo "<td>R$ $imprime_imp_aplicacao_acp</td>";
 			
@@ -1611,13 +1914,20 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	$mensal_total_qtd_ura = $mensal_total_qtd_ura + $qtd_ura;
 		
 	// imprime total humano
-	$imprime_total_ca = number_format($total_ca, 0, ',', '.');
+	$imprime_total_ca = number_format($total_ca, 0, ',', '.');	
 	echo '<tr>';
 	echo "<td>QUANTIDADE DE ATENDIMENTOS HUMANOS</td>";
 	echo "<td>$imprime_total_ca</td>";
 	echo '</tr>';
 	
+	$imprime_total_saldocb = number_format($total_saldocb, 0, ',', '.');
+	echo '<tr>';
+	echo "<td>ATENDIMENTOS RECORRENTES NÃO REMUNERADOS</td>";
+	echo "<td>$imprime_total_saldocb</td>";
+	echo '</tr>';
+	
 	$mensal_total_ca = $mensal_total_ca + $total_ca;
+	$mensal_saldocb = $mensal_saldocb + $total_saldocb;
 		
 	// imprime total eletrônico + humano
 	$total_dia_hum_ura = $qtd_ura + $total_ca;
@@ -1731,6 +2041,8 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 		
 		$total_ca = 0;
 		
+		$total_saldocb = 0;
+		
 		$valor_bruto_diario = 0;
 		
 		$total_ansm = 0;
@@ -1765,6 +2077,12 @@ $imprime_mensal_total_ca = number_format($mensal_total_ca, 0, ',', '.');
 echo '<tr">';
 echo "<td>QUANTIDADE DE ATENDIMENTOS HUMANOS</td>";
 echo "<td>$imprime_mensal_total_ca</td>";
+echo '</tr>';
+
+$imprime_mensal_saldocb = number_format($mensal_saldocb, 0, ',', '.');
+echo '<tr">';
+echo "<td>ATENDIMENTOS RECORRENTES NÃO REMUNERADOS</td>";
+echo "<td>$imprime_mensal_saldocb</td>";
 echo '</tr>';
 
 $imprime_mensal_total_qtd_ura = number_format($mensal_total_qtd_ura, 0, ',', '.');

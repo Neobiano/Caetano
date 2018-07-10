@@ -19,13 +19,10 @@
   <script src="http://cdn.datatables.net/plug-ins/1.10.13/sorting/date-eu.js"></script>    
   <link rel="stylesheet" type="text/css" href="css/dataTables.css">  
   <script type="text/javascript" charset="utf8" src="js/dataTables.js"></script>
-
-
-    
-
+  
     	
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">    
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">    
 
 		//---------------------RELOAD DA PÁGINA-------------------
     	 var time = new Date().getTime();
