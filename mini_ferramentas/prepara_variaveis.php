@@ -172,6 +172,31 @@ $rd_bandeira = $_POST['rd_bandeira']; //radiobutton
 $select_retencao = $_POST['select_retencao'];
 
 
+//-------Relatório 31 - Pesquisa de Satifação------------//
+$select_tipo_31 = $_POST['select_tipo_31'];
+$rd_falhaidpos_31 = $_POST['rd_falhaidpos_31']; 
+
+
+if (isset($_POST['pesq_operador_31']) )
+   $pesq_operador_31 = $_POST['pesq_operador_31'];
+else
+   $pesq_operador_31 = 0;
+
+if (isset($_POST['pesq_fila_31']))    
+   $pesq_fila_31 = $_POST['pesq_fila_31'];
+else
+   $pesq_fila_31 = 0;
+
+
+if (trim($pesq_operador_31)=='' )
+   $pesq_operador_31 = 0;
+
+if (trim($pesq_fila_31)=='' )
+    $pesq_fila_31 = 0;
+       
+
+
+
 //conversão de data no formato 'universal' yyy-mm-dd
 $t_inicial = strtotime($data_inicial);
 $data_inicial_u = date('Y-m-d',$t_inicial);

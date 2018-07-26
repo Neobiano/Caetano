@@ -216,6 +216,11 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_localiza_atendimentos").hide();
     	$("#div_select_filas").hide();
     	$("#div_select_retencao").hide();
+    	$("#div_select_tipo_31").hide();
+    	$("#div_rd_falhaidpos_31").hide();
+    	
+    	$("#div_pesq_fila_31").hide();
+    	$("#div_pesq_operador_31").hide();    	
     	$("#div_corte_retencao").hide();
     	$("#div_base_comp_retencao").hide();
     	
@@ -774,7 +779,29 @@ $(document).ready(function(){
 						$("#txt_data_final").show();
 					    $("#txt_detalhes").text("O enfoque do relatório os indices de adesão da campanha Upgrade/Mastercard");
 					    $("#btn_pesquisar").html("Consultar");					    	    									    																
-						break;																															
+						break;
+						
+					case '31':
+					    hideAll();	
+					    $("#div_datas").show();					    	
+					    $("#div_button").show();
+						$("#div_tex_detalhes").show();												
+						$("#data_final").show();
+						$("#div_select_tipo_31").show();
+						$("#div_rd_falhaidpos_31").show();
+						
+						$("#div_pesq_fila_31").show();
+				    	$("#div_pesq_operador_31").show();
+												
+						$("#txt_data_inicial").html("Data Inicial:");
+						$("#txt_data_final").show();
+					    $("#txt_detalhes").text("O enfoque do relatório é monitorar os índices de qualidade de atendimento baseado na resposta '3' (Cordialidade do Operador) da pesquisa de satifação");
+					    $("#btn_pesquisar").html("Consultar");
+					    $('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+					    					    
+						//habilitando o filtro por bandeira	    											
+    	    			
+					    break;																															
 						
 		}
 	});
@@ -1024,6 +1051,7 @@ function diminuiFrame(){
         				<option value="23">Pesquisa de Satisfação - Detalhamento</option>
         				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
         				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
+        				<option value="31">Pesquisa de Satisfação - Campanha Operador/Fila</option>
         				<option value="29">Retenção ATC - Análise de Dados</option>
         				<option value="30">Campanha - MASTERCARD - Análise de Dados</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
@@ -1167,14 +1195,24 @@ function diminuiFrame(){
     			</select>		
     		</div>
     		
-    		<div id="div_corte_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
-    			<b>Min. Atendimentos:</b>
-    			<input size='3' id="corte_retencao" type='text' name="corte_retencao" value='30' onkeypress='return SomenteNumero(event, this,4)'>		
+    		<!-- CAIXA DE SELEÇÃO DADOS DE RETENÇÃO-->
+    		<div id="div_select_tipo_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Modelo:</b>
+    			<select id="select_tipo_31" name="select_tipo_31">  
+    			    <option value="00">Por Operador/Fila</option>   				
+    				<option value="01">Por Operador</option>
+    				<option value="02">Por Fila</option>    	    				    				   							    			
+    			</select>		
+    		</div>    		    		    		    		    	
+    		
+    		<div id="div_pesq_fila_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Fila:</b>
+    			<input size='6' id="pesq_fila_31" type='text' name="pesq_fila_31" value='' onkeypress='return SomenteNumero(event, this,4)'>		
     		</div>
     		
-    		<div id="div_base_comp_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
-    			<b>Dias Comparação:</b>
-    			<input size='3' id="base_comp_retencao" type='text' name="base_comp_retencao" value='7' onkeypress='return SomenteNumero(event, this,2)'>		
+    		<div id="div_pesq_operador_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Operador</b>
+    			<input size='6' id="pesq_operador_31" type='text' name="pesq_operador_31" value='' onkeypress='return SomenteNumero(event, this,2)'>		
     		</div>
 		
     		<!-- CAIXA DE SELEÇÃO "OPERADOR / SUPERVISOR" -->
@@ -1403,9 +1441,32 @@ function diminuiFrame(){
               	<input class='w3-margin-8' type="radio" checked="checked" id='rd_bandeira' name='rd_bandeira' value = ''>  
               	Todas &nbsp &nbsp           
             	</label>
-        	</div>        
-            
+        	</div>                                           
         </div>
+        
+        <div id="div_rd_falhaidpos_31" class="w3-container">
+            	<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Falha IDPos:</b> </div>
+            	<div class='w3-left'>     			                
+                	<label class="container">
+                  		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' checked="checked" value = 'EXCLUIR'>
+                  		EXCLUIR &nbsp &nbsp            
+                	</label>
+                </div>    
+                   			    		
+              	<div class='w3-left'>     			                
+                	<label class="container"> 
+                  		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'INCLUIR'>
+                  		INCLUIR &nbsp &nbsp            
+                	</label>           
+                </div>                                
+                
+                <div class='w3-left'>     			                
+                    <label class="container"> 
+                  		<input class='w3-margin-8' type="radio" id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'SOMENTE'>
+                  		SOMENTE &nbsp &nbsp             
+                	</label>
+                </div>                                                      
+            </div>
 	
     	<div id="div_perg_satisfacao" class="w3-container">  
     		<div>

@@ -15,7 +15,7 @@
 <div class="w3-modal-content" style="width:100%;height:100%;position:absolute;top:0;right:0;padding:0;margin:0;">
   <div class="w3-container w3-center w3-margin w3-padding-64">
 	<img src="loading.gif" style="width:100px;">
-	<p class="w3-text-black w3-center" style="margin-left:1px;"><font class="w3-small w3-wide"><b>CARREGANDO</b></font></p>
+	<p class="w3-text-black w3-center" style="margin-left:1px;"><font class="w3-small w3-wide"><b>CARREGANDOs</b></font></p>
   </div>
 </div>
 </div>
@@ -231,6 +231,10 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         
     case '30':
         include "consulta_30.php"; // Retenção
+        break;
+        
+    case '31':
+        include "consulta_31.php"; // Pesquisa de Satisfação - Campanha
         break;
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS

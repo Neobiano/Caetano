@@ -46,17 +46,17 @@ $(document).ready(function() {
     	case 'recebidas':
     	    $sql ="	 set nocount on; 
        
-                     declare @T TABLE(callid varchar(50),
+                     declare @T TABLE(callid varchar(100),
                                         data_hora datetime,
                                         cod_fila int,
                                         tempo_espera int,
                                         tempo_consulta_mudo int,
                                         tempo_atend int,
                                         id_operador int,
-                                        desc_operador varchar(50),
-                                        ds_motivo varchar(50),
-                                        ds_submotivo varchar(50),
-                    					CPF varchar(20),
+                                        desc_operador varchar(100),
+                                        ds_motivo varchar(100),
+                                        ds_submotivo varchar(100),
+                    					CPF varchar(100),
                     					BASE char(3)                					
                                     ); 
                      insert @T exec sp_CERATFO_radar_cartoes_query30b '$data_inicial',1,64
@@ -298,7 +298,7 @@ $(document).ready(function() {
     echo $cabecalho;
     echo '</tr></thead><tbody>';
 
-        //echo $sql;			
+        echo $sql;			
         $query = $pdo->prepare($sql);
         $query->execute();
         for($i=0; $row = $query->fetch(); $i++)

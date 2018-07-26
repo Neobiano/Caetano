@@ -192,21 +192,21 @@ $(document).ready(function(){
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_1" name="chk_1" value = "1">01 &nbsp &nbsp </div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_2" name="chk_2" value = "2" >02 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_3" name="chk_3" value = "3">03 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_4" name="chk_4" value = "4" >04 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_5" name="chk_5" value = "5" >05 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_6" name="chk_6" value = "6" >06 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_7" name="chk_7" value = "7" >07 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_8" name="chk_8" value = "8" >08 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_4" name="chk_4" value = "4" checked>04 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_5" name="chk_5" value = "5" checked>05 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_6" name="chk_6" value = "6" checked>06 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_7" name="chk_7" value = "7" checked>07 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_8" name="chk_8" value = "8" checked>08 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_9" name="chk_9" value = "9" >09 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_10" name="chk_10" value = "10">10 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_11" name="chk_11" value = "11" >11 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_11" name="chk_11" value = "11" checked>11 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_12" name="chk_12" value = "12" >12 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_13" name="chk_13" value = "13" >13 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_14" name="chk_14" value = "14" >14 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_15" name="chk_15" value = "15" >15 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_16" name="chk_16" value = "16">16 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_17" name="chk_17" value = "17">17 &nbsp &nbsp</div>
-	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_18" name="chk_18" value = "18" >18 &nbsp &nbsp</div>
+	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_18" name="chk_18" value = "18" checked>18 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_19" name="chk_19" value = "19">19 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_20" name="chk_20" value = "20" >20 &nbsp &nbsp</div>
 	<div class="div_dia"> <input class="w3-margin-8 ckb" type="checkbox" id="chk_21" name="chk_21" value = "21" >21 &nbsp &nbsp</div>
@@ -336,8 +336,8 @@ DIV 3 - FIM -->
 		<div class="w3-left w3-padding">
 		
 			<p id="txt_glosa" class="w3-margin-8"><b>Glosas (Quantidade) / IQF / Acertos:</b></p>
-			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='0' onkeypress='return SomenteValor(event, this, 3)'></div>		
-			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='100.00' onkeypress='return SomenteValor(event, this, 13)'></div>
+			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='18' onkeypress='return SomenteValor(event, this, 3)'></div>		
+			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='93.32' onkeypress='return SomenteValor(event, this, 13)'></div>
 			
 	
 			<div class="div_dia w3-margin-8">

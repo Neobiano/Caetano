@@ -385,9 +385,20 @@ echo "<br>";
 echo "<hr>";
 
 // imprime dia a dia - início
-//for($pos_dia=28; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
-for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
+//for($pos_dia=8; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
+for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
+    
+    /*verificacao se o dia em questão possui revisao de nivel*/
+    $sql = "select count(*) qtde from tb_fat_revisao_nivel_DNS where data_revista = '$qual_ano-$qual_mes-$pos_dia'";
+    //echo $sqlpremium;
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {
+        $dia_revisao_nivel = $row['qtde'];        
+    } 
+    
     //$pos_dia= 10;
 	//utilizado para avaliar a concessão de ACP de filas com NS < 90%
 	$ns_todas_filas_2 = 1; //regra mensal
@@ -448,173 +459,58 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	
 	$menor_ns_faixa_horario = 1;
 	$menor_ns_faixa_horario_premium = 1;
-		
-	$sql = "select min(A.n_nsa) menor_n_nsa from  (
-        	select datepart(hh,data_hora) as hora,
-            			datepart(minute,data_hora)/30 as minuto,
-        				(
-        					select count(*) from 
-        										(
-        											select distinct * from tb_eventos_dac t1
-        											where t1.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-        											and t1.cod_fila in (sql_filas_ns) 
-        											and t1.id_operador <> 'NULL'  
-        											and t1.tempo_atend > 0  
-        											and t1.tempo_espera <= $ns
-        									   ) a
-        				  where datepart(hh,a.data_hora) = datepart(hh,t.data_hora)
-        				  and (datepart(minute,a.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-        				) at_ns,
-        				(
-        					select count(*) from 
-        										(
-        											select distinct * from tb_eventos_dac t2
-        											where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-        											and t2.cod_fila in (sql_filas_ns) 
-        											and t2.id_operador <> 'NULL'  
-        											and t2.tempo_atend > 0  
-        									   ) b
-        				  where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
-        				  and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-        				)  atendidas,
-        				(
-        					select count(*) from 
-        										(
-        											select distinct * from tb_eventos_dac t3
-        											where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-        											and t3.cod_fila in (sql_filas_ns)         											
-            										and t3.tempo_atend <= 0
-            										and t3.tempo_espera > $ns  
-        									   ) c
-        				  where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
-        				  and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-        				)  abandonadas,
-        				
-        				(
-        						/*atendimentas ate NS do dia*/
-        					(
-        						select count(*) from 
-        											(
-        												select distinct * from tb_eventos_dac t1
-        												where t1.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-        												and t1.cod_fila in (sql_filas_ns) 
-        												and t1.id_operador <> 'NULL'  
-        												and t1.tempo_atend > 0  
-        												and t1.tempo_espera <= $ns
-        											) a
-        						where datepart(hh,a.data_hora) = datepart(hh,t.data_hora)
-        						and (datepart(minute,a.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-        					) 
-        					/
-        					
-                        	case 
-                            	cast (
-                							(
-                								/*Total de Atendimentos*/
-                								(
-                									select count(*) from 
-                														(
-                															select distinct * from tb_eventos_dac t2
-                															where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-                															and t2.cod_fila in (sql_filas_ns) 
-                															and t2.id_operador <> 'NULL'  
-                															and t2.tempo_atend > 0  
-                														) b
-                									where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
-                									and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-                								) 
-                								+
-                								    /*Total de Abandonadas*/
-                								(
-                									select count(*) from 
-                														(
-                															select distinct * from tb_eventos_dac t3
-                															where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-                															and t3.cod_fila in (sql_filas_ns)         															
-                    														and t3.tempo_atend <= 0
-                    														and t3.tempo_espera > $ns  
-                														) c
-                									where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
-                									and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-                								)  
-                							)
-        								as float)
-                             when 0 then 1
-                             else 
-                                cast (
-                							(
-                								/*Total de Atendimentos*/
-                								(
-                									select count(*) from 
-                														(
-                															select distinct * from tb_eventos_dac t2
-                															where t2.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-                															and t2.cod_fila in (sql_filas_ns) 
-                															and t2.id_operador <> 'NULL'  
-                															and t2.tempo_atend > 0  
-                														) b
-                									where datepart(hh,b.data_hora) = datepart(hh,t.data_hora)
-                									and (datepart(minute,b.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-                								) 
-                								+
-                								    /*Total de Abandonadas*/
-                								(
-                									select count(*) from 
-                														(
-                															select distinct * from tb_eventos_dac t3
-                															where t3.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-                															and t3.cod_fila in (sql_filas_ns)         															
-                    														and t3.tempo_atend <= 0
-                    														and t3.tempo_espera > $ns  
-                														) c
-                									where datepart(hh,c.data_hora) = datepart(hh,t.data_hora)
-                									and (datepart(minute,c.data_hora)/30) = (datepart(minute,t.data_hora)/30)
-                								)  
-                							)
-        								as float)
-                                end /*final case*/
-
-        						
-        			) n_nsa
-        
-        	from tb_eventos_dac t
-        	 where t.data_hora between '$qual_ano-$qual_mes-$pos_dia 00:00:00' and '$qual_ano-$qual_mes-$pos_dia 23:59:59'
-        	and t.cod_fila  in (sql_filas_ns)          
-        	group by datepart(hh,t.data_hora), datepart(minute,t.data_hora)/30
-        ) A
-
-        where (abandonadas + atendidas) > 0     
-        ";
-	
+				
 	//------------TODAS AS FILAS----------------//	
-	$sqltodas = str_replace('sql_filas_ns', $in_todas_filas,$sql);  
+	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'TODAS','MENOR_NSA'";
 	//echo $sqltodas;	
-	$query = $pdo->prepare($sqltodas);
+	$query = $pdo->prepare($sql);
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++)
 	{
-	    $nd_nsa = $row['menor_n_nsa'];
+	    $nd_nsa = $row['n_nsa'];
 	    $nd_ns = $nd_nsa / $nsr_valor;
 	}
 	
 	if ($nd_ns < $menor_ns_faixa_horario)
 	    $menor_ns_faixa_horario = $nd_ns;
-	
-	    
+		    
     //------------SOMENTE FILAS PREMIUM----------------//
-	$sqlpremium = str_replace('sql_filas_ns', $in_filas_premium,$sql);
+	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'PREMIUM','MENOR_NSA'";
     //echo $sqlpremium;
-	$query = $pdo->prepare($sqlpremium);	
+	$query = $pdo->prepare($sql);	
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)
     {
-        $nd_nsa = $row['menor_n_nsa'];
+        $nd_nsa = $row['n_nsa'];
         $nd_ns = $nd_nsa / $nsr_premium_valor;
     }    
     
     $menor_ns_faixa_horario_premium = $nd_ns;  
 	       
 	
+    //-------------------MENOR NIVEL DE SERVICO DA FILA------------------//
+    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'MENOR_NSA',0";
+    //echo $sqlpremium;
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    for($i=0; $row = $query->fetch(); $i++)
+    {
+        $nd_nsa = $row['n_nsa'];
+        $srv_cod_fila = $row['cod_fila'];
+        
+        //verificando se a fila é premium pra poder determinar o NS baseado na divisao do NSA/NSR        
+        if (strpos($in_filas_premium,$srv_cod_fila) !== false)
+        {    
+           $menor_ns_filas = ($nd_nsa / $nsr_premium_valor);
+        }
+        else
+        {
+           $menor_ns_filas = ($nd_nsa / $nsr_valor);
+        }
+    }    
+          
+    
+    
 	//consulta sql (a) - [a_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL
 							FROM TB_EVENTOS_DAC
@@ -1304,7 +1200,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	        $$nome_variavel_ca = $row['TOTAL'];
 	}	
 	
-	$menor_ns_filas = 1;
+	
 	// PRIMEIRA TABELA		
 	for($i=0; $i<$num_filas ; $i++)
 	{
@@ -1400,10 +1296,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			$cont_ansm++;
 			$imprime_nivel_de_servico = number_format($nivel_de_servico, 10, ',', '.');
 			
-			$$var_ns = $nivel_de_servico; // variável ns
-			
-			if ($nivel_de_servico < $menor_ns_filas)
-			   $menor_ns_filas = $nivel_de_servico;
+			$$var_ns = $nivel_de_servico; // variável ns						
 			
 			echo "<td>$imprime_nivel_de_servico</td>";
 			echo "<td>$valor_tma</td>";				
@@ -1532,7 +1425,37 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
     				
     		}
 			
-			$imp_acp_aplicado = 0.00;
+			$imp_acp_aplicado = 0.00; 
+			
+			/*se houve revisao de nivel, entao devo considerar nao mais o nivel de servico da fila, mas sim
+			 o nivel de servico das 3 datas utilizadas na revisao PARA A FILA*/
+			if ($dia_revisao_nivel > 0)
+			{            		
+			    //gambiarra, presente do giuan e do leirton
+			    if (($cont ==138) or ($cont ==139))
+			    {
+			        $qtde_acp = 0;
+			    }
+			    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'TODAS',$cont";
+        		
+        		$query = $pdo->prepare($sql);
+        		$query->execute(); 
+        		for($y=0; $row = $query->fetch(); $y++)
+        		{
+        		    $nd_nsa = $row['n_nsa'];
+        		            		    
+        		    //verificando se a fila é premium pra poder determinar o NS baseado na divisao do NSA/NSR
+        		    if (strpos($in_filas_premium,$cont) !== false)
+        		    {
+        		        $valor_ns = ($nd_nsa / $nsr_premium_valor);
+        		    }
+        		    else
+        		    {
+        		        $valor_ns = ($nd_nsa / $nsr_valor);
+        		    }
+        		}        		
+			}
+			
 			//Agregando filas de acordo as particulares de remuneração de ACP
 			if (in_array($cont, $vet_retencao)  or  in_array($cont, $vet_triagem)
 			or in_array($cont, $vet_contestacao_com_100)  or in_array($cont, $vet_pontos)
