@@ -174,7 +174,8 @@ $select_retencao = $_POST['select_retencao'];
 
 //-------Relatório 31 - Pesquisa de Satifação------------//
 $select_tipo_31 = $_POST['select_tipo_31'];
-$rd_falhaidpos_31 = $_POST['rd_falhaidpos_31']; 
+$rd_falhaidpos_31 = $_POST['rd_falhaidpos_31'];
+$rd_pergunta_31 = $_POST['rd_pergunta_31'];
 
 
 if (isset($_POST['pesq_operador_31']) )

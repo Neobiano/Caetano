@@ -32,24 +32,26 @@ echo "<b>$titulo</b>";
 echo "<br><br><b>Período de Consulta:</b> $data_inicial_texto à $data_final_texto";
 echo '</div>';
 
-include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
-include "inicia_tabela_organizada.php"; // INICIA A TABELA
+//include "inicia_div_tabela_organizada.php"; // INICIA A <DIV> DA TABELA **
+//include "inicia_tabela_organizada.php"; // INICIA A TABELA
+echo '<div class="w3-border" style="padding:16px 16px;">';
+    echo '<table id = "tabela" class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-tiny w3-card-4 w3-centered">';
+        echo '<thead>
+                    <tr class="w3-indigo w3-tiny">';
+                        echo '<td><b>DATA</b></td>';
+                        echo '<td><b>CALLID</b></td>';
+                        echo '<td><b>1ª TRANSF &nbsp</b></td>';
+                        echo '<td><b>2ª TRANSF &nbsp</b></td>';
+                        echo '<td><b>3ª TRANSF &nbsp</b></td>';
+                        echo '<td><b>4ª TRANSF &nbsp</b></td>';
+                        echo '<td><b>5ª TRANSF &nbsp</b></td>';
+                        echo '<td><b>6ª TRANSF &nbsp</b></td>';
+                                              
+                        
+                echo '</tr>
+              </thead>
+                <tbody>';
 
-// IMPRIME COLUNAS DA TABELA - INÍCIO
-$texto = "<td><b>DATA &nbsp</b></td>";
-echo incrementa_tabela($texto);
-
-$texto = "<td><b>CALLID &nbsp</b></td>";
-echo incrementa_tabela($texto);
-
-$texto = "<td><b>PERCURSO &nbsp</b></td>";
-echo incrementa_tabela($texto);
-
-$texto = "</tr></thead><tbody>";
-echo incrementa_tabela($texto);
-// IMPRIME COLUNAS DA TABELA - FIM
-
-echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 
 // INFORMA A CONSULTA
 $query = $pdo->prepare("select callid, data_hora, cod_fila from tb_eventos_dac where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and callid is not null and callid in (		
@@ -114,14 +116,20 @@ foreach($callids as $callid){
 	
 	$texto = "";
 	$ja_tem_valor = 0;
-	foreach($percurso[$callid] as $fila){
+	foreach($percurso[$callid] as $fila)
+	{
 		$desc_fila = $cod_desc[$fila];
-		if(!$ja_tem_valor) $texto = "<b>$fila</b> <i>($desc_fila)</i>";
-		else $texto = $texto.", <b>$fila</b> <i>($desc_fila)</i>";
-		$ja_tem_valor = 1;
+		$texto = "<b>$fila</b> <i>($desc_fila)</i>";
+		$texto = "<td>$texto</td>";
+		echo incrementa_tabela($texto);
+		/*if(!$ja_tem_valor) 
+		  $texto = "<b>$fila</b> <i>($desc_fila)</i>";
+		else 
+		    $texto = $texto.", <b>$fila</b> <i>($desc_fila)</i>";
+		$ja_tem_valor = 1;*/
 	}
-	$texto = "<td>$texto</td>";
-	echo incrementa_tabela($texto);
+	//$texto = "<td>$texto</td>";
+	//echo incrementa_tabela($texto);
 		
 	
 	$texto = '</tr>';
@@ -129,9 +137,13 @@ foreach($callids as $callid){
 }
 $texto = '</tbody>';
 echo incrementa_tabela($texto);
+
+		     echo "</table>
+            </div>";
+		echo "</div>";
 //IMPRIME INFORMAÇÕES DA TABELA - FIM
 
-include "finaliza_tabela.php"; // FINALIZA A TABELA
+//include "finaliza_tabela.php"; // FINALIZA A TABELA
 //include"imprime_grafico.php"; // IMPRIME O GRÁFICO
 ?>
 

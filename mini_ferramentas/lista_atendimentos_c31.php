@@ -28,8 +28,22 @@ $(document).ready(function() {
     $data2 = $_GET['pData2'];
     $operador = $_GET['pOperador'];
     $fila = $_GET['pFila'];
+    $pergunta = $_GET['pPergunta'];
     $idpos = $_GET['pIDPOS'];
   
+    $sFiltro = '';
+    if (trim($operador) <> '0')
+        $sFiltro = " Operador: $operador, ";
+        
+    if (trim($fila) <> '0')    
+        $sFiltro = ("$sFiltro  Fila: $fila, ");
+        
+    if (trim($pergunta) <> '')
+        $sFiltro = ("$sFiltro  Pergunta: $pergunta, ");
+            
+    if (trim($idpos) <> '')
+        $sFiltro = ("$sFiltro  At. Falha de IDPos: $idpos, ");
+                
     $t_inicial = strtotime($data1);
     $data_inicial_texto = date('d/m/Y',$t_inicial);
     
@@ -59,7 +73,7 @@ $(document).ready(function() {
                                 cod_fila int,
                                 desc_fila varchar(100)
                             ); 
-             insert @T EXEC sp_CERATFO_radar_cartoes_query31b '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$idpos,$valor_dado                      
+             insert @T EXEC sp_CERATFO_radar_cartoes_query31b '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$pergunta,$idpos,$valor_dado                      
                                                                             
              select * from @T 
 		";
@@ -69,7 +83,8 @@ $(document).ready(function() {
     echo '<div class="w3-margin w3-tiny w3-center">';
     echo "<b>Rastreio de Atendimentos - Campanha Cordialidade do Operador</b>";
     echo "<br><br><b><i>Data:</i></b> $data_inicial_texto à $data_final_texto";
-    echo "<br><br><b><i>Listando:</i></b> $valor_dado";
+    echo "<br><b><i>Filtros:</i></b> $sFiltro ";       
+    echo "<br><br><b><i>Listando:</i> $valor_dado</b> ";
     echo "<br><br>";
     
     echo '<div class="w3-border" style="padding:16px 16px;">';

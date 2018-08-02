@@ -385,7 +385,9 @@ echo "<br>";
 echo "<hr>";
 
 // imprime dia a dia - início
-//for($pos_dia=8; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
+
+
+//for($pos_dia=20; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
 for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
     
@@ -1431,11 +1433,12 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			 o nivel de servico das 3 datas utilizadas na revisao PARA A FILA*/
 			if ($dia_revisao_nivel > 0)
 			{            		
-			    //gambiarra, presente do giuan e do leirton
+			    
+			    /*gambiarra, presente do giuan e do leirton
 			    if (($cont ==138) or ($cont ==139))
 			    {
 			        $qtde_acp = 0;
-			    }
+			    }*/
 			    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'TODAS',$cont";
         		
         		$query = $pdo->prepare($sql);
