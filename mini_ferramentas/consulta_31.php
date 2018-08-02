@@ -31,8 +31,8 @@
         $total_satisfeito = 0;
         $total_indiferente = 0;
         $total_insatisfeito = 0;
-        //teste vamos ver 
-        $sFiltro = '';
+        //teste vamos ve, alterei e tal... papapa
+        
         $sFiltro = '';
         if (trim($pesq_operador_31) <> '0')
             $sFiltro = " Operador: $pesq_operador_31, ";
