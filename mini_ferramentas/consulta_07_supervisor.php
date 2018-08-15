@@ -40,7 +40,8 @@ $SOMA_TMA = 0;
 							inner join tb_colaboradores_indra as b
 							on a.id_operador = b.login_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and datepart(dw,data_hora) in $in_semana
-							group by SUPERVISOR
+							AND ativo = 1
+                            group by SUPERVISOR
 							order by TMA desc");
 	$query->execute(); // EXECUTA A CONSULTA
 	

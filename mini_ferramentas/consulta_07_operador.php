@@ -46,11 +46,14 @@ $SOMA_TMA = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	$query = $pdo->prepare("select MATRICULA, id_operador ID, desc_operador NOME, SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
+	$sql = "select MATRICULA, id_operador ID, b.NOME, SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
 							inner join tb_colaboradores_indra as b
 							on a.id_operador = b.login_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and datepart(dw,data_hora) in $in_semana
-							group by MATRICULA, id_operador, desc_operador, SUPERVISOR");
+							group by MATRICULA, id_operador, b.NOME, SUPERVISOR";
+	echo $sql;
+	
+	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO

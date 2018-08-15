@@ -61,11 +61,11 @@ echo '<td><b>TOTAL DE ATENDIMENTOS</b></td>';
 echo '<td><b>TMA</b></td>';
 echo '</tr></thead><tbody>';
 
-$query = $pdo->prepare("select MATRICULA, id_operador ID, desc_operador NOME, SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
+$query = $pdo->prepare("select MATRICULA, id_operador ID, b.Nome NOME, SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
 							inner join tb_colaboradores_indra as b
 							on a.id_operador = b.login_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and SUPERVISOR = '$SUPERVISOR' and datepart(dw,data_hora) in $in_semana
-							group by MATRICULA, id_operador, desc_operador, SUPERVISOR
+							group by MATRICULA, id_operador, b.Nome, SUPERVISOR
 							order by TMA desc");
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){
