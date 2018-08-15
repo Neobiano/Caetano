@@ -307,7 +307,7 @@ DIV 3 - FIM -->
 		<div class="div_dia w3-margin-8">09:<input size='12' id="ansm9" type='text' name="ansm9" value='0.969798' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">10:<input size='12' id="ansm10" type='text' name="ansm10" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">11:<input size='12' id="ansm11" type='text' name="ansm11" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
-		<div class="div_dia w3-margin-8">12:<input size='12' id="ansm12" type='text' name="ansm12" value='0.98004' onkeypress='return SomenteValor(event, this, 12)'></div>
+		<div class="div_dia w3-margin-8">12:<input size='12' id="ansm12" type='text' name="ansm12" value='0.980567' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">13:<input size='12' id="ansm13" type='text' name="ansm13" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">14:<input size='12' id="ansm14" type='text' name="ansm14" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">15:<input size='12' id="ansm15" type='text' name="ansm15" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
@@ -315,7 +315,7 @@ DIV 3 - FIM -->
 		<div class="div_dia w3-margin-8">17:<input size='12' id="ansm17" type='text' name="ansm17" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">18:<input size='12' id="ansm18" type='text' name="ansm18" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">19:<input size='12' id="ansm19" type='text' name="ansm19" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
-		<div class="div_dia w3-margin-8">20:<input size='12' id="ansm20" type='text' name="ansm20" value='0.980778' onkeypress='return SomenteValor(event, this, 12)'></div>
+		<div class="div_dia w3-margin-8">20:<input size='12' id="ansm20" type='text' name="ansm20" value='0.983112' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">21:<input size='12' id="ansm21" type='text' name="ansm21" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">22:<input size='12' id="ansm22" type='text' name="ansm22" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
 		<div class="div_dia w3-margin-8">23:<input size='12' id="ansm23" type='text' name="ansm23" value='0.00' onkeypress='return SomenteValor(event, this, 12)'></div>
@@ -336,8 +336,8 @@ DIV 3 - FIM -->
 		<div class="w3-left w3-padding">
 		
 			<p id="txt_glosa" class="w3-margin-8"><b>Glosas (Quantidade) / IQF / Acertos:</b></p>
-			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='28' onkeypress='return SomenteValor(event, this, 3)'></div>		
-			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='93.32' onkeypress='return SomenteValor(event, this, 13)'></div>
+			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='47' onkeypress='return SomenteValor(event, this, 3)'></div>		
+			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='90.2614' onkeypress='return SomenteValor(event, this, 13)'></div>
 			
 	
 			<div class="div_dia w3-margin-8">

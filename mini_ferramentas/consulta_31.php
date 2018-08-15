@@ -61,52 +61,19 @@
                           <td><b>(%)</b></td> 
                           <td><b>Insatisfeitos</b></td> 
                           <td><b>(%)</b></td> ';
-            
-                  
-                
-                $stable = ' declare @T TABLE(cod_operador int,
-                                             desc_operador varchar(50),
-                                             cod_fila int,
-                                             desc_fila varchar(50),
-                                             qtde_respondida	int,
-                                             satisfeito	int,
-                                             pct_satisfeito float,
-                                             indiferente	int,
-                                             pct_indiferente float,
-                                             insatisfeito	int,
-                                             pct_insatisfeito float
-                                             ); ';
+                                                              
                 break;
             case 1:
                 $sFiltro = ("$sFiltro  Agrupado: Por Operador");                
             
                 $shead =' <td><b>Operador</b></td> <td><b>Respondidas</b></td> <td><b>Satisfeitos</b></td> <td><b>(%)</b></td> <td><b>Indiferentes</b></td> <td><b>(%)</b></td> <td><b>Insatisfeitos</b></td> <td><b>(%)</b></td> ';                      
                 
-                $stable = ' declare @T TABLE(cod_operador int,
-                                             desc_operador varchar(50),                                             
-                                             qtde_respondida	int,
-                                             satisfeito	int,
-                                             pct_satisfeito float,
-                                             indiferente	int,
-                                             pct_indiferente float,
-                                             insatisfeito	int,
-                                             pct_insatisfeito float
-                                             ); ';
                 break;
             case 2:
                 $sFiltro = ("$sFiltro  Agrupado: Por Fila");                               
                 $shead =' <td><b>Fila</b></td> <td><b>Respondidas</b></td> <td><b>Satisfeitos</b></td> <td><b>(%)</b></td> <td><b>Indiferentes</b></td> <td><b>(%)</b></td> <td><b>Insatisfeitos</b></td> <td><b>(%)</b></td> ';
               
-                $stable = ' declare @T TABLE(cod_fila int,
-                                             desc_fila varchar(50),
-                                             qtde_respondida	int,
-                                             satisfeito	int,
-                                             pct_satisfeito float,
-                                             indiferente	int,
-                                             pct_indiferente float,
-                                             insatisfeito	int,
-                                             pct_insatisfeito float
-                                             ); ';
+                
                 break;            
         }
 
@@ -132,26 +99,19 @@
                                    echo $shead;                                                                
                    echo '       </tr>
                           </thead>
-                          <tbody>';
-                      
-                        $sql = "set nocount on;
-                        
-                                $stable
-                                
-                                insert @T EXEC sp_CERATFO_radar_cartoes_query31 '$data_inicial_u 00:00:00','$data_final_u 23:59:59.999',$pesq_operador_31,$pesq_fila_31,$rd_pergunta_31,$select_tipo_31,$rd_falhaidpos_31
-                                
-                                select *
-                                from @T";                                                                                                        
+                          <tbody>';                                                                                                                                                  
                                                                 
                                 $dadosgrafico1 = '';
-                                $dadosgrafico2 = '';
-                                //echo $sql;                                
+                                $dadosgrafico2 = '';                                
+                                $sql = " set nocount on; EXEC sp_CERATFO_radar_cartoes_query31 '$data_inicial_u 00:00:00','$data_final_u 23:59:59.999',$pesq_operador_31,$pesq_fila_31,$rd_pergunta_31,$select_tipo_31,$rd_falhaidpos_31,$rd_sisindisponivel_31,$rd_ligindevida_31,$rd_ligimprodutiva_31,$pesq_shortcall_31";
+                                //echo $sql;
+                                
                                 $query = $pdo->prepare($sql);
                                 $query->execute();                                
                                 for($i=0; $row = $query->fetch(); $i++)
                                 {
                                     echo '<tr>';
-                                    $qtde_respondida = utf8_encode($row['qtde_respondida']);
+                                    $qtde_respondida = utf8_encode($row['qtde_respondido']);
                                     $satisfeito = utf8_encode($row['satisfeito']);
                                     $pct_satisfeito = utf8_encode($row['pct_satisfeito']);
                                     $pct_satisfeito = number_format($pct_satisfeito, 2, ',', '.');
@@ -175,10 +135,10 @@
                                             echo "<td>$desc_operador ($cod_operador)</td>";
                                             echo "<td>$desc_fila ($cod_fila)</td>";
                                             
-                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
-                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$satisfeito</a></b></td>";
-                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$indiferente</a></b></td>";
-                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$insatisfeito</a></b></td>";
+                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
+                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$satisfeito</a></b></td>";
+                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$indiferente</a></b></td>";
+                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$insatisfeito</a></b></td>";
                                            
                                             break;
                                         case 1:
@@ -192,10 +152,10 @@
                                             
                                             echo "<td>$desc_operador ($cod_operador)</td>";
                                             
-                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
-                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$satisfeito</a></b></td>";
-                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$indiferente</a></b></td>";
-                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$insatisfeito</a></b></td>";
+                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
+                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$satisfeito</a></b></td>";
+                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$indiferente</a></b></td>";
+                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$insatisfeito</a></b></td>";
                                             break;
                                         case 2:
                                             if ($pesq_operador_31 > 0)
@@ -208,10 +168,10 @@
                                             
                                             echo "<td>$cod_fila ($desc_fila)</td>";
                                             
-                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
-                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$satisfeito</a></b></td>";
-                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$indiferente</a></b></td>";
-                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31\" target=\"_blank\">$insatisfeito</a></b></td>";
+                                            $texto_respondidas =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=RESPONDIDAS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$qtde_respondida</a></b></td>";
+                                            $texto_satisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=SATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$satisfeito</a></b></td>";
+                                            $texto_indiferentes =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INDIFERENTES&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$indiferente</a></b></td>";
+                                            $texto_insatisfeitos =  "<td><b><a class='w3-text-indigo' title='Rastrear Ligações' href= \"lista_atendimentos_c31.php?pGrupo=INSATISFEITOS&pData1=$data_inicial_u&pData2=$data_final_u&pOperador=$cod_operador&pFila=$cod_fila&pIDPOS=$rd_falhaidpos_31&pPergunta=$rd_pergunta_31&pSisindisponivel=$rd_sisindisponivel_31&pLigindevida=$rd_ligindevida_31&pLigimprodutiva=$rd_ligimprodutiva_31&pShortCall=$pesq_shortcall_31\" target=\"_blank\">$insatisfeito</a></b></td>";
                                             break;
                                     }
                                     

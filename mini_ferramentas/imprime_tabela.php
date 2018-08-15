@@ -236,6 +236,10 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
     case '31':
         include "consulta_31.php"; // Pesquisa de Satisfação - Campanha
         break;
+        
+    case '32':
+        include "consulta_32.php"; // Atendimentos - SAC
+        break;
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

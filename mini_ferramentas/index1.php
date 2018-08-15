@@ -217,12 +217,19 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_select_filas").hide();
     	$("#div_select_retencao").hide();
     	$("#div_select_tipo_31").hide();
+    	$("#div_select_tipo_32").hide();
     	$("#div_rd_consulta_31").hide();
+    	$("#div_pesq_shortcall_31").hide();
     	
     	
     	
     	$("#div_pesq_fila_31").hide();
-    	$("#div_pesq_operador_31").hide();    	
+    	$("#div_pesq_operador_31").hide();
+    	
+    	$("#div_sac_fila_32").hide();    	
+    	$("#div_sac_operador_32").hide();
+    	$("#div_motivo_submotivo_32").hide();
+    	    	    	
     	$("#div_corte_retencao").hide();
     	$("#div_base_comp_retencao").hide();
     	
@@ -546,7 +553,7 @@ $(document).ready(function(){
         					$("#div_dia_semana").hide();
     					break;					
     					case '01':
-        					$ ('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+        					$('#frame_230', top.document).eq(0).attr ('rows', '290,*');
         					$("#div_dia_semana").show();
     					break;
     				}
@@ -790,16 +797,35 @@ $(document).ready(function(){
 						$("#div_tex_detalhes").show();												
 						$("#data_final").show();
 						$("#div_select_tipo_31").show();
-						$("#div_rd_consulta_31").show();						
-										
+						$("#div_rd_consulta_31").show();																												
 						$("#div_pesq_fila_31").show();
 				    	$("#div_pesq_operador_31").show();
-												
+				    	$("#div_pesq_shortcall_31").show();
+						
 						$("#txt_data_inicial").html("Data Inicial:");
 						$("#txt_data_final").show();
 					    $("#txt_detalhes").text("O enfoque do relatório é monitorar os índices de qualidade de atendimento baseado nas respostas para as perguntas '3' e '4' (Cordialidade do Operador/Demanda Atendida) da pesquisa de satifação");
 					    $("#btn_pesquisar").html("Consultar");
 					    $('#frame_230', top.document).eq(0).attr ('rows', '290,*');
+					    					    
+						//habilitando o filtro por bandeira	    											    	    			
+					    break;
+					    
+					case '32':
+					    hideAll();	
+					    $("#div_datas").show();					    	
+					    $("#div_button").show();
+						$("#div_tex_detalhes").show();												
+						$("#data_final").show();
+						$("#div_select_tipo_32").show();																				
+						$("#div_sac_fila_32").show();
+				    	$("#div_sac_operador_32").show();				    													
+						$("#txt_data_inicial").html("Data Inicial:");
+						$("#txt_data_final").show();
+						$("#div_motivo_submotivo_32").show();
+					    $("#txt_detalhes").text("O enfoque do relatório é monitorar os índices de qualidade de atendimento baseado nas chamadas transferidas para o SAC");					    
+					    $("#btn_pesquisar").html("Consultar");
+					    $('#frame_230',top.document).eq(0).attr('rows','350,*');
 					    					    
 						//habilitando o filtro por bandeira	    											
     	    			
@@ -898,7 +924,7 @@ $(document).ready(function(){
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
     		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//onClose: diminuiFrame
         });
     });
 
@@ -913,7 +939,7 @@ $(document).ready(function(){
             dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-    		//beforeShow: aumentaFrame,
+    		beforeShow: aumentaFrame,
     		//onClose: diminuiFrame
         });
     });
@@ -930,7 +956,7 @@ $(document).ready(function(){
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
     		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//onClose: diminuiFrame
         });
     });
     
@@ -946,7 +972,7 @@ $(document).ready(function(){
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
     		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//onClose: diminuiFrame
         });
     });
 
@@ -961,7 +987,7 @@ $(document).ready(function(){
             dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-    		//beforeShow: aumentaFrame,
+    		beforeShow: aumentaFrame,
     		//onClose: diminuiFrame
         });
     });
@@ -978,7 +1004,7 @@ $(document).ready(function(){
             monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
             monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
     		beforeShow: aumentaFrame,
-    		onClose: diminuiFrame
+    		//onClose: diminuiFrame
         });
     });
 </script>
@@ -1054,8 +1080,9 @@ function diminuiFrame(){
         				<option value="25">Pesquisa de Satisfação - Motivo/SubMotivo</option>
         				<option value="26">Pesquisa de Satisfação - Monitoramento de Respostas</option>
         				<option value="31">Pesquisa de Satisfação - Campanha Operador/Fila</option>
+        				<option value="32">Atendimentos - SAC</option>
         				<option value="29">Retenção ATC - Análise de Dados</option>
-        				<option value="30">Campanha - MASTERCARD - Análise de Dados</option>
+        				<option value="30">Campanha - MASTERCARD - Análise de Dados</option>        				
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
     				</optgroup>
     				<optgroup label="PRODUÇÃO">         				
@@ -1207,7 +1234,7 @@ function diminuiFrame(){
     			<input size='3' id="base_comp_retencao" type='text' name="base_comp_retencao" value='7' onkeypress='return SomenteNumero(event, this,2)'>		
     		</div>
     		
-    		<!-- CAIXA DE SELEÇÃO DADOS DE RETENÇÃO-->
+    		<!-------------------------------------- CONSULTA 31-------------------------------- -->
     		<div id="div_select_tipo_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
     			<b>Modelo:</b>
     			<select id="select_tipo_31" name="select_tipo_31">  
@@ -1215,8 +1242,8 @@ function diminuiFrame(){
     				<option value="01">Por Operador</option>
     				<option value="02">Por Fila</option>    	    				    				   							    			
     			</select>		
-    		</div>    		    		    		    		    	
-    		
+    		</div>    
+    		    	
     		<div id="div_pesq_fila_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
     			<b>Fila:</b>
     			<input size='6' id="pesq_fila_31" type='text' name="pesq_fila_31" value='' onkeypress='return SomenteNumero(event, this,4)'>		
@@ -1225,7 +1252,32 @@ function diminuiFrame(){
     		<div id="div_pesq_operador_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
     			<b>Operador</b>
     			<input size='6' id="pesq_operador_31" type='text' name="pesq_operador_31" value='' onkeypress='return SomenteNumero(event, this,6)'>		
+    		</div>    				    		    		    		    	
+    		
+    		<div id="div_pesq_shortcall_31" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>ShortCall:</b>
+    			<input size='3' id="pesq_shortcall_31" type='text' name="pesq_shortcall_31" value='20' onkeypress='return SomenteNumero(event, this,4)'>		
     		</div>
+    		
+    		<!-------------------------------------- CONSULTA 32-------------------------------- -->
+    		<div id="div_select_tipo_32" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Modelo:</b>
+    			<select id="select_tipo_32" name="select_tipo_32">  
+    			    <option value="00">Por Operador</option>   				
+    				<option value="01">Por Fila</option>
+    				<option value="02">Por Motivo/SubMotivo</option>    	    				    				   							    			
+    			</select>		
+    		</div>
+ 			<div id="div_sac_fila_32" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Fila:</b>
+    			<input size='6' id="sac_fila_32" type='text' name="sac_fila_32" value='' onkeypress='return SomenteNumero(event, this,4)'>		
+    		</div>
+    		
+    		<div id="div_sac_operador_32" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Operador</b>
+    			<input size='6' id="sac_operador_32" type='text' name="sac_operador_32" value='' onkeypress='return SomenteNumero(event, this,6)'>		
+    		</div>
+    		   	    		 		            	    		
 		
     		<!-- CAIXA DE SELEÇÃO "OPERADOR / SUPERVISOR" -->
     		<div id="div_select_operador_supervisor" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
@@ -1457,32 +1509,101 @@ function diminuiFrame(){
         </div>
         
          <div class="w3-row" id="div_rd_consulta_31">         
-            <div  class="w3-col s4">
-                	<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Falha IDPos:</b> </div>
+            <div  class="w3-col m2">
+            	<fieldset style="display:block !important;">
+    				<legend>Falhas de IDPOS</legend>                	
                 	<div class='w3-left'>     			                
                     	<label class="container">
-                      		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' checked="checked" value = 'EXCLUIR'>
-                      		EXCLUIR &nbsp &nbsp            
+                      		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' checked="checked" value = 'EXCLUIR'>Excluir            
                     	</label>
                     </div>    
                        			    		
                   	<div class='w3-left'>     			                
                     	<label class="container"> 
-                      		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'INCLUIR'>
-                      		INCLUIR &nbsp &nbsp            
+                      		<input class='w3-margin-8' type="radio"  id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'INCLUIR'>Incluir            
                     	</label>           
                     </div>                                
                     
                     <div class='w3-left'>     			                
                         <label class="container"> 
-                      		<input class='w3-margin-8' type="radio" id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'SOMENTE'>
-                      		SOMENTE &nbsp &nbsp             
+                      		<input class='w3-margin-8' type="radio" id='rd_falhaidpos_31' name='rd_falhaidpos_31' value = 'SOMENTE'>Somente           
                     	</label>
-                    </div>                                                      
+                    </div>     
+                </fieldset>                                                 
             </div>
             
-            <div class="w3-col s8">
-                	<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Perguntas:</b> </div>
+            <div  class="w3-col m2">
+            	<fieldset style="display:block !important;">
+    				<legend>Sistema Indisponível</legend>                	
+                	<div class='w3-left'>     			                
+                    	<label class="container">
+                      		<input class='w3-margin-8' type="radio"  id='rd_sisindisponivel_31' name='rd_sisindisponivel_31' checked="checked" value = 'EXCLUIR'>Excluir            
+                    	</label>
+                    </div>    
+                       			    		
+                  	<div class='w3-left'>     			                
+                    	<label class="container"> 
+                      		<input class='w3-margin-8' type="radio"  id='rd_sisindisponivel_31' name='rd_sisindisponivel_31' value = 'INCLUIR'>Incluir            
+                    	</label>           
+                    </div>                                
+                    
+                    <div class='w3-left'>     			                
+                        <label class="container"> 
+                      		<input class='w3-margin-8' type="radio" id='rd_sisindisponivel_31' name='rd_sisindisponivel_31' value = 'SOMENTE'>Somente           
+                    	</label>
+                    </div>     
+                </fieldset>                                                 
+            </div>
+            
+            <div  class="w3-col m2">
+            	<fieldset style="display:block !important;">
+    				<legend>Ligação Indevida</legend>                	
+                	<div class='w3-left'>     			                
+                    	<label class="container">
+                      		<input class='w3-margin-8' type="radio"  id='rd_ligindevida_31' name='rd_ligindevida_31' checked="checked" value = 'EXCLUIR'>Excluir            
+                    	</label>
+                    </div>    
+                       			    		
+                  	<div class='w3-left'>     			                
+                    	<label class="container"> 
+                      		<input class='w3-margin-8' type="radio"  id='rd_ligindevida_31' name='rd_ligindevida_31' value = 'INCLUIR'>Incluir            
+                    	</label>           
+                    </div>                                
+                    
+                    <div class='w3-left'>     			                
+                        <label class="container"> 
+                      		<input class='w3-margin-8' type="radio" id='rd_ligindevida_31' name='rd_ligindevida_31' value = 'SOMENTE'>Somente           
+                    	</label>
+                    </div>     
+                </fieldset>                                                 
+            </div>
+            
+            <div  class="w3-col m2">
+            	<fieldset style="display:block !important;">
+    				<legend>Ligação Improdutiva</legend>                	
+                	<div class='w3-left'>     			                
+                    	<label class="container">
+                      		<input class='w3-margin-8' type="radio"  id='rd_ligimprodutiva_31' name='rd_ligimprodutiva_31' checked="checked" value = 'EXCLUIR'>Excluir            
+                    	</label>
+                    </div>    
+                       			    		
+                  	<div class='w3-left'>     			                
+                    	<label class="container"> 
+                      		<input class='w3-margin-8' type="radio"  id='rd_ligimprodutiva_31' name='rd_ligimprodutiva_31' value = 'INCLUIR'>Incluir            
+                    	</label>           
+                    </div>                                
+                    
+                    <div class='w3-left'>     			                
+                        <label class="container"> 
+                      		<input class='w3-margin-8' type="radio" id='rd_ligimprodutiva_31' name='rd_ligimprodutiva_31' value = 'SOMENTE'>Somente           
+                    	</label>
+                    </div>     
+                </fieldset>                                                 
+            </div>
+            
+            <div class="w3-col m2">
+	            <fieldset style="display:block !important;">
+    				<legend><b>Perguntas</b></legend>                   	
                 	<div class='w3-left'>     			                
                     	<label class="container">
                       		<input class='w3-margin-8' type="radio"  id='rd_pergunta_31' name='rd_pergunta_31' checked="checked" value = '3'>
@@ -1495,7 +1616,8 @@ function diminuiFrame(){
                       		<input class='w3-margin-8' type="radio"  id='rd_pergunta_31' name='rd_pergunta_31' value = '4'>
                       		Perg. 4 &nbsp &nbsp            
                     	</label>           
-                    </div>                                                                                                               
+                    </div>    
+                 </fieldset>                                                                                                               
             </div>
 		 </div>
 		 
@@ -1571,6 +1693,27 @@ function diminuiFrame(){
     		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Parâmetros de Análise:</b> </div>
     		<div class="w3-left"> <input class="w3-margin-8" type="checkbox" id="rchk_1" name="ruchk_1" value = "1" checked>Incluir chamadas desconectadas (sem interação) na URA &nbsp &nbsp </div>    				
     	</div>
+    	
+    	<div id="div_motivo_submotivo_32" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+        	<fieldset style="display:block !important;">
+        		<legend>Motivo/SubMotivo</legend> 
+        		<div id="div_motivo_32" class="w3-left w3-margin-bottom w3-margin-left">
+                   <b><label for="cd_motivo_32" style="display:block !important;">Motivos</label></b> 
+                    <select name="cd_motivo_32" id="cd_motivo_32">
+                        <option value=""></option>
+                        <?php echo $in_motivos;?>
+                    </select>
+                </div>  
+        
+                <div id="div_submotivo_32" class="w3-left w3-margin-bottom w3-margin-left" >
+                    <b><label for="cd_submotivo_32" style="display:block !important;">SubMotivos</label></b>       
+                    <select name="cd_submotivo_32" id="cd_submotivo_32">
+                        <option value="">-- Escolha um submotivo --</option>
+                    </select>       
+                    <span class="carregando" >Aguarde, carregando...</span>                                                     
+                </div>
+            </fieldset>
+        </div>
 	</form>
 	<!-- FORMULÁRIO - FIM -->
 	
@@ -1616,6 +1759,8 @@ function diminuiFrame(){
 		<div id="div_btn_add_cartao" class="w3-left" style="margin-left:4px;">
 			<button id="btn_add_cartao" class="w3-btn w3-indigo w3-round w3-tiny" type="submit" name="btn_add_cartao" value="Gerar">+</button>
 		</div>
+		
+		
 
 	</div>
 	
@@ -1659,7 +1804,30 @@ function diminuiFrame(){
             }
         });
     });
-    
+
+  //função que carrega os submotivos dinamicamente 
+    $(function(){
+        $('#cd_motivo_32').change(function()
+        {
+            if( $(this).val() ) 
+            {
+                $('#cd_submotivo_32').hide();
+                $('.carregando').show();
+                $.getJSON('sub_motivos.ajax.php?search=',{cd_motivo: $(this).val(), ajax: 'true'}, 
+                function(j)
+                {
+                    var options = '<option value=""></option>'; 
+                    for (var i = 0; i < j.length; i++) {
+                        options += '<option value="' + j[i].cd_submotivo + '">' + j[i].cd_submotivo +' - '+ j[i].ds_submotivo + '</option>';
+                    }   
+                    $('#cd_submotivo_32').html(options).show();
+                    $('.carregando').hide();
+                });
+            } else {
+                $('#cd_submotivo_32').html('<option value="">– Escolha um Motivo –</option>');
+            }
+        });
+    });
 
 </script>
 

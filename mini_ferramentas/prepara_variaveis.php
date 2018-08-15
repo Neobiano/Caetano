@@ -175,6 +175,12 @@ $select_retencao = $_POST['select_retencao'];
 //-------Relatório 31 - Pesquisa de Satifação------------//
 $select_tipo_31 = $_POST['select_tipo_31'];
 $rd_falhaidpos_31 = $_POST['rd_falhaidpos_31'];
+$rd_sisindisponivel_31 = $_POST['rd_sisindisponivel_31'];
+$rd_ligindevida_31 = $_POST['rd_ligindevida_31'];
+$rd_ligimprodutiva_31 = $_POST['rd_ligimprodutiva_31'];
+
+$pesq_shortcall_31 = $_POST['pesq_shortcall_31'];
+
 $rd_pergunta_31 = $_POST['rd_pergunta_31'];
 
 
@@ -196,8 +202,36 @@ if (trim($pesq_fila_31)=='' )
     $pesq_fila_31 = 0;
        
 
+//-------Relatório 32 - Pesquisa de Satifação------------//
+$select_tipo_32 = $_POST['select_tipo_32'];
 
-
+if (isset($_POST['sac_operador_32']) )
+    $sac_operador_32 = $_POST['sac_operador_32'];
+else
+    $sac_operador_32 = 0;
+    
+if (isset($_POST['sac_fila_32']))
+    $sac_fila_32 = $_POST['sac_fila_32'];
+else
+    $sac_fila_32 = 0;
+    
+    
+if (trim($pesq_operador_32)=='' )
+    $pesq_operador_32 = 0;
+        
+if (trim($pesq_fila_32)=='' )
+    $pesq_fila_32 = 0;
+                
+$cd_motivo_32 = $_POST['cd_motivo_32'];
+if ($cd_motivo_32  > 0)
+    $cd_motivo_32 = number_format($cd_motivo_32, 0, ',', '.');
+  
+    
+$cd_submotivo_32 = $_POST['cd_submotivo_32'];
+if ($cd_submotivo_32 > 0)
+   $cd_submotivo_32 = number_format($cd_submotivo_32, 0, ',', '.');
+        
+    
 //conversão de data no formato 'universal' yyy-mm-dd
 $t_inicial = strtotime($data_inicial);
 $data_inicial_u = date('Y-m-d',$t_inicial);

@@ -30,6 +30,12 @@ $(document).ready(function() {
     $fila = $_GET['pFila'];
     $pergunta = $_GET['pPergunta'];
     $idpos = $_GET['pIDPOS'];
+    
+    $sisindisponivel=$_GET['pSisindisponivel'];
+    $ligindevida = $_GET['pLigindevida'];
+    $ligimprodutiva= $_GET['pLigimprodutiva'];
+    $shortCall = $_GET['pShortCall'];
+    
   
     $sFiltro = '';
     if (trim($operador) <> '0')
@@ -62,24 +68,8 @@ $(document).ready(function() {
                   
     $valor_dado = trim($valor_dado);
     			
-    $sql ="	 set nocount on; 
-
-             declare @T TABLE(  callid varchar(100),
-                                data_hora datetime,                                        
-                                tempo_espera int,                                        
-                                tempo_atend int,
-                                id_operador int,
-                                desc_operador varchar(100),
-                                cod_fila int,
-                                desc_fila varchar(100)
-                            ); 
-             insert @T EXEC sp_CERATFO_radar_cartoes_query31b '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$pergunta,$idpos,$valor_dado                      
-                                                                            
-             select * from @T 
-		";
-    	    
-    	    
-
+    $sql ="set nocount on EXEC sp_CERATFO_radar_cartoes_query31b '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$pergunta,$idpos,$valor_dado,$sisindisponivel,$ligindevida,$ligimprodutiva,$shortCall";
+    	       	    
     echo '<div class="w3-margin w3-tiny w3-center">';
     echo "<b>Rastreio de Atendimentos - Campanha Cordialidade do Operador</b>";
     echo "<br><br><b><i>Data:</i></b> $data_inicial_texto à $data_final_texto";

@@ -1280,15 +1280,33 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 				
 			}
 			else
-			{
-				if($nsa >= $nsr ) 
-					$nivel_de_servico = 1;
+			{   //gambiarra fila 64
+				if ($cont ==64)
+				{  
+				    if($nsa >= $nsr )
+				        $nivel_de_servico = 1;
+				    else
+				        $nivel_de_servico = $nsa/0.70;				    				  
+				    
+				    $imprime_nsr = number_format(0.70, 2, ',', '.');
+				    echo "<td>$imprime_nsr</td>";
+				}
 				else 
-				    $nivel_de_servico = $nsa/$nsr_valor;
+				{    
+				    if($nsa >= $nsr ) 
+					   $nivel_de_servico = 1;
+				    else 
+				       $nivel_de_servico = $nsa/$nsr_valor;
 				
 				    $imprime_nsr = number_format($nsr_valor, 2, ',', '.');
-				echo "<td>$imprime_nsr</td>";
+				    echo "<td>$imprime_nsr</td>";
+				}
+				
+				
 			} 
+			
+			if ($nivel_de_servico > 1)
+			    $nivel_de_servico = 1.00;
 			
 			if ($nivel_de_servico < 0.90) 
 				$ns_todas_filas_2 = 0; // Segundo critério de 90% do NS - Segundo Grupo
@@ -1454,8 +1472,15 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
         		    }
         		    else
         		    {
-        		        $valor_ns = ($nd_nsa / $nsr_valor);
+        		        //gambiarra thiago x Leirton X Giuan: FILA 64
+        		        if ($cont == 64)
+        		          $valor_ns = ($nd_nsa / 0.70);
+        		        else 
+        		          $valor_ns = ($nd_nsa / $nsr_valor);        		        
         		    }
+        		    
+        		    if ($valor_ns > 1)
+        		      $valor_ns = 1.00;
         		}        		
 			}
 			
@@ -1502,19 +1527,20 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			     }
 			}
 			else if (in_array($cont, $vet_geral_premium)) //3º Grupo aqui
-			{
-			    if (($valor_ns < '0.95') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP!
+			{			    
+			    if (($valor_ns < '0.95') ) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP  - retirado or ($menor_ns_filas < '0.90') !
 			        $imp_acp_aplicado = '00';
 			    else if ($menor_ns_faixa_horario_premium >= '0.90')
-			    {    
-			       $imp_acp_aplicado = '25';
-			       $fator = 1.25;
-			    }
-			    else 
+			    {
+			        $imp_acp_aplicado = '25';
+			        $fator = 1.25;
+			    }else
 			    {
 			        $imp_acp_aplicado = '20';
 			        $fator = 1.20;
 			    }
+			    
+			    
 			}
 			
 			/*$imp_acp_aplicado = 0.00;//retirando o ACP
@@ -1619,18 +1645,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			echo "<td>$imp_acp_aplicado_ret%</td>";			
 			echo "<td>$qtde_retacp</td>";
 			echo "<td>R$ $imp_ad_acp_ret</td>"; 
-			
-			/**codigo antigo, retirado
-			// "aplicação acp", mas retirando a parte de retidos que serão remunerados somente com adicional de retenção, no restante 
-			//sera aplicado o acp
-			if (($aplicacao_ansm - $p_acp) == 0) //todas as chamadas retidas, nao tera aplicao de ACP
-			{
-				$imp_aplicacao_acp =  $aplicacao_ansm + $ad_acp;
-			}
-			else
-			{	
-				$imp_aplicacao_acp = (($aplicacao_ansm - $p_acp)* (1+($imp_acp_aplicado)/100)) + ($p_acp + $ad_acp);
-			}*/
+						
 			
 			$imp_aplicacao_acp =  $aplicacao_ansm + $ad_acp + $ad_acp_ret;
 			$imprime_imp_aplicacao_acp = number_format($imp_aplicacao_acp, 2, ',', '.');

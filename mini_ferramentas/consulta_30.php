@@ -108,7 +108,7 @@
                                                     campanha_nao_aceito_nao_int_variant	int,
                                                     campanha_nao_aceito_nao_informou int,
                                                     campanha_aceitou int);
-                                insert @T EXEC sp_CERATFO_radar_cartoes_query30 '$data_inicial_u','$data_final_u',1,64
+                                insert @T EXEC sp_CERATFO_radar_cartoes_query30 '$data_inicial_u 00:00:00','$data_final_u 23:59:59.999',1,64
                                 
                                 select  dia,	
                                         datepart(dw,dia) dia_semana,
