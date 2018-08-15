@@ -51,8 +51,8 @@ $SOMA_TMA = 0;
 							on a.id_operador = b.login_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and datepart(dw,data_hora) in $in_semana
 							group by MATRICULA, id_operador, b.NOME, SUPERVISOR";
+	echo $sql;
 	
-	//echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	

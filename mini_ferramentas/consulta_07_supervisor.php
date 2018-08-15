@@ -36,14 +36,13 @@ $SOMA_TMA = 0;
 	echo "<script>$('#tabela').hide();</script>"; // ESCONDE A TABELA
 	
 	// INFORMA A CONSULTA
-	$sql = "select SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
+	$query = $pdo->prepare("select SUPERVISOR, count (*) TOTAL_DE_ATENDIMENTOS, avg(tempo_atend) TMA from tb_eventos_dac as a
 							inner join tb_colaboradores_indra as b
 							on a.id_operador = b.login_dac
 							where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0 and datepart(dw,data_hora) in $in_semana
-							group by SUPERVISOR
-							order by TMA desc";
-	echo $sql;
-	$query = $pdo->prepare($sql);
+							AND ativo = 1
+                            group by SUPERVISOR
+							order by TMA desc");
 	$query->execute(); // EXECUTA A CONSULTA
 	
 	// IMPRIME O RESULTADO DA CONSULTA - INÍCIO
@@ -64,19 +63,13 @@ $SOMA_TMA = 0;
 		echo incrementa_tabela($texto);
 			
 			
-			if(isset($array_supervisores[$SUPERVISOR])) 
-			    $supervisor_nome = $array_supervisores[$SUPERVISOR];
-			else 
-			   $supervisor_nome = "";
-			
+			if(isset($array_supervisores[$SUPERVISOR])) $supervisor_nome = $array_supervisores[$SUPERVISOR];
+			else $supervisor_nome = "";
 			echo "<td><a class='w3-text-indigo' title='Listar Operadores Vinculados' href= \"lista_operadores_vinculados.php?SUPERVISOR=$SUPERVISOR&data_inicial=$data_inicial&data_final=$data_final&txt_dias_semana=$txt_dias_semana&in_semana=$in_semana&supervisor_nome=$supervisor_nome\" target=\"_blank\">$supervisor_nome</a></td>";
 			$tabela=$tabela."<td>$supervisor_nome</td>";
 			
 			$TOTAL_DE_ATENDIMENTOS = number_format($TOTAL_DE_ATENDIMENTOS, 0, ',', '.');
 			$texto = "<td>$TOTAL_DE_ATENDIMENTOS</td>";
-			echo incrementa_tabela($texto);
-			
-			$texto = "<td>$SUPERVISOR</td>";
 			echo incrementa_tabela($texto);
 			
 			$TMA = number_format($TMA, 0, ',', '.');
