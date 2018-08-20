@@ -45,6 +45,18 @@
                   
        if (trim($rd_falhaidpos_31) <> '')
            $sFiltro = ("$sFiltro  At. Falha de IDPos: $rd_falhaidpos_31, ");
+                  
+       if (trim($rd_sisindisponivel_31) <> '')
+         $sFiltro = ("$sFiltro  Sis. Indisponível: $rd_sisindisponivel_31, ");
+       
+       if (trim($rd_ligindevida_31) <> '')
+         $sFiltro = ("$sFiltro  Lig. Indevida: $rd_ligindevida_31, ");
+         
+       if (trim($rd_ligimprodutiva_31) <> '')
+         $sFiltro = ("$sFiltro  Lig. Improdutiva: $rd_ligimprodutiva_31, ");
+     
+       if ($pesq_shortcall_31 > 0)
+         $sFiltro = ("$sFiltro  ShortCall: $pesq_shortcall_31 ");
                         
                        
         switch ($select_tipo_31) 
@@ -71,8 +83,7 @@
                 break;
             case 2:
                 $sFiltro = ("$sFiltro  Agrupado: Por Fila");                               
-                $shead =' <td><b>Fila</b></td> <td><b>Respondidas</b></td> <td><b>Satisfeitos</b></td> <td><b>(%)</b></td> <td><b>Indiferentes</b></td> <td><b>(%)</b></td> <td><b>Insatisfeitos</b></td> <td><b>(%)</b></td> ';
-              
+                $shead =' <td><b>Fila</b></td> <td><b>Respondidas</b></td> <td><b>Satisfeitos</b></td> <td><b>(%)</b></td> <td><b>Indiferentes</b></td> <td><b>(%)</b></td> <td><b>Insatisfeitos</b></td> <td><b>(%)</b></td> ';              
                 
                 break;            
         }
@@ -261,88 +272,7 @@
 		echo "</div>";
 		
 		
-		/*$total_campanha_n_aceitou = $total_categorizadas_campanha - $total_campanha_aceitou;
 		
-		if ($total_categorizadas_campanha > 0)
-		    $pct_aceito = round(($total_campanha_aceitou/$total_categorizadas_campanha),4)*100.00;
-		else 
-		    $pct_aceito = 0;
-		
-		$campanha = 'Aceitos ('.$pct_aceito.'%)';
-		$dadosgrafico2 = $dadosgrafico2."['$campanha',$total_categorizadas_campanha,$total_categorizadas_campanha, $total_campanha_aceitou,$total_campanha_aceitou, $total_campanha_n_aceitou, $total_campanha_n_aceitou]";
-		
-		$altura = 300;
-		
-		$grafico =   '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                             <script type="text/javascript">'.
-                             "google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
-                                  google.charts.setOnLoadCallback(drawChart);
-                                  
-                                  function drawChart()
-                                  {
-    		                         var data1 = new google.visualization.DataTable();
-                                     data1.addColumn('date', 'Dia');
-            		                 data1.addColumn('number', 'RECEBIDAS');
-            		                 data1.addColumn('number', 'CATEGORIZADAS');
-            		                 data1.addColumn('number', 'CATEGORIZADAS NA CAMPANHA');                                                                         
-                                     data1.addRows([$dadosgrafico1]);
-                                     var options1 =
-                                                    {
-                                                        title: '".$titulo."',
-                                                        curveType: 'function',
-                                                        series: {
-                                                        		    0: { pointShape: 'star', pointSize:10 },
-                                                                  	1: { color: 'red', pointShape: 'square', pointSize:6 },
-                                                                  	2: { color: 'green',pointShape: 'polygon', pointSize:6 }
-                                                                    
-                                                        		},
-                                                        vAxis: {
-                                                                    viewWindowMode:'explicit',
-                                                                    viewWindow: {
-                                                                        max:$total_recebidas,
-                                                                        min:0
-                                                                    }
-                                                                } ,
-                                                		vAxes: {
-                                                		    0: {title: 'Quantidade de Ligações'}
-                                                		},
-                                                      legend: { position: 'top' },                                                     
-                                                    };
-                                     
-                                     var chart = new google.visualization.LineChart(document.getElementById('chart1_div'));
-                                     chart.draw(data1, options1);
-
-                                     var data2 = new google.visualization.DataTable();
-                                     data2.addColumn('string', 'Campanha');
-                                     data2.addColumn('number', 'Categorizadas');
-                                     data2.addColumn({type: 'number', role: 'annotation'});  
-                                     data2.addColumn('number', 'Aceitos');
-                                     data2.addColumn({type: 'number', role: 'annotation'});  
-                                     data2.addColumn('number', 'Não Aceitos');
-                                     data2.addColumn({type: 'number', role: 'annotation'});        
-                                     
-                                                                        
-                                     data2.addRows([$dadosgrafico2]);                                     
-                                     var options2 = {
-                                                        title: 'Campanha de UPGRADE Mastercard - Índice de Aceitação',                                       
-                                                        bars: 'vertical',
-                                                        isStacked: false,
-                                                        legend: { position: 'top' },
-                                                        vAxes: {
-                                                		    0: {title: 'Qtde de Ligações'}
-                                                		},
-                                                     };
-                                      var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2_div'));
-                                      chart2.draw(data2, options2);
-                                       
-                                   }
-                                 </script> ".
-                                 '<div id="chart1_div" style="margin-top: 50px; width: auto; height: 500px"></div>
-                                  <div id="chart2_div" style="margin-top: 50px; width: auto; height: 500px"></div>  
-                                  ';                                                                                                            
-                                                      
-                                                      
-        echo $grafico;	*/
 		$fim = defineTime();
 		echo tempoDecorrido($inicio,$fim);
 		include "desconecta.php";

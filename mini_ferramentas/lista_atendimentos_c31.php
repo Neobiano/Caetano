@@ -49,6 +49,18 @@ $(document).ready(function() {
             
     if (trim($idpos) <> '')
         $sFiltro = ("$sFiltro  At. Falha de IDPos: $idpos, ");
+    
+    if (trim($sisindisponivel) <> '')
+        $sFiltro = ("$sFiltro  Sis. Indisponível: $sisindisponivel, ");
+
+    if (trim($ligindevida) <> '')
+        $sFiltro = ("$sFiltro  Lig. Indevida: $ligindevida, ");
+
+    if (trim($ligimprodutiva) <> '')
+        $sFiltro = ("$sFiltro  Lig. Improdutiva: $ligimprodutiva, ");
+    
+    if ($shortCall > 0)
+        $sFiltro = ("$sFiltro  ShortCall: $shortCall ");
                 
     $t_inicial = strtotime($data1);
     $data_inicial_texto = date('d/m/Y',$t_inicial);
