@@ -1,5 +1,5 @@
 ﻿<?php
-$query = $pdo->prepare("select cod_evento, desc_evento from tb_eventos");
+$query = $pdo->prepare("select distinct cod_evento, desc_evento from tb_eventos (nolock)");
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){
 	
@@ -10,7 +10,7 @@ for($i=0; $row = $query->fetch(); $i++){
 	$$palavra_evento = $desc_evento;	
 }
 
-$query = $pdo->prepare("select cod_evento, desc_evento from tb_eventos_novaura");
+$query = $pdo->prepare("select distinct cod_evento, desc_evento from tb_eventos_novaura (nolock)");
 $query->execute();
 for($i=0; $row = $query->fetch(); $i++){
 	

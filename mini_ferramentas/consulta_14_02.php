@@ -96,7 +96,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
     							where data_hora between '$data_inicial' and '$data_final 23:59:59.999'
     							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as h on g.DIA = h.DIA";
-	//echo $sql;
+	echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	

@@ -92,7 +92,7 @@ $SOMA_TOTAL_RECHAMADAS = 0;
     							group by convert(date,data_hora,11), datepart(dw,data_hora)
 							) as h on g.DIA = h.DIA";
 	
-	//echo $sql;
+	echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	

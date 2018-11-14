@@ -207,7 +207,7 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         
         echo '<script>
                 function myFunction() {
-                    window.open("PainelSincronia.php");
+                    window.open("consulta_28.php");
                 }
                 myFunction();
                 </script>';
@@ -240,6 +240,18 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
     case '32':
         include "consulta_32.php"; // Atendimentos - SAC
         break;
+        
+    case '33':
+        
+        echo '<script>
+                function myFunction() {
+                    window.open("consulta_33.php");
+                }
+                myFunction();
+                </script>';
+        //include "consulta_28.php"; // Pesquisa de Satisfação - Motivo/Submotivo
+        
+        break;	
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

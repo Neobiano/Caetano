@@ -114,8 +114,8 @@
                                                                 
                                 $dadosgrafico1 = '';
                                 $dadosgrafico2 = '';                                
-                                $sql = " set nocount on; EXEC sp_CERATFO_radar_cartoes_query31 '$data_inicial_u 00:00:00','$data_final_u 23:59:59.999',$pesq_operador_31,$pesq_fila_31,$rd_pergunta_31,$select_tipo_31,$rd_falhaidpos_31,$rd_sisindisponivel_31,$rd_ligindevida_31,$rd_ligimprodutiva_31,$pesq_shortcall_31";
-                                //echo $sql;
+                                $sql = " set nocount on; EXEC sp_CERATFO_radar_cartoes_query31w '$data_inicial_u 00:00:00','$data_final_u 23:59:59.999',$pesq_operador_31,$pesq_fila_31,$rd_pergunta_31,$select_tipo_31,$rd_falhaidpos_31,$rd_sisindisponivel_31,$rd_ligindevida_31,$rd_ligimprodutiva_31,$pesq_shortcall_31";
+                                echo $sql;
                                 
                                 $query = $pdo->prepare($sql);
                                 $query->execute();                                

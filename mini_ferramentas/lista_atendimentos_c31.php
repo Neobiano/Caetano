@@ -80,7 +80,7 @@ $(document).ready(function() {
                   
     $valor_dado = trim($valor_dado);
     			
-    $sql ="set nocount on EXEC sp_CERATFO_radar_cartoes_query31b '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$pergunta,$idpos,$valor_dado,$sisindisponivel,$ligindevida,$ligimprodutiva,$shortCall";
+    $sql ="set nocount on EXEC sp_CERATFO_radar_cartoes_query31by '$data1 00:00:00','$data2 23:59:59.999',$operador,$fila,$pergunta,$idpos,$valor_dado,$sisindisponivel,$ligindevida,$ligimprodutiva,$shortCall";
     	       	    
     echo '<div class="w3-margin w3-tiny w3-center">';
     echo "<b>Rastreio de Atendimentos - Campanha Cordialidade do Operador</b>";
@@ -95,7 +95,7 @@ $(document).ready(function() {
     echo $cabecalho;
     echo '</tr></thead><tbody>';
 
-        //echo $sql;			
+        echo $sql;			
         $query = $pdo->prepare($sql);
         $query->execute();
         for($i=0; $row = $query->fetch(); $i++)

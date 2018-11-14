@@ -184,6 +184,7 @@ $(function() {
 
 <?php
 include "conecta.php";
+include "def_var_ura.php";
 
 set_time_limit(3000);
 ini_set('max_execution_time', 3000);
@@ -234,7 +235,7 @@ if($tipo_consulta=='05'){
 	
 	// EXCLUIR TELEFONE - INÍCIO
 	if($tipo_acao=='01'){
-		$query = $pdo->prepare("select count(*) TOTAL from tb_blacklist where tipo = 'telefone' and valor = '$input_telefone'");
+		$query = $pdo->prepare("select count(*) TOTAL from tb_blacklist (nolock) where tipo = 'telefone' and valor = '$input_telefone'");
 		$query->execute();
 		for($i=0; $row = $query->fetch(); $i++){			
 			$TOTAL = utf8_encode($row['TOTAL']);
@@ -244,7 +245,7 @@ if($tipo_consulta=='05'){
 				return;
 			}
 		}
-		$query = $pdo->prepare("delete from tb_blacklist where tipo = 'telefone' and valor = '$input_telefone'");
+		$query = $pdo->prepare("delete from tb_blacklist (nolock) where tipo = 'telefone' and valor = '$input_telefone'");
 		if($query->execute()) echo "<script>alert('Telefone $input_telefone excluído com sucesso!')</script>";
 		else echo "<script>alert('Falha ao excluir!')</script>";
 		include "desconecta.php";
@@ -304,7 +305,7 @@ if($tipo_consulta=='05'){
 
 		$txt_dados = '';
 		$contador = 0;
-		$query = $pdo->prepare("select * from tb_blacklist where tipo <> 'gambiarra' $txt_filtro order by data_hora desc");		
+		$query = $pdo->prepare("select * from tb_blacklist (nolock) where tipo <> 'gambiarra' $txt_filtro order by data_hora desc");		
 		$query->execute();
 		
 		echo '<div class="w3-margin w3-tiny w3-center">';
@@ -473,7 +474,7 @@ if($tipo_consulta=='04'){
 	echo '</tr></thead><tbody>';
 	
 	$query = $pdo->prepare("select telefone, x.callid, data_hora, desc_dado, valor_dado
-							from tb_dados_cadastrais as x
+							from tb_dados_cadastrais as x (nolock)
 							inner join (select distinct callid, valor as telefone
 							from tb_dados_cadastrais as a
 							inner join tb_blacklist as b
@@ -611,7 +612,7 @@ echo "<form name = 'meuform' id = 'meuform' action='gera_relatorio.php' method='
 		</script>";
 // DIV NOVA PESQUISA - FIM
 
-include "def_var_ura.php";
+
 
 if ($tipo_consulta == '01'){
 	echo '<div class="w3-margin-right w3-margin-left w3-tiny w3-center">';
@@ -623,17 +624,19 @@ if ($tipo_consulta == '01'){
 		if($tipo_consulta == '02') echo "<td><b>TOTAL DE ACESSOS</b></td>";
 		if($tipo_consulta == '03') echo "<td><b>TOTAL DE ACESSOS</b></td>";
 	echo '</tr></thead><tbody>';
-
-	$query = $pdo->prepare("select a.valor_dado DADO, COUNT (DISTINCT b.valor_dado) TOTAL
+	$sql = "select a.valor_dado DADO, COUNT (DISTINCT b.valor_dado) TOTAL
 							FROM (select callid, valor_dado
-							from tb_dados_cadastrais
+							from tb_dados_cadastrais (nolock)
 							where cod_dado = '3' and data_hora between '$data_inicial' and '$data_final' and len(valor_dado) > 10 and substring(valor_dado,1,3) <> '00') as a
 							INNER JOIN (select callid, valor_dado
-							from tb_dados_cadastrais
+							from tb_dados_cadastrais (nolock)
 							where cod_dado = '2' and data_hora between '$data_inicial' and '$data_final') as b
 							ON a.callid = b.callid
 							GROUP BY a.valor_dado
-							HAVING COUNT (DISTINCT b.valor_dado) >= $qtd_minima");
+							HAVING COUNT (DISTINCT b.valor_dado) >= $qtd_minima";
+	
+	echo $sql;
+	$query = $pdo->prepare($sql);
 	$query->execute();
 		
 	for($i=0; $row = $query->fetch(); $i++){

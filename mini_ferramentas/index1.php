@@ -4,7 +4,7 @@
 	//preenchendo o select de filas
 	$iniciou = 0;
 	$in_filas = "";
-	$query = $pdo->prepare("select cod_fila from tb_filas 
+	$query = $pdo->prepare("select cod_fila from tb_filas (nolock)
                             where desc_fila liKe '%CXA%'
                             and cod_fila <> 131"); //retirando bloqueio cobrança PJ
 	$query->execute();
@@ -21,7 +21,7 @@
 	//preenchendo o select de motivo 
 	$in_motivos = "";
 	//carregando o motivo das categorizações, pois não temos uma tabela de cadastros destes..
-	$query = $pdo->prepare("select distinct  cd_motivo, ds_motivo from tb_log_categorizacao
+	$query = $pdo->prepare("select distinct  cd_motivo, ds_motivo from tb_log_categorizacao (nolock)
                             where data_hora between (GETDATE() - 5) and (GETDATE() - 3)
                             order by ds_motivo");
 	$query->execute();
@@ -1438,7 +1438,7 @@ function diminuiFrame(){
     	<div id="div_ilhas" class="w3-container">
     		<div class="w3-left" style="margin-top: 8px; margin-bottom: 16px;"> <b>Ilhas:</b> </div>
     		<?php
-    		$query = $pdo->prepare("select * from tb_ilhas");
+    		$query = $pdo->prepare("select * from tb_ilhas (nolock)");
     		$query->execute();
     		for($i=0; $row = $query->fetch(); $i++){
     			$nome_ilha = utf8_encode($row['nome_ilha']);

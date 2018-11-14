@@ -166,7 +166,7 @@
             echo "<td>$A</td>";
             echo "<td>$B</td>";
             echo "<td>$C</td>";
-            echo "<td>$tme_3</td>";
+            echo "<td>$tme_1</td>";
             //echo "<td>$NSA</td>";
        echo "</tr>";
    echo "</tbody>"; 
@@ -210,7 +210,7 @@
                     echo "<td>$A</td>";
                     echo "<td>$B</td>";
                     echo "<td>$C</td>";
-                    echo "<td>$tme_3</td>";
+                    echo "<td>$tme_2</td>";
                     //echo "<td>$NSA</td>";
                 echo "</tr>";
             echo "</tbody>";

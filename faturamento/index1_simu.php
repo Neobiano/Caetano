@@ -86,10 +86,10 @@ $(document).ready(function(){
 <div class="w3-container w3-margin w3-white w3-card-8 w3-azulzinho w3-border w3-round">
 
 <!-- TÍTULO -->
-<div class='w3-container w3-padding w3-margin-16 w3-tiny w3-center w3-indigo-dark w3-wide w3-card-4 '><b>FATURAMENTO - CONTRATO INDRA MARACANAÚ</b></div>
+<div class='w3-container w3-padding w3-margin-16 w3-tiny w3-center w3-indigo-dark w3-wide w3-card-4 '><b>FATURAMENTO - CONTRATO INDRA MARACANAÚ (SIMULAÇÃO)</b></div>
 
 <!-- FORMULÁRIO - INÍCIO -->
-<form action="imprime_tabela.php" method="post" class="w3-container w3-tiny" target="_blank">
+<form action="imprime_tabela_simu.php" method="post" class="w3-container w3-tiny" target="_blank">
 <!-- DIV 1 - INÍCIO -->
 <div class="w3-tiny w3-container w3-white w3-padding-0 w3-border-indigo-dark  w3-border  w3-card-4">	
 	
@@ -335,8 +335,8 @@ DIV 3 - FIM -->
 		<div class="w3-left w3-padding">
 		
 			<p id="txt_glosa" class="w3-margin-8"><b>Glosas (Quantidade) / IQF / Acertos:</b></p>
-			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='16' onkeypress='return SomenteValor(event, this, 3)'></div>		
-			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='91.2521' onkeypress='return SomenteValor(event, this, 13)'></div>
+			<div class="div_dia w3-margin-8">Quantidade de Atendimentos Prestados com Falta de Cortesia e/ou Fora dos Padrões:<input size='2' id="glosa1" type='text' name="glosa1" value='0' onkeypress='return SomenteValor(event, this, 3)'></div>		
+			<div class="div_dia w3-margin-8">IQF(%):<input size='12' id="iqf" type='text' name="iqf" value='100.00' onkeypress='return SomenteValor(event, this, 13)'></div>
 			
 	
 			<div class="div_dia w3-margin-8">
