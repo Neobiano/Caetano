@@ -241,16 +241,19 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
         include "consulta_32.php"; // Atendimentos - SAC
         break;
         
-    case '33':
-        
-        echo '<script>
-                function myFunction() {
-                    window.open("consulta_33.php");
-                }
-                myFunction();
-                </script>';
-        //include "consulta_28.php"; // Pesquisa de Satisfação - Motivo/Submotivo
-        
+    case '33':      
+        echo "<div class='w3-center'>
+                <div class='w3-bar'> 
+                <a class='w3-btn w3-indigo  ' title='Painel de Abandonos' href= \"consulta_33.php?pData1=$data_inicial_u&pData2=$data_final_u\" target=\"_blank\">Clique para abrir o Painel de Acompanhamento de Abandonos</a>
+               </div> 
+            </div>";      
+        break;	
+    case '34':
+        echo "<div class='w3-center'>
+                <div class='w3-bar'>
+                <a class='w3-btn w3-indigo  ' title='Painel de Trasferências' href= \"consulta_34.php?pData1=$data_inicial_u&pData2=$data_final_u&pFila=$cd_filas_2\" target=\"_blank\">Clique para abrir o Painel de Acompanhamento de Trasferências</a>
+               </div>
+            </div>";
         break;	
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS

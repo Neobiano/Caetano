@@ -4,18 +4,24 @@
 	//preenchendo o select de filas
 	$iniciou = 0;
 	$in_filas = "";
-	$query = $pdo->prepare("select cod_fila from tb_filas (nolock)
+	$in_filas_sel = "";
+	$query = $pdo->prepare("select cod_fila, desc_fila from tb_filas (nolock)
                             where desc_fila liKe '%CXA%'
                             and cod_fila <> 131"); //retirando bloqueio cobrança PJ
 	$query->execute();
-	for($i=0; $row = $query->fetch(); $i++){
+	for($i=0; $row = $query->fetch(); $i++)
+	{
 		$cod_fila = utf8_encode($row['cod_fila']);
 		$cod_fila = number_format($cod_fila, 0, ',', '.');
-		if($iniciou == 0){
+		$desc_fila = utf8_encode($row['desc_fila']);
+		
+		if($iniciou == 0)
+		{
 			$iniciou = 1;
 			$in_filas = "$in_filas"."$cod_fila";
 		}
 		else $in_filas = "$in_filas".",$cod_fila";
+		$in_filas_sel .= '<option value="'.$row['cod_fila'].'">'.$row['cod_fila'].' - '.$row['desc_fila'].'</option>';
 	}
 	
 	//preenchendo o select de motivo 
@@ -199,7 +205,9 @@ function mascaraData_final(campoData, e,tipodata=0){
 
 <script>
     function hideAll(){
-    	$("#div_datas").hide();
+    	$("#txt_data_inicial").text("Data Inicial:");
+		$("#txt_data_final").text("Data Final:");
+    	$("#div_datas").hide();   	 	
     	$("#div_horas").hide();
     	$("#div_datas1").hide();
     	$("#div_datas2").hide();
@@ -242,6 +250,8 @@ function mascaraData_final(campoData, e,tipodata=0){
     	
     	$("#div_dmm").hide();
     	$("#div_filas").hide();
+    	$("#div_filas_2").hide();
+    	
     	$("#div_dias_excluir").hide();
     	$("#div_select_ilhas").hide();
     	$("#div_ilhas").hide();
@@ -829,7 +839,41 @@ $(document).ready(function(){
 					    					    
 						//habilitando o filtro por bandeira	    											
     	    			
-					    break;																															
+					    break;		
+
+					case '33': //Painel de Verificação de Abandonos
+						hideAll();
+						$("#div_button").show();
+						$("#div_datas").show();
+						$("#txt_data_inicial").text("Data Base:");
+						$("#txt_data_final").text("Data Comparação:");
+						d = new Date();
+						d_7 = new Date();
+						d_7.setDate(d_7.getDate() - 7);
+						
+						//$("#data_inicial").val((d.getDate() + '/'+(d.getMonth()+1) + '/' +  d.getFullYear()));
+						//$("#data_final").val((d_7.getDate() + '/'+(d_7.getMonth()+1) + '/' +  d_7.getFullYear())); 				
+					    
+						$("#div_tex_detalhes").show();
+						$("#btn_pesquisar").html("Consultar");
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
+						$("#txt_detalhes").text("Painel de Acompanhamento de Abandonos.");	
+						break;	
+						
+					case '34': //Painel de Verificação de Abandonos
+						hideAll();
+						$("#div_button").show();
+						$("#div_datas").show();
+						$("#div_filas_2").show();
+						$("#txt_data_inicial").text("Data Base:");
+						$("#txt_data_final").text("Data Comparação:");
+								
+					    
+						$("#div_tex_detalhes").show();
+						$("#btn_pesquisar").html("Consultar");
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
+						$("#txt_detalhes").text("Painel de Acompanhamento de Trasferências.");	
+						break;																													
 						
 		}
 	});
@@ -1095,6 +1139,8 @@ function diminuiFrame(){
         				<option value="08">Perc. Atend. não Categorizados</option> <!-- Por Skill -->
         				<option value="05">Categorização de Chamadas</option>
         				<option value="12">DNS - Dispersão de Nível de Serviço</option>
+        				<option value="33">Painel de Acompanhamento - Abandonos</option>
+        				<option value="34">Painel de Acompanhamento - Transferências</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
         			</optgroup>
     				<optgroup label="TECNOLOGIA">
@@ -1343,7 +1389,18 @@ function diminuiFrame(){
     					<input id='in_filas' type='text' size='10' name='in_filas' value='$in_filas' onkeypress='mascaraData_final(this, event);' placeholder=''>
     				</div>";
     		?>
-
+	
+			<!-- CAIXA DE SELEÇÃO "REICIDENCIA PESQUISA SATISFAÇÃO"  
+    		<div id="div_filas_2" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">-->    		 
+    		<div id="div_filas_2" class="w3-left w3-margin">					
+			   <b >Filas:</b>	               
+                <select name="cd_filas_2" id="cd_filas_2">
+                    <option value=""></option>
+                    <?php echo $in_filas_sel;?>
+                </select>
+            </div>                            
+    		
+    		
     		<!-- DIV DATAS - div_datas -->
     		<div id="div_datas" class="w3-left w3-margin">										
     			<b id="txt_data_inicial">Data Inicial:</b>

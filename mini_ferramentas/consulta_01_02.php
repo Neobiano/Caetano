@@ -49,13 +49,16 @@ $CALLID_ANTERIOR_2 = "";
 $TRANSF_EFETUADAS = array();
 $TRANSF_RECEBIDAS = array();
 
-$query = $pdo->prepare("select a.callid CALLID, a.cod_fila COD_FILA, ROW_NUMBER() OVER(order by a.callid, a.data_hora asc) as NUM_LINHA from tb_eventos_dac as a
+$query = $pdo->prepare("select a.callid CALLID, 
+                               a.cod_fila COD_FILA, 
+                               ROW_NUMBER() OVER(order by a.callid, a.data_hora asc) as NUM_LINHA 
+                        from tb_eventos_dac as a
 						inner join
 						(
-						select callid, count(*) TOTAL from tb_eventos_dac
-						where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0
-						group by callid
-						having count(*) > 1
+						  select callid, count(*) TOTAL from tb_eventos_dac
+						  where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and tempo_atend > 0
+						  group by callid
+						  having count(*) > 1
 						) as b on a.callid = b.callid
 						where a.data_hora between '$data_inicial' and '$data_final 23:59:59.999' and a.tempo_atend > 0");
 $query->execute();	
@@ -153,21 +156,35 @@ for($i=0; $row = $query->fetch(); $i++){
 	
 	// INFORMAA CONSULTA
 	
-	$sql = "select E.cod_fila E_COD_FILA, fi.desc_fila R_COD_FILA, fi.desc_fila E_DESC_FILA, R.desc_fila R_DESC_FILA, E.TOTAL_LIGACOES E_TOTAL_LIGACOES, R.TOTAL_LIGACOES R_TOTAL_LIGACOES, E.TRANSF_PARA_OUTRAS_FILAS, R.RECEBIDAS_DE_TRANSF, E.PERC_TRANSF PERC_TRANSF_PARA_OUTRAS_FILAS, R.PERC_TRANSF PERC_RECEBIDAS_DE_TRANSF from
-                            (
-                            -- PERCENTUAL DE TRANSFERÊNCIAS PARA OUTRAS FILAS
-                            SELECT M.cod_fila, F.desc_fila, TOTAL_TRANSF TRANSF_PARA_OUTRAS_FILAS, TOTAL_LIGACOES, cast(TOTAL_TRANSF as float)/cast(TOTAL_LIGACOES as float)*100 PERC_TRANSF FROM
-                            (
-                            select cod_fila, count(*) TOTAL_TRANSF from
-                            (
-                            select * from tb_eventos_dac
-                            where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and datepart(dw,data_hora) in $in_semana and tempo_atend > 0 and callid in (select CALLID_TRANSF from
-                            (
-                            select callid as CALLID_TRANSF, count(*) TOTAL from tb_eventos_dac
-                            where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and datepart(dw,data_hora) in $in_semana and tempo_atend > 0
-                            group by callid
-                            having count(*) > 1
-                            ) as T)
+	$sql = "select E.cod_fila E_COD_FILA, 
+                   fi.desc_fila R_COD_FILA, 
+                   fi.desc_fila E_DESC_FILA, 
+                   R.desc_fila R_DESC_FILA, 
+                   E.TOTAL_LIGACOES E_TOTAL_LIGACOES, 
+                   R.TOTAL_LIGACOES R_TOTAL_LIGACOES, 
+                   E.TRANSF_PARA_OUTRAS_FILAS, 
+                   R.RECEBIDAS_DE_TRANSF, 
+                   E.PERC_TRANSF PERC_TRANSF_PARA_OUTRAS_FILAS, 
+                   R.PERC_TRANSF PERC_RECEBIDAS_DE_TRANSF from
+                                                                (
+                                                                     -- PERCENTUAL DE TRANSFERÊNCIAS PARA OUTRAS FILAS
+                                                                    SELECT M.cod_fila, F.desc_fila, TOTAL_TRANSF TRANSF_PARA_OUTRAS_FILAS, 
+                                                                          TOTAL_LIGACOES, cast(TOTAL_TRANSF as float)/cast(TOTAL_LIGACOES as float)*100 PERC_TRANSF 
+                                                                    FROM
+                                                                    (
+                                                                        select cod_fila, count(*) TOTAL_TRANSF  from
+                                                                                                                     (
+                                                                                                                        select * from tb_eventos_dac
+                                                                                                                        where data_hora between '$data_inicial' and '$data_final 23:59:59.999' 
+                                                                                                                        and datepart(dw,data_hora) in $in_semana 
+                                                                                                                        and tempo_atend > 0 and callid in (
+                                                                                                                                                            select CALLID_TRANSF from
+                                                                                                                                                                                        (
+                                                                                                                                                                                            select callid as CALLID_TRANSF, count(*) TOTAL from tb_eventos_dac
+                                                                                                                                                                                            where data_hora between '$data_inicial' and '$data_final 23:59:59.999' and datepart(dw,data_hora) in $in_semana and tempo_atend > 0
+                                                                                                                                                                                            group by callid
+                                                                                                                                                                                            having count(*) > 1
+                                                                                                                                                                                        ) as T)
                             ) as O
                             left join
                             (
@@ -243,7 +260,7 @@ for($i=0; $row = $query->fetch(); $i++){
                             (select * from tb_filas where desc_fila like 'CXA%') as fi
                             on E.cod_fila = fi.cod_fila";
 	
-	//echo $sql;
+	echo $sql;
 	$query = $pdo->prepare($sql);
 	$query->execute(); // EXECUTA A CONSULTA
 	

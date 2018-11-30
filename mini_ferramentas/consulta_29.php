@@ -95,27 +95,27 @@
                                 		count(*) qtde,
                                 		( 
                                 			select count(*) 
-                                			from tb_dados_retencao t1 
+                                			from tb_dados_retencao t1 (nolock)
                                 			where cast(t1.data_hora as date) = cast(t.data_hora as date) 
                                 			and t1.tipo_retencao = 'CARTÃO NÃO RETIDO'
                                 			and t1.bandeira = t.bandeira
                                 		) nao_retido,
                                 		( 
                                 			select count(*) 
-                                			from tb_dados_retencao t2 
+                                			from tb_dados_retencao t2 (nolock)
                                 			where cast(t2.data_hora as date) = cast(t.data_hora as date) 
                                 			and t2.tipo_retencao = 'DESCONTO DE ANUIDADE'
                                 			and t2.bandeira = t.bandeira
                                 		) ret_desc,
                                 		( 
                                 			select count(*) 
-                                			from tb_dados_retencao t3 
+                                			from tb_dados_retencao t3 (nolock)
                                 			where cast(t3.data_hora as date) = cast(t.data_hora as date) 
                                 			and t3.tipo_retencao = 'ARGUMENTAÇÃO'
                                 			and t3.bandeira = t.bandeira
                                 		) ret_arg
                                          
-                                		from tb_dados_retencao t
+                                		from tb_dados_retencao t (nolock)
                                 		where t.data_hora between '$data_inicial_u 00:00:00' and '$data_final_u 23:59:59'
                                         and ($swhere)	
                                 	    group by cast(data_hora as date), datepart(dw,data_hora),bandeira 
@@ -278,12 +278,12 @@
                     count(*) qtde,
                     ( 
                         select count(*) 
-                        from tb_dados_retencao t1 
+                        from tb_dados_retencao t1 (nolock)
                         where  t1.tipo_retencao = 'CARTÃO NÃO RETIDO'
                         and t1.bandeira = t.bandeira
                 		and t1.data_hora between '$data_inicial_u 00:00:00' and '$data_final_u 23:59:59'	
                     ) nao_retido	                        
-                    from tb_dados_retencao t
+                    from tb_dados_retencao t (nolock)
                     where t.data_hora between '$data_inicial_u 00:00:00' and '$data_final_u 23:59:59'	
                     and ($swhere)	
                     group by  bandeira 

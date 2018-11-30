@@ -47,6 +47,8 @@ if ($cd_submotivo > 0)
 
 $in_filas = $_POST['in_filas'];
 $in_filas = str_replace(" ","",$in_filas);
+$cd_filas_2 = $_POST['cd_filas_2'];
+
 
 $cb_motivos = $_POST['cb_motivos'];
 $cb_motivos = str_replace(" ","",trim($cb_motivos));
