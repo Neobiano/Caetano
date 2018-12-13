@@ -119,7 +119,7 @@ echo "</div>";
     	    
     	    //----------------------------------BRUTO----------------------------------//
     	    //Total recebidas da URA 
-    	    $sql = "select datepart(dw,data_hora) dia_semana, count(distinct t.callid) qtde from tb_eventos_ura t
+    	    $sql = "select datepart(dw,data_hora) dia_semana, count(distinct t.callid) qtde from tb_eventos_ura t (nolock)
     	            where data_hora between '$sdata' and '$sdata 23:59:59.999'$sAND
     	            and datepart(dw,t.data_hora) in $in_semana
                     group by datepart(dw,data_hora)";
@@ -134,7 +134,7 @@ echo "</div>";
     	    }
     	    
     	    //Total encaminhadas para o Humano, NÃO RETIDAS 
-    	    $sql = " select count(distinct t2.callid) qtde from tb_eventos_dac t2
+    	    $sql = " select count(distinct t2.callid) qtde from tb_eventos_dac t2 (nolock)
     	             where t2.data_hora  between '$sdata' and '$sdata 23:59:59.999'
                      and datepart(dw,t2.data_hora) in $in_semana 
     	             and t2.tempo_atend > 0 ";
@@ -153,20 +153,20 @@ echo "</div>";
     	    
     	    //--------------------------------Liquido--------------------------------------------
     	    //Total recebidas liquidas na ura sem contabilizar as chamadas das filas que NÃO POSSUEM serviço válido na URA 
-    	    $sql = "    select count(distinct t.callid) qtde from tb_eventos_ura t 
+    	    $sql = "    select count(distinct t.callid) qtde from tb_eventos_ura t (nolock) 
                         where t.data_hora between '$sdata' and '$sdata 23:59:59.999'$sAND
                         and datepart(dw,t.data_hora) in $in_semana
                         and t.callid not in 
                         (   --lista de callids que iniciaram os atendimentos pelas filas que não possuem funcionalidade na ura 
                         	select distinct t2.callid 
-                            from tb_eventos_dac t2 
+                            from tb_eventos_dac t2 (nolock) 
                         	where t2.data_hora between '$sdata' and '$sdata 23:59:59.999'
                         	and t2.cod_fila in (63,64,99,100,110,130) 
                             and t2.tempo_atend > 0 
                             and datepart(dw,t2.data_hora) in $in_semana
                         	and t2.data_hora = ( 
                         							select min(data_hora) 
-                        							from tb_eventos_dac t3 
+                        							from tb_eventos_dac t3 (nolock) 
                         							where t3.data_hora between '$sdata' and '$sdata 23:59:59.999'	
                                                     and datepart(dw,t3.data_hora) in $in_semana							  
                         							and t3.callid = t2.callid
@@ -182,14 +182,14 @@ echo "</div>";
     	    
     	    //Atendimentos NÃO retidos na URA, ou seja, originados nas filas que possuem serviço na ura (NOT IN (63,64,99,100,110,130))	    
     	    $sql = "
-    				select count(distinct t2.callid) qtde from tb_eventos_dac t2 
+    				select count(distinct t2.callid) qtde from tb_eventos_dac t2 (nolock) 
     				where t2.data_hora between '$sdata' and '$sdata 23:59:59.999'
     				and t2.cod_fila not in (63,64,99,100,110,130) 
                     and t2.tempo_atend > 0
                     and datepart(dw,t2.data_hora) in $in_semana 
     				and t2.data_hora = ( 
     										select min(data_hora) 
-    										from tb_eventos_dac t3 
+    										from tb_eventos_dac t3 (nolock) 
     										where t3.data_hora between '$sdata' and '$sdata 23:59:59.999'
                                             and datepart(dw,t3.data_hora) in $in_semana						  
     										and t3.callid = t2.callid														

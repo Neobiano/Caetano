@@ -110,7 +110,7 @@
 </script>
 
 <script>
-function mascaraData_inicial(campoData, e,tipodata=0){
+function mascaraData_inicial(campoData, e,tipodata){
 
 	var tecla=(window.event)?event.keyCode:e.which;   
 	if((tecla == 8)) return true;	
@@ -197,8 +197,6 @@ function mascaraData_final(campoData, e,tipodata=0){
 	        return true;
 	    }
 }
-
-
 
 
 </script>
@@ -873,6 +871,19 @@ $(document).ready(function(){
 						$("#btn_pesquisar").html("Consultar");
 						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
 						$("#txt_detalhes").text("Painel de Acompanhamento de Trasferências.");	
+						break;		
+
+					case '35': //Lista de Incidentes CSCIT
+						hideAll();
+						$("#div_button").show();
+						$("#div_datas").show();						
+						$("#txt_data_inicial").text("Data Inicial:");
+						$("#txt_data_final").text("Data Final:");							
+					    
+						$("#div_tex_detalhes").show();
+						$("#btn_pesquisar").html("Consultar");
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
+						$("#txt_detalhes").text("Painel de Acompanhamento de Trasferências.");	
 						break;																													
 						
 		}
@@ -1141,6 +1152,7 @@ function diminuiFrame(){
         				<option value="12">DNS - Dispersão de Nível de Serviço</option>
         				<option value="33">Painel de Acompanhamento - Abandonos</option>
         				<option value="34">Painel de Acompanhamento - Transferências</option>
+        				<option value="35">Lista de Incidentes - CSCIT</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
         			</optgroup>
     				<optgroup label="TECNOLOGIA">

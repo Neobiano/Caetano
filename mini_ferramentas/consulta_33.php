@@ -21,7 +21,7 @@
   <script type="text/javascript" charset="utf8" src="js/dataTables.js"></script>
   
     	
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
   <script type="text/javascript">    
 
 		//---------------------RELOAD DA PÁGINA-------------------
@@ -348,7 +348,7 @@
              data1.addColumn('timeofday', 'Hora');
              data1.addColumn('number', '<?php echo $sdata1.' - Média ( '.$media_abandonadas_1.'% )'?>');
              data1.addColumn('number', '<?php echo $sdata2.' - Média ( '.$media_abandonadas_2.'% )'?>');
-             data1.addColumn('number', 'Benchmark 2,3%');                      		                                                   
+             data1.addColumn('number', 'Benchmark 2,3% (Considerando Abanonos > 10s)');                      		                                                   
              data1.addRows([<?php echo $dadosgrafico1?>]);
              var options1 =
                             {
@@ -374,7 +374,8 @@
                               interpolateNulls : true                                                  
                             };
              
-             var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+             var chart = new google.visualization.LineChart(document.getElementById('chart_div'));                           
+             
              chart.draw(data1, options1);
           }    
                                                   	     
@@ -419,6 +420,7 @@
     	
       <div class="w3-border w3-margin w3-padding-bottom w3-card-4" style="margin-top:0; !important;">
         <div id="chart_div" style="height: 500px;" ></div>    
+        
       </div>  
     
   
@@ -429,8 +431,8 @@
             <tr class="w3-indigo">              	
                 	<tr class="w3-indigo">
                        <td colspan="3"><b>Intervalo<b></td>
-                       <td colspan="6"><b><?php echo $data1?></b></td>
-                       <td colspan="6"><b><?php echo $data2?></b></td>
+                       <td colspan="6"><b><?php echo $sdata1?></b></td>
+                       <td colspan="6"><b><?php echo $sdata2?></b></td>
                     </tr>   
                 	<tr class="w3-indigo">
                     	<td><b>Hora</b></td>                

@@ -388,8 +388,10 @@ echo "<hr>";
 
 
 //for($pos_dia=20; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
-//for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
-for($pos_dia=22; ($pos_dia <= 22); $pos_dia++)
+//
+//for($pos_dia=22; ($pos_dia <= 22); $pos_dia++)
+$qtd_dias = 10;
+for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
     
     /*verificacao se o dia em questão possui revisao de nivel*/
@@ -2036,7 +2038,7 @@ echo '</tr>';
 
 
 //$mensal_total = $mensal_retido + $mensal_ura + $mensal_humano; // DEFINE MENSAL TOTAL COM RETIDOS
-$mensal_total = ($mensal_ura + ($mensal_humano * $iqm))*$dns; // DEFINE MENSAL TOTAL SEM RETIDOS
+$mensal_total = ($mensal_ura + $hum_mensal); // DEFINE MENSAL TOTAL SEM RETIDOS
 $imprime_mensal_total = number_format($mensal_total, 2, ',', '.');
 
 echo '<tr">';

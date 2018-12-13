@@ -410,8 +410,8 @@
             <tr class="w3-indigo">              	
                 	<tr class="w3-indigo">
                        <td colspan="3"><b>Intervalo<b></td>
-                       <td colspan="5"><b><?php echo $data1?></b></td>
-                       <td colspan="5"><b><?php echo $data2?></b></td>
+                       <td colspan="5"><b><?php echo $sdata1?></b></td>
+                       <td colspan="5"><b><?php echo $sdata2?></b></td>
                     </tr>   
                 	<tr class="w3-indigo">
                     	<td><b>Hora</b></td>                
