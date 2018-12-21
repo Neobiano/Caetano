@@ -195,8 +195,8 @@
     $ilha_aviso_viagem = "'125'";
     $ilha_parcelamento = "'72','76','80','84','111'";
     $ilha_contestacao = "'60','88','90','93','96'";
-    $ilha_pontos = "'87','91','94','97','139'"; //'120',
-    $ilha_pj = "'99','101','110'";/*'100', ,'100','130'*/
+    $ilha_pontos = "'87','91','94','97','139'"; 
+    $ilha_pj = "'99','101','110'";
     $ilha_100 = "'100'";
     $ilha_130 = "'130'";
     $ilha_caixa_empregado = "'63'";
@@ -207,7 +207,7 @@
     $ilha_bloqueio_cobranca = "'117','106','107','108','109'";
     $ilha_app = "'102'";
 
-    //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130', ,'120'
+ 
     $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126','100','130'";
     
     $in_filas_premium = "'82','83','84','85','96','97','98','107'";
@@ -390,7 +390,6 @@ echo "<hr>";
 //for($pos_dia=20; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
 //
 //for($pos_dia=22; ($pos_dia <= 22); $pos_dia++)
-$qtd_dias = 10;
 for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
     
@@ -771,20 +770,6 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	}
 	
 
-	// contestacao	
-	/*
-	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL	FROM  TB_EVENTOS_DAC ted
-							inner join	(
-											SELECT distinct  CALLID, min(data_hora) d_hora
-											FROM TB_EVENTOS_DAC
-											WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-											AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_contestacao)
-											GROUP BY CALLID
-									    ) AS A on (A.CALLID = ted.callid and A.d_hora = ted.data_hora)
-							WHERE ted.DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
-							AND ted.CALLID IS NOT NULL AND ted.TEMPO_ATEND > '0' AND ted.COD_FILA IN ($ilha_contestacao)
-							GROUP BY ted.COD_FILA");*/
-	
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
 																	FROM TB_EVENTOS_DAC
@@ -1515,14 +1500,14 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			$total_ansm = $total_ansm + $aplicacao_ansm; // $total_ansm do dia
 			
 			//--------------calculando adicional ACP-----------------
-			//$qtde_acp = 0; //código para anular a implementação de adição de retidos
+			//$qtde_acp = 0; //código para anular a implementação de adição de retidos (usado em testes)
 			//$fator = 1;
 			$ad_acp_ret = 0;
 			$qtde_retacp = 0;
 			$imp_ad_acp_ret = 0;
 			$imp_acp_aplicado_ret = 0;
 			
-			//Agregando a FILA RETENÇÃO PREMIUM '85' para permitir a aplicação da regra das ligações retidas
+			//Agregando a FILA RETENÇÃO PREMIUM '85' para permitir a aplicação da regra das ligações retidas 
 			$vet_retencao_ret_premium = $vet_retencao;
 			array_push($vet_retencao_ret_premium,'85');
 			if (in_array($cont, $vet_retencao_ret_premium))
@@ -1682,101 +1667,13 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	//obs, código retirado pois o calculo feito acima, somente com sql é mais simples e produz o mesmo resultado
 	if($sel_eventos_ura=='02RETIRADO')
 	{
-		$qtd_ura = 0;
-		$valida_callid = 0;
-		
-		//prepara o 'vet' dos eventos faturáveis - início
-		$txt_eventos_faturaveis = "";
-		/*
-		$query = $pdo->prepare("select * from tb_eventos
-					where cod_fonte = 1");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$cod_evento = $row['cod_evento'];
-			if(isset($_POST["evento_ura_$cod_evento"]))
-			{
-				if($txt_eventos_faturaveis=="") 
-					$txt_eventos_faturaveis = $txt_eventos_faturaveis . "$cod_evento";
-				else 
-					$txt_eventos_faturaveis = $txt_eventos_faturaveis . ",$cod_evento";
-			}
-		}
-		$vet_eventos_faturaveis = explode(",",$txt_eventos_faturaveis); */
-		$eventos_faturaveis = array('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140');
-		//prepara o 'vet' dos eventos faturáveis - FIM
-					
-					
-		$query = $pdo->prepare("SELECT CALLID, COD_EVENTO
-								FROM TB_EVENTOS_URA
-								WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$valida_callid = 0;
-			$cod_evento = $row['COD_EVENTO'];
-			$vetor = explode(";", $cod_evento);
-			
-			$qtd_vetor = count($vetor);
-			
-			for($a=0;$a<$qtd_vetor;$a++)
-			{
-				if (in_array($vetor[$a], $vet_eventos_faturaveis)) 
-					$valida_callid = 1;
-			}
-			
-			if($valida_callid==1) 
-				$qtd_ura = $qtd_ura + 1;
-			
-		}
-		
-		if ($txt_eventos_faturaveis=="") 
-			$qtd_ura = 0;					
+	   //retirado
 	}
 		
 	if($sel_eventos_ura=='03')
 	{
-		$qtd_ura = 0;
-			
-		//prepara o 'vet' dos eventos faturáveis - início
-		$txt_eventos_faturaveis = "";
-		$query = $pdo->prepare("select * from tb_eventos
-					where cod_fonte = 1");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$cod_evento = $row['cod_evento'];
-			if(isset($_POST["evento_ura_$cod_evento"]))
-			{
-				if($txt_eventos_faturaveis=="") 
-					$txt_eventos_faturaveis = $txt_eventos_faturaveis . "$cod_evento";
-				else 
-					$txt_eventos_faturaveis = $txt_eventos_faturaveis . ",$cod_evento";
-			}
-		}
-		$vet_eventos_faturaveis = explode(",",$txt_eventos_faturaveis);
-		//prepara o 'vet' dos eventos faturáveis - fim
-			
-			
-		$query = $pdo->prepare("SELECT CALLID, COD_EVENTO
-								FROM TB_EVENTOS_URA
-								WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL");
-		$query->execute();
-		for($i=0; $row = $query->fetch(); $i++)
-		{
-			$cod_evento = $row['COD_EVENTO'];
-			$vetor = explode(";", $cod_evento);
-			
-			$qtd_vetor = count($vetor);
-			
-			for($a=0;$a<$qtd_vetor;$a++){
-				if (in_array($vetor[$a], $vet_eventos_faturaveis)) $qtd_ura = $qtd_ura+1;
-			}
-			
-		}
-		if ($txt_eventos_faturaveis=="") $qtd_ura = 0;
-		
-	}// FINAL if($sel_eventos_ura=='03')
+	   //retirado		
+	}
 		
 		
 	$imprime_qtd_ura = number_format($qtd_ura, 0, ',', '.');		
@@ -1938,14 +1835,6 @@ echo '<tr class="w3-black">';
 echo "<td><b>RESUMO DE FATURAMENTO - MENSAL</b></td>";
 echo "<td><b>$mes de $qual_ano</b></td>";
 echo '</tr>';
-
-/*
-$imprime_mensal_retido = number_format($mensal_retido, 2, ',', '.');
-echo '<tr">';
-echo "<td>FATURAMENTO RETIDOS</td>";
-echo "<td>R$ $imprime_mensal_retido</td>";
-echo '</tr>';
-*/
 
 $imprime_mensal_total_ca = number_format($mensal_total_ca, 0, ',', '.');
 echo '<tr">';

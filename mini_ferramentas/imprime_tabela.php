@@ -266,6 +266,9 @@ switch ($tipo_consulta) { // VERIFICA QUAL A CONSULTA A SER REALIZADA
          
           
         break;
+    case '36':
+        include "consulta_36.php"; // Lista atendimentos por CPF/FONE                               
+        break;
 }
 include "desconecta.php"; // DESCONECTA DO BANCO DE DADOS
 ?>

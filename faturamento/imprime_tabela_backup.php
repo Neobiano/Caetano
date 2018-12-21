@@ -160,7 +160,7 @@
     $vet_triagem = array('150','138');
     $vet_parcelamento = array('72','76','80','111');
     $vet_contestacao = array('60','88','90','93');//tirei
-    $vet_pontos = array('87','91','94','120','139'); //tirei
+    $vet_pontos = array('87','91','94','139'); //tirei '120'
     $vet_geral_normal = array('70','71','74','75','78','79','86','58','89','92','95','114','118','137','126');//tirei 57 é perda e roubo
     $vet_geral_premium = array('82','83','98','107','85','84','96','97'); //Reagregando as filas premium 
 
@@ -195,7 +195,7 @@
     $ilha_aviso_viagem = "'125'";
     $ilha_parcelamento = "'72','76','80','84','111'";
     $ilha_contestacao = "'60','88','90','93','96'";
-    $ilha_pontos = "'87','91','94','97','120','139'";
+    $ilha_pontos = "'87','91','94','97','139'"; //'120',
     $ilha_pj = "'99','101','110'";/*'100', ,'100','130'*/
     $ilha_100 = "'100'";
     $ilha_130 = "'130'";
@@ -207,8 +207,8 @@
     $ilha_bloqueio_cobranca = "'117','106','107','108','109'";
     $ilha_app = "'102'";
 
-    //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130',
-    $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','120','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126','100','130'";
+    //31/10/2016 (Fabiano) adicionado a fila 125, retirada fila '100', '100','130', ,'120'
+    $in_todas_filas = "'73','77','81','85','116','150','72','76','80','84','111','60','88','90','93','96','87','91','94','97','70','71','74','75','78','79','86','58','89','92','95','102','106','108','109','114','118','57','82','83','98','107','99','101','110','63','61','64','117','125','137','126','100','130'";
     
     $in_filas_premium = "'82','83','84','85','96','97','98','107'";
 
@@ -280,7 +280,7 @@
  $dns = $qual_dns; 
 
 // imprime parâmetros - início
-echo "<div class = 'w3-leftbar w3-border-black w3-margin-left'><div class='w3-margin-left w3-tiny'><b>( OLD ) Parâmetros Utilizados:</b></div>";
+echo "<div class = 'w3-leftbar w3-border-black w3-margin-left'><div class='w3-margin-left w3-tiny'><b>Parâmetros Utilizados:</b></div>";
 echo "<br>";
 echo "<div class='w3-margin-left w3-tiny'>Período da Pesquisa: $mes / $qual_ano</div>";
 echo "<div class='w3-margin-left w3-tiny'>Limite para pagamento de Shortcall: $shortcall_porcentagem%</div>";
@@ -388,9 +388,10 @@ echo "<hr>";
 
 
 //for($pos_dia=20; ($pos_dia <= ($pos_dia+1)); $pos_dia++)//aqui
-//for($pos_dia=14; ($pos_dia <= 14); $pos_dia++)//aqui
-//for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
-for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
+//
+//for($pos_dia=22; ($pos_dia <= 22); $pos_dia++)
+$qtd_dias = 10;
+for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
     
     /*verificacao se o dia em questão possui revisao de nivel*/
@@ -465,68 +466,42 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 	$menor_ns_faixa_horario_premium = 1;
 				
 	//------------TODAS AS FILAS----------------//	
-	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'TODAS','MENOR_NSA'";
+	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao_2 '$qual_ano-$qual_mes-$pos_dia','TODAS','MENOR_NS'";
 	//echo $sqltodas;	
 	$query = $pdo->prepare($sql);
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++)
 	{
-	    $nd_nsa = $row['n_nsa'];
-	    $nd_ns = $nd_nsa / $nsr_valor;
+	    $nd_ns = $row['avg_ns'];    
 	}
 	
 	if ($nd_ns < $menor_ns_faixa_horario)
 	    $menor_ns_faixa_horario = $nd_ns;
 		    
     //------------SOMENTE FILAS PREMIUM----------------//
-	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'PREMIUM','MENOR_NSA'";
+	$sql = "EXEC sp_CERATFO_fat_menor_ns_intervalo_revisao_2 '$qual_ano-$qual_mes-$pos_dia','PREMIUM','MENOR_NS'";
     //echo $sqlpremium;
 	$query = $pdo->prepare($sql);	
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)
     {
-        $nd_nsa = $row['n_nsa'];
-        $nd_ns = $nd_nsa / $nsr_premium_valor;
+        $nd_ns = $row['avg_ns'];        
     }    
     
     $menor_ns_faixa_horario_premium = $nd_ns;  
 	       
 	
-    //-------------------MENOR NIVEL DE SERVICO DA FILA------------------//
-    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'MENOR_NSA',0";
+    //-------------------MENOR NIVEL DE SERVICO DA FILA------------------//                
+    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao_2 '$qual_ano-$qual_mes-$pos_dia','MENOR_NS',0";
     //echo $sqlpremium;
     $query = $pdo->prepare($sql);
     $query->execute();
     for($i=0; $row = $query->fetch(); $i++)
     {
-        $nd_nsa = $row['n_nsa'];
-        $srv_cod_fila = $row['cod_fila'];
-        
-        if ($dia_revisao_nivel > 0)
-        {    
-            if (strpos($in_filas_premium,$srv_cod_fila) !== false)
-            {
-                $menor_ns_filas = ($nd_nsa / $nsr_premium_valor);
-            }
-            else
-            {
-                $menor_ns_filas = ($nd_nsa / $nsr_valor);
-            }
-        }
-        else 
-        {
-            $menor_ns_filas = $nd_nsa;
-        }
-        /*verificando se a fila é premium pra poder determinar o NS baseado na divisao do NSA/NSR        
-        if (strpos($in_filas_premium,$srv_cod_fila) !== false)
-        {    
-           $menor_ns_filas = ($nd_nsa / $nsr_premium_valor);
-        }
-        else
-        {
-           $menor_ns_filas = ($nd_nsa / $nsr_valor);
-        }*/
+        $nd_nsa = $row['ns'];
+        $srv_cod_fila = $row['cod_fila'];                        
     }    
+    $menor_ns_filas = $nd_nsa;
           
     
     
@@ -1297,15 +1272,14 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 				
 			}
 			else
-			{  
-				    if($nsa >= $nsr ) 
-					   $nivel_de_servico = 1;
-				    else 
-				       $nivel_de_servico = $nsa/$nsr_valor;
-				
-				    $imprime_nsr = number_format($nsr_valor, 2, ',', '.');
-				    echo "<td>$imprime_nsr</td>";								
-				
+			{    
+			    if($nsa >= $nsr ) 
+				   $nivel_de_servico = 1;
+			    else 
+			       $nivel_de_servico = $nsa/$nsr_valor;
+			
+			    $imprime_nsr = number_format($nsr_valor, 2, ',', '.');
+			    echo "<td>$imprime_nsr</td>";											
 			} 
 			
 			if ($nivel_de_servico > 1)
@@ -1442,10 +1416,8 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 				//$fator = 1.1; RETIRADO NOVO FORMATO ACP
 			}
 			else if (in_array("$cont", $vet_contestacao_com_100) or in_array("$cont", $vet_pontos) )
-			{
-			       				    				    			
-    				$qtde_acp = $valor_ca;
-    				
+			{			       				    				    			
+    		   $qtde_acp = $valor_ca;    			
     		}
 			
 			$imp_acp_aplicado = 0.00; 
@@ -1454,34 +1426,15 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			 o nivel de servico das 3 datas utilizadas na revisao PARA A FILA*/
 			if ($dia_revisao_nivel > 0)
 			{            		
-			    
-			    /*gambiarra, presente do giuan e do leirton
-			    if (($cont ==138) or ($cont ==139))
-			    {
-			        $qtde_acp = 0;
-			    }*/
-			    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao '$qual_ano-$qual_mes-$pos_dia',$ns,'TODAS',$cont";
+			    			   
+			    $sql = "EXEC sp_CERATFO_fat_menor_ns_revisao_2 '$qual_ano-$qual_mes-$pos_dia','TODAS',$cont";
         		
         		$query = $pdo->prepare($sql);
         		$query->execute(); 
         		for($y=0; $row = $query->fetch(); $y++)
         		{
-        		    $nd_nsa = $row['n_nsa'];
-        		            		    
-        		    //verificando se a fila é premium pra poder determinar o NS baseado na divisao do NSA/NSR
-        		    if (strpos($in_filas_premium,$cont) !== false)
-        		    {
-        		        $valor_ns = ($nd_nsa / $nsr_premium_valor);
-        		    }
-        		    else
-        		    {
-        		        //gambiarra thiago x Leirton X Giuan: FILA 64
-        		        if ($cont == 64)
-        		          $valor_ns = ($nd_nsa / 0.70);
-        		        else 
-        		          $valor_ns = ($nd_nsa / $nsr_valor);        		        
-        		    }
-        		    
+        		    $valor_ns = $row['ns'];
+        		            		            		           		   
         		    if ($valor_ns > 1)
         		      $valor_ns = 1.00;
         		}        		
@@ -1489,51 +1442,30 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			
 			//Agregando filas de acordo as particulares de remuneração de ACP
 			if (in_array($cont, $vet_retencao)  or  in_array($cont, $vet_triagem)
-			or in_array($cont, $vet_contestacao_com_100)  or in_array($cont, $vet_pontos)
-			or in_array($cont, $vet_perda_roubo)  or in_array($cont, $vet_pj))
+			    or in_array($cont, $vet_contestacao_com_100)  or in_array($cont, $vet_pontos)
+			    or in_array($cont, $vet_perda_roubo)  or in_array($cont, $vet_pj)
+			    or in_array($cont, $vet_parcelamento_com_130) or  in_array($cont, $vet_aviso_viagem)
+			)
 			{
 			    			   
 			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.95')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 95% - !SEM ACP!
 			         $imp_acp_aplicado = '00';
-			    else if ($menor_ns_faixa_horario >= '0.90') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
+			    else if ($menor_ns_faixa_horario >= '0.85') //Validando a 3º Condição (mais dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 90%
 			    {
 		            $imp_acp_aplicado = '25';
 		            $fator = 1.25;
-			    }
-			    else if ($menor_ns_faixa_horario >= '0.85') //Validando a 2º Condição (levemente dificil) se TODOS os intervalos de TODAS as filas ficaram com NS > 85%
-			    {
-			        $imp_acp_aplicado = '20';
-			        $fator = 1.20;
-			    }
+			    }			   
 		        else //Validando a 1º Condição (a mais fácil), FILA com NS >= 98% e as demais filas com NS >= 95%
-		        {
-		            if (in_array($cont, $vet_pj)) //demais PJ
-		            {//Nesta condição se for atendimento PJ recebe 10%
-		                $imp_acp_aplicado = '10';
-		                $fator = 1.10;
-		            }
-		            else  //demais recebem 15%
-		            {
-		                $imp_acp_aplicado = '15';
-		                $fator = 1.15;
-		            }
+		        {		            		            
+                    $imp_acp_aplicado = '15';
+                    $fator = 1.15;		            
 		        }
-			}
-			else if (in_array($cont, $vet_parcelamento_com_130)  or  in_array($cont, $vet_aviso_viagem)) //2º Grupo
-			{
-			    if (($valor_ns < '0.98') or ($menor_ns_filas < '0.90')) //1º Critério - Se o NS da Fila < 98% ou NS das demais filas < 90% - !SEM ACP!			    
-			        $imp_acp_aplicado = '00';			        
-			     else
-			     {			         
-			        $imp_acp_aplicado = '25';
-			        $fator = 1.25;
-			     }
-			}
+			}			
 			else if (in_array($cont, $vet_geral_premium)) //3º Grupo aqui
 			{			    
 			    if (($valor_ns < '0.95') ) //1º Critério - Se o NS da Fila < 95% ou NS das demais filas < 90% - !SEM ACP  - retirado or ($menor_ns_filas < '0.90') !
 			        $imp_acp_aplicado = '00';
-			    else if ($menor_ns_faixa_horario_premium >= '0.90')
+			    else if ($menor_ns_faixa_horario_premium >= '0.85')
 			    {
 			        $imp_acp_aplicado = '25';
 			        $fator = 1.25;
@@ -1541,9 +1473,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)//aqui
 			    {
 			        $imp_acp_aplicado = '20';
 			        $fator = 1.20;
-			    }
-			    
-			    
+			    }			   			  
 			}
 			
 			/*$imp_acp_aplicado = 0.00;//retirando o ACP
@@ -2108,7 +2038,7 @@ echo '</tr>';
 
 
 //$mensal_total = $mensal_retido + $mensal_ura + $mensal_humano; // DEFINE MENSAL TOTAL COM RETIDOS
-$mensal_total = ($mensal_ura + ($mensal_humano * $iqm))*$dns; // DEFINE MENSAL TOTAL SEM RETIDOS
+$mensal_total = ($mensal_ura + $hum_mensal); // DEFINE MENSAL TOTAL SEM RETIDOS
 $imprime_mensal_total = number_format($mensal_total, 2, ',', '.');
 
 echo '<tr">';

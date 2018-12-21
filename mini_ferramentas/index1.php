@@ -155,7 +155,7 @@ function mascaraData_inicial(campoData, e,tipodata){
 	    }
 }
 
-function mascaraData_final(campoData, e,tipodata=0){
+function mascaraData_final(campoData, e,tipodata){
 
 	var tecla=(window.event)?event.keyCode:e.which;   
 	if((tecla == 8)) return true;	
@@ -214,13 +214,15 @@ function mascaraData_final(campoData, e,tipodata=0){
     	$("#div_tex_detalhes").hide();
     	$("#div_select_dias_semana").hide();
     	$("#div_dia_semana").hide();
-    	$("#div_qtd_transf").hide();
+    	$("#div_qtd_transf").hide();    	   	
     	$("#div_select_operador_supervisor").hide();
     	$("#div_select_intervalo").hide();
     	$("#div_codigo_eventos").hide();
     	$("#div_fonte").hide();
     	$("#div_localiza_atendimentos").hide();
     	$("#div_select_filas").hide();
+    	$("#div_select_tipo_dado").hide();
+    	$("#div_select_valor_dado").hide();    	
     	$("#div_select_retencao").hide();
     	$("#div_select_tipo_31").hide();
     	$("#div_select_tipo_32").hide();
@@ -884,7 +886,25 @@ $(document).ready(function(){
 						$("#btn_pesquisar").html("Consultar");
 						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');					
 						$("#txt_detalhes").text("Painel de Acompanhamento de Trasferências.");	
-						break;																													
+						break;
+																																			
+					case '36': //Lista de Incidentes CSCIT
+						hideAll();							    											    			
+	    				
+	    				$("#div_button").show();
+	    				$("#div_tex_detalhes").show();
+						$('#frame_230', top.document).eq(0).attr ('rows', '260,*');
+						$("#txt_detalhes").text("Lista de atendimentos por CPF/TELEFONE");
+												
+						$("#div_datas").show();						
+						$("#txt_data_inicial").text("Data Inicial:");
+						$("#txt_data_final").text("Data Final:");							
+						$("#div_select_tipo_dado").show();
+				    	$("#div_select_valor_dado").show();											    
+						$("#div_tex_detalhes").show();
+						$("#btn_pesquisar").html("Consultar");									
+							
+						break;	
 						
 		}
 	});
@@ -1165,6 +1185,7 @@ function diminuiFrame(){
         				<option value="09">URA / FRONTEND - Tradutor de Evento</option>
         				<option value="28">BD - Painel de Verificação de Sincronia</option>
         				<option value="22">BD - Verifica Alimentação BD - Período</option>
+        				<option value="36">Lista de Atendimentos - CPF/TELEFONE</option>
         				<option value="" class='w3-border-top w3-margin-top' style='padding-top: 16px;'disabled></option>
         			</optgroup>
     				
@@ -1271,6 +1292,7 @@ function diminuiFrame(){
     				<option value="00">Por Período / Dia a Dia</option>
     			</select>		
     		</div>
+    		    		  		
     		
     		<!-- CAIXA DE SELEÇÃO DADOS DE RETENÇÃO-->
     		<div id="div_select_retencao" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
@@ -1483,6 +1505,19 @@ function diminuiFrame(){
     		<div id="div_qtd_transf" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">		
     			<b id="txt_qtd_transf">Quantidade Mínima de Transferências:</b>
     			<input id="qtd_transf" type='text' size='1' name="qtd_transf" value='3' onkeypress='return SomenteNumero(event, this, 2)' maxlength="2">
+    		</div>
+    		
+    		<div id="div_select_tipo_dado" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">
+    			<b>Modelo:</b>
+    			<select id="select_tipo_dado" name="select_tipo_dado">
+    				<option value="02">Por CPF</option>
+    				<option value="03">Por Telefone</option>
+    			</select>		
+    		</div>
+    		
+    		<div id="div_select_valor_dado" class="w3-left w3-margin-top w3-margin-bottom w3-margin-left">		
+    			<b id="txt_valor_dado">Valor Dado:</b>
+    			<input id="valor_dado" type='text' size='20' name="valor_dado" value='' onkeypress='return SomenteNumero(event, this, 20)' maxlength="20">
     		</div>
 		
     		<!-- DIV BOTÃO CONSULTAR - div_button -->		

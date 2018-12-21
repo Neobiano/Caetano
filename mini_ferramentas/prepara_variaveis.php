@@ -35,6 +35,9 @@ $pesq_satisf_perg3 = $_POST['perg3'];
 $pesq_satisf_perg4 = $_POST['perg4'];
 $tempo_de_corte = $_POST['tempo_de_corte'];
 
+$valor_dado = $_POST['valor_dado'];
+$select_tipo_dado = $_POST['select_tipo_dado'];
+
 $cd_motivo = $_POST['cd_motivo'];
 if ($cd_motivo  > 0)
     $cd_motivo = number_format($cd_motivo, 0, ',', '.');
