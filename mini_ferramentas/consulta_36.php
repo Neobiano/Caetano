@@ -26,7 +26,7 @@
        <?php
       // include "funcoes.php";
         /*filtros*/                   
-       
+       $inicio = defineTime();
         $sql = '';                                                   
         $nome_relatorio = "Lista_CPF_TELEFONE"; // NOME DO RELATÃ“RIO (UTILIZAR UNDERLINE, POIS Ã‰ PARTE DO NOME DO ARQUIVO EXCEL)
         $titulo = "Listagem de Atendimentos - CPF/TELEFONE"; // MESMO NOME DO INDEX
@@ -177,22 +177,25 @@
                        echo "</tbody>
                        <tr class='w3-indigo'>                                              	                        	                        
                         	<td><b>TOTAL</b></td>
-                        	<td></td>
-                        	<td><b>$qtde</b></td>
+                        	<td></td>                       	
                         	<td><b></b></td>                        	                        
                         	<td><b></b></td>                            
                             <td><b></b></td>
-                            <td><b></b></td>                                                                                  
+                            <td><b></b></td>
+                            <td><b>$qtde</b></td>                                                                                  
                         </tr>  
                     </table>";
 		     echo "</div>";
 		echo "</div>";
 		
-		
+		$fim = defineTime();
+		echo tempoDecorrido($inicio,$fim);
 		include "desconecta.php";
 ?>
 
-
+<script>  
+    document.getElementById("divtitulo").appendChild(document.getElementById("tmp"));    
+</script>
 </body>
 </html>
 

@@ -394,7 +394,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 { 
     
     /*verificacao se o dia em questão possui revisao de nivel*/
-    $sql = "select count(*) qtde from tb_fat_revisao_nivel_DNS where data_revista = '$qual_ano-$qual_mes-$pos_dia'";
+    $sql = "select count(*) qtde from tb_fat_revisao_nivel_DNS (nolock) where data_revista = '$qual_ano-$qual_mes-$pos_dia'";
     //echo $sqlpremium;
     $query = $pdo->prepare($sql);
     $query->execute();
@@ -429,7 +429,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	echo "<div class='w3-padding w3-margin-bottom w3-tiny w3-center w3-dark-grey w3-wide w3-card-4'><b>$pos_dia de $mes de $qual_ano</b></div>";
 	
 	// consulta tabela tb_filas
-	$query = $pdo->prepare("SELECT * FROM TB_FILAS");
+	$query = $pdo->prepare("SELECT * FROM TB_FILAS (nolock)");
 	$query->execute();
 	for($i=0; $row = $query->fetch(); $i++)
 	{
@@ -506,7 +506,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
     
 	//consulta sql (a) - [a_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL
-							FROM TB_EVENTOS_DAC
+							FROM TB_EVENTOS_DAC (nolock)
 							WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 							AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND TEMPO_ESPERA <= '$ns'
 							GROUP BY COD_FILA");
@@ -523,7 +523,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	
 	//consulta sql (B + TMA) - [b_xx] [tma_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL, AVG (TEMPO_ATEND) TMA
-							FROM TB_EVENTOS_DAC
+							FROM TB_EVENTOS_DAC (nolock)
 							WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 							AND CALLID IS NOT NULL AND TEMPO_ATEND > '0'
 							GROUP BY COD_FILA
@@ -542,7 +542,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	
 	//consulta sql (C) - [c_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL
-							FROM TB_EVENTOS_DAC
+							FROM TB_EVENTOS_DAC (nolock)
 							WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 							AND CALLID IS NOT NULL AND TEMPO_ATEND = '0' AND TEMPO_ESPERA > '$ns'
 							GROUP BY COD_FILA");
@@ -557,7 +557,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	
 	//consulta sql shortcall (SC) - [sc_xx]
 	$query = $pdo->prepare("SELECT COD_FILA, COUNT (*) TOTAL
-							FROM TB_EVENTOS_DAC
+							FROM TB_EVENTOS_DAC (nolock)
 							WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 							AND CALLID IS NOT NULL AND TEMPO_ATEND BETWEEN '1' AND '$shortcall_tempo'
 							GROUP BY COD_FILA");
@@ -575,7 +575,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	//APP
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_app)
 																	GROUP BY CALLID
@@ -595,7 +595,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	//APP - BRUTO
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_app)																	
 																) AS A
@@ -614,7 +614,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	//retencao
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_retencao)
 																	GROUP BY CALLID
@@ -633,7 +633,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	//retencao BRUTO
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
 																	SELECT CALLID,  (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_retencao)																	
 																) AS A
@@ -650,7 +650,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// triagem preventiva
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_triagem)
 																	GROUP BY CALLID
@@ -671,7 +671,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// triagem preventiva - BRUTO
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_triagem)																	
 																 ) AS A
@@ -691,7 +691,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// aviso de viagem
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock) 
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_aviso_viagem)
 																	GROUP BY CALLID
@@ -712,7 +712,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// aviso de viagem - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_aviso_viagem)																	
 																) AS A
@@ -731,7 +731,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// parcelamento
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_parcelamento)
 																	GROUP BY CALLID
@@ -752,7 +752,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// parcelamento - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_parcelamento)																	
 																 ) AS A
@@ -772,7 +772,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_contestacao)
 																	GROUP BY CALLID
@@ -793,7 +793,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// contestacao - BRUTO
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID,(COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_contestacao)																	
 																) AS A
@@ -813,7 +813,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// programa de pontos
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pontos)
 																	GROUP BY CALLID
 																 ) AS A
@@ -834,7 +834,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// programa de pontos - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pontos)
 																	
 																 ) AS A
@@ -854,7 +854,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// pj
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock) 
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pj)
 																	GROUP BY CALLID
 																 ) AS A
@@ -874,7 +874,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// pj - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
                                                                     AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_pj)																	
 																 ) AS A
@@ -895,7 +895,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// 130
     $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
                                                                     SELECT CALLID, MIN (COD_FILA) COD_FILA
-                                                                    FROM TB_EVENTOS_DAC
+                                                                    FROM TB_EVENTOS_DAC (nolock) 
                                                                     WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_130)
                                                                     GROUP BY CALLID
                                                                  ) AS A
@@ -915,7 +915,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
     // 130 - bruto
     $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
                                                                     SELECT CALLID, (COD_FILA) COD_FILA
-                                                                    FROM TB_EVENTOS_DAC
+                                                                    FROM TB_EVENTOS_DAC (nolock)
                                                                     WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_130)
                                                                     
                                                                  ) AS A
@@ -936,7 +936,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// 100
     $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
                                                                     SELECT CALLID, MIN (COD_FILA) COD_FILA
-                                                                    FROM TB_EVENTOS_DAC
+                                                                    FROM TB_EVENTOS_DAC (nolock)
                                                                     WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_100)
                                                                     GROUP BY CALLID
                                                                  ) AS A
@@ -956,7 +956,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
     // 100 - bruto
     $query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
                                                                     SELECT CALLID, (COD_FILA) COD_FILA
-                                                                    FROM TB_EVENTOS_DAC
+                                                                    FROM TB_EVENTOS_DAC (nolock)
                                                                     WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_100)
                                                                    
                                                                  ) AS A
@@ -976,7 +976,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// caixa empregado
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_caixa_empregado)
 																	GROUP BY CALLID
@@ -995,8 +995,8 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 		
 	// caixa empregado - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL FROM (
-																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	SELECT CALLID, (COD_FILA) COD_FILA 
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_caixa_empregado)
 																	
@@ -1016,7 +1016,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// deficiente auditivo
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_deficiente_auditivo)
 																	GROUP BY CALLID
@@ -1037,7 +1037,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// deficiente auditivo - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_deficiente_auditivo)
 																	
@@ -1058,7 +1058,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// mala direta
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_mala_direta)
 																	GROUP BY CALLID
@@ -1079,7 +1079,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// mala direta - bruto
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_mala_direta)
 																	
@@ -1100,7 +1100,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// bloqueio cobranca
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_bloqueio_cobranca)
 																	GROUP BY CALLID
@@ -1121,7 +1121,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// bloqueio cobranca
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_bloqueio_cobranca)
 																	
@@ -1142,7 +1142,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// geral (normal + premium)
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, MIN (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' 
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_geral_normal,$ilha_geral_premium)
 																	GROUP BY CALLID
@@ -1162,7 +1162,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	// geral (normal + premium) - BRUTO
 	$query = $pdo->prepare("SELECT COD_FILA,COUNT (*) TOTAL	FROM (
 																	SELECT CALLID, (COD_FILA) COD_FILA
-																	FROM TB_EVENTOS_DAC
+																	FROM TB_EVENTOS_DAC (nolock)
 																	WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
 																	AND CALLID IS NOT NULL AND TEMPO_ATEND > '0' AND COD_FILA IN ($ilha_geral_normal,$ilha_geral_premium)
 																	
@@ -1514,8 +1514,8 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 			{			    
 			    $retquery = $pdo->prepare("
                                            select count(distinct t.callid) qtde 
-                                           from tb_dados_retencao t 
-                                           inner join tb_eventos_dac t2 on (t2.callid = t.callid) 
+                                           from tb_dados_retencao t (nolock) 
+                                           inner join tb_eventos_dac t2 (nolock) on (t2.callid = t.callid)  
                                            where t.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
                                            and t2.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999'
                                            and t.tipo_retencao not like  '%CARTÃO NÃO RETIDO%' 
@@ -1627,7 +1627,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	if($sel_eventos_ura=='01')
 	{
 		$query = $pdo->prepare("SELECT COUNT (DISTINCT CALLID) TOTAL
-				FROM TB_EVENTOS_URA
+				FROM TB_EVENTOS_URA (nolock)
 				WHERE DATA_HORA BETWEEN '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL");
 		$query->execute();
 		for($i=0; $row = $query->fetch(); $i++)
@@ -1641,7 +1641,7 @@ for($pos_dia=01; ($pos_dia <= $qtd_dias); $pos_dia++)
 	{
 	    //atendimentos eletronico - TB_EVENTOS_URA
 	    $query = $pdo->prepare("select count(*) TOTAL
-                                from tb_eventos_ura_2 t
+                                from tb_eventos_ura_2 t (nolock)
                                 where t.data_hora between '$qual_mes/$pos_dia/$qual_ano' AND '$qual_mes/$pos_dia/$qual_ano 23:59:59.999' AND CALLID IS NOT NULL
                                 and t.cod_evento in  ('020','031','037','039','042','045','047','050','051','061','062','076','078','136','137','138','139','140','149','790')    
                                 ");

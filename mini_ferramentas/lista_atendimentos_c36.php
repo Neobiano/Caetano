@@ -40,11 +40,13 @@ $data_inicial_texto = date('d/m/Y',$t_inicial);
 //Conversão Data Texto - Fim
 
 echo '<div class="w3-margin w3-tiny w3-center">';
+echo '<div id="divtitulo" class="w3-margin w3-tiny w3-center">';
 echo "<b>Rastreio de Atendimentos</b>";
 echo "<br><br><b> Tipo de Atendimento:</b> $grupo";
 echo "<br><br><b> $pTipoDado:</b> $valor - <b> CallID: </b> $pcallid";
 echo "<br><br><b><i>Período de Consulta:</i></b> $data_inicial_texto ";
 echo "<br><br>";
+echo "</div>";
    
 echo '<div class="w3-border" style="padding:16px 16px;">';
 echo '<table id = "tabela" class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-tiny w3-card-4">';
